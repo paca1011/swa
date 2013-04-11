@@ -7,15 +7,14 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Adresse implements Serializable {
 	private static final long serialVersionUID = -3029272617931844501L;
+	
 	private Long id;
 	private String plz;
 	private String stadt;
-	private String haus_nr;
-	
+	private String hausnum;
 	@JsonIgnore
 	private Kunde kunde;
-	
-	private Date erstellt;
+	private Date erzeugt;
 	private Date aktualisiert;
 	
 	public Long getId() {
@@ -24,23 +23,11 @@ public class Adresse implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Date getAktualisiert() {
-		return aktualisiert;
+	public String getHausnum() {
+		return hausnum;
 	}
-	public void setAktualisiert(Date aktualisiert) {
-		this.aktualisiert = aktualisiert;
-	}
-	public Date getErstellt() {
-		return erstellt;
-	}
-	public void setErstellt(Date erstellt) {
-		this.erstellt = erstellt;
-	}
-	public String getHaus_nr() {
-		return haus_nr;
-	}
-	public void setHaus_nr(String haus_nr) {
-		this.haus_nr = haus_nr;
+	public void setHausnum(String hausnum) {
+		this.hausnum = hausnum;
 	}
 	public String getPlz() {
 		return plz;
@@ -54,13 +41,25 @@ public class Adresse implements Serializable {
 	public void setStadt(String stadt) {
 		this.stadt = stadt;
 	}
-	
 	public Kunde getKunde() {
 		return kunde;
 	}
 	public void setKunde(Kunde kunde) {
 		this.kunde = kunde;
 	}
+	public Date getErzeugt() {
+		return erzeugt == null ? null : (Date) erzeugt.clone();
+	}
+	public void setErzeugt(Date erzeugt) {
+		this.erzeugt = erzeugt == null ? null : (Date) erzeugt.clone();
+	}
+	public Date getAktualisiert() {
+		return aktualisiert == null ? null : (Date) erzeugt.clone();
+	}
+	public void setAktualisiert(Date aktualisiert) {
+		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,7 +77,7 @@ public class Adresse implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Adresse other = (Adresse) obj;
+		final Adresse other = (Adresse) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -21,7 +21,7 @@ public class Kunde implements Serializable {
 	@JsonIgnore
 	private List<Bestellung> bestellungen;
 	private URI bestellungenUri;
-	private Date erstellt;
+	private Date erzeugt;
 	private Date aktualisiert;
 
 	public Long getId() {
@@ -29,18 +29,6 @@ public class Kunde implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public Date getAktualisiert() {
-		return aktualisiert;
-	}
-	public void setAktualisiert(Date aktualisiert) {
-		this.aktualisiert = aktualisiert;
-	}
-	public Date getErstellt() {
-		return erstellt;
-	}
-	public void setErstellt(Date erstellt) {
-		this.erstellt = erstellt;
 	}
 	public String getPasswort() {
 		return passwort;
@@ -78,6 +66,18 @@ public class Kunde implements Serializable {
 	public void setBestellungenUri(URI bestellungenUri) {
 		this.bestellungenUri = bestellungenUri;
 	}
+	public Date getErzeugt() {
+		return erzeugt == null ? null : (Date) erzeugt.clone();
+	}
+	public void setErzeugt(Date erzeugt) {
+		this.erzeugt = erzeugt == null ? null : (Date) erzeugt.clone();
+	}
+	public Date getAktualisiert() {
+		return aktualisiert == null ? null : (Date) erzeugt.clone();
+	}
+	public void setAktualisiert(Date aktualisiert) {
+		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
+	}
 
 	@Override
 	public int hashCode() {
@@ -95,7 +95,7 @@ public class Kunde implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Kunde other = (Kunde) obj;
+		final Kunde other = (Kunde) obj;
 		if (email == null) {
 			if (other.email != null)
 				return false;

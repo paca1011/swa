@@ -22,7 +22,7 @@ public class Bestellung implements Serializable {
 	@JsonIgnore
 	private Lieferant lieferant;
 	private URI lieferantUri;
-	private Date erstellt;
+	private Date erzeugt;
 	private Date aktualisiert;
 	
 	public Long getId() {
@@ -37,17 +37,17 @@ public class Bestellung implements Serializable {
 	public void setGesamtpreis(BigDecimal gesamtpreis) {
 		this.gesamtpreis = gesamtpreis;
 	}
-	public Date getErstellt() {
-		return erstellt;
+	public Date getErzeugt() {
+		return erzeugt == null ? null : (Date) erzeugt.clone();
 	}
-	public void setErstellt(Date erstellt) {
-		this.erstellt = erstellt;
+	public void setErzeugt(Date erzeugt) {
+		this.erzeugt = erzeugt == null ? null : (Date) erzeugt.clone();
 	}
 	public Date getAktualisiert() {
-		return aktualisiert;
+		return aktualisiert == null ? null : (Date) erzeugt.clone();
 	}
 	public void setAktualisiert(Date aktualisiert) {
-		this.aktualisiert = aktualisiert;
+		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
 	}
 	public URI getLieferantUri() {
 		return lieferantUri;
@@ -79,13 +79,13 @@ public class Bestellung implements Serializable {
 	public void setKunde(Kunde kunde) {
 		this.kunde = kunde;
 	}
-	
 	public URI getKundeUri() {
 		return kundeUri;
 	}
 	public void setKundeUri(URI kundeUri) {
 		this.kundeUri = kundeUri;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -93,6 +93,7 @@ public class Bestellung implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
