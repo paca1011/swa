@@ -8,4 +8,3 @@ target
 MANIFEST.MF
 .idea
 *.iml
-/.apt_generated
