@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Bestellung;
+import de.shop.bestellverwaltung.domain.Lieferant;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.domain.Adresse;
 
@@ -91,6 +93,41 @@ public final class Mock {
 		return bestellung;
 	}
 
+	public static Artikel findArtikelById(Long id) {
+		if (id > MAX_ID) {
+			return null;
+		}
+		
+		final Artikel artikel = new Artikel();
+		artikel.setId(id);
+		artikel.setBezeichnung("Bezeichnung");
+		artikel.setFarbe("Farbe");
+		
+		return artikel;
+	}
+	
+	public static Artikel createArtikel(Artikel artikel) {
+		final String bezeichnung = artikel.getBezeichnung();
+		artikel.setId(Long.valueOf(bezeichnung.length()));
+		
+		System.out.println("Neuer Artikel: " + artikel);
+		return artikel;
+	}
+	
+	public static Bestellung createBestellung(Bestellung bestellung) {
+		final String status = bestellung.getStatus();
+		bestellung.setId(Long.valueOf(status.length()));
+		final Kunde kunde = bestellung.getKunde();
+		final Lieferant lieferant = bestellung.getLieferant();
+		kunde.setId((Long.valueOf(status.length())) + 1);
+		bestellung.setKunde(kunde);
+		lieferant.setId((Long.valueOf(status.length())) + 2);
+		bestellung.setLieferant(lieferant);
+		
+		System.out.println("Neue Bestellung: " + kunde);
+		return bestellung;
+	}
+	
 	public static Kunde createKunde(Kunde kunde) {
 		// Neue IDs fuer Kunde und zugehoerige Adresse
 		// Ein neuer Kunde hat auch keine Bestellungen
@@ -109,6 +146,14 @@ public final class Mock {
 		System.out.println("Aktualisierter Kunde: " + kunde);
 	}
 
+	public static void updateArtikel(Artikel artikel) {
+		System.out.println("Aktualisierter Artikel: " + artikel);
+	}
+	
+	public static void updateBestellung(Bestellung bestellung) {
+		System.out.println("Aktualisierte Bestellung: " + bestellung);
+	}
+	
 	public static void deleteKunde(Long kundeId) {
 		System.out.println("Kunde mit ID=" + kundeId + " geloescht");
 	}
