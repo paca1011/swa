@@ -6,7 +6,6 @@ import java.util.List;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.bestellverwaltung.domain.Lieferant;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.domain.Adresse;
 
@@ -83,12 +82,14 @@ public final class Mock {
 			return null;
 		}
 
-		final Kunde kunde = findKundeById(id + 1);  // andere ID fuer den Kunden
-
+		final Kunde kunde = findKundeById(id + 1); // andere ID fuer den Kunden
+		
 		final Bestellung bestellung = new Bestellung();
 		bestellung.setId(id);
+		bestellung.setStatus("laeuft");
 		bestellung.setAusgeliefert(false);
 		bestellung.setKunde(kunde);
+
 		
 		return bestellung;
 	}
@@ -117,14 +118,8 @@ public final class Mock {
 	public static Bestellung createBestellung(Bestellung bestellung) {
 		final String status = bestellung.getStatus();
 		bestellung.setId(Long.valueOf(status.length()));
-		final Kunde kunde = bestellung.getKunde();
-		final Lieferant lieferant = bestellung.getLieferant();
-		kunde.setId((Long.valueOf(status.length())) + 1);
-		bestellung.setKunde(kunde);
-		lieferant.setId((Long.valueOf(status.length())) + 2);
-		bestellung.setLieferant(lieferant);
 		
-		System.out.println("Neue Bestellung: " + kunde);
+		System.out.println("Neue Bestellung: " + bestellung);
 		return bestellung;
 	}
 	

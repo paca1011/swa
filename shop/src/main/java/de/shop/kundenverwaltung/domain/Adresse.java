@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import de.shop.bestellverwaltung.domain.Lieferant;
+
 public class Adresse implements Serializable {
 	private static final long serialVersionUID = -3029272617931844501L;
 	
@@ -14,6 +16,7 @@ public class Adresse implements Serializable {
 	private String hausnum;
 	@JsonIgnore
 	private Kunde kunde;
+	private Lieferant lieferant;
 	private Date erzeugt;
 	private Date aktualisiert;
 	
@@ -22,6 +25,12 @@ public class Adresse implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Lieferant getLieferant() {
+		return lieferant;
+	}
+	public void setLieferant(Lieferant lieferant) {
+		this.lieferant = lieferant;
 	}
 	public String getHausnum() {
 		return hausnum;

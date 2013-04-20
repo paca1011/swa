@@ -2,7 +2,10 @@ package de.shop.bestellverwaltung.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.Date;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 
@@ -13,7 +16,9 @@ public class Posten implements Serializable {
 	private Long idx;
 	private Long anzahl;
 	private BigDecimal preis;
+	@JsonIgnore
 	private Artikel artikel;
+	private URI artikelUri;
 	private Bestellung bestellung;
 	private Date erzeugt;
 	private Date aktualisiert;
@@ -23,6 +28,12 @@ public class Posten implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public URI getArtikelUri() {
+		return artikelUri;
+	}
+	public void setArtikelUri(URI artikelUri) {
+		this.artikelUri = artikelUri;
 	}
 	public Long getIdx() {
 		return idx;

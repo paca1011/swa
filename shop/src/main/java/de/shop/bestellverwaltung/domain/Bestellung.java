@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -22,6 +23,8 @@ public class Bestellung implements Serializable {
 	@JsonIgnore
 	private Lieferant lieferant;
 	private URI lieferantUri;
+	@JsonIgnore
+	private List<Posten> vieleposten;
 	private Date erzeugt;
 	private Date aktualisiert;
 	
@@ -30,6 +33,12 @@ public class Bestellung implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public List<Posten> getVieleposten() {
+		return vieleposten;
+	}
+	public void setVieleposten(List<Posten> vieleposten) {
+		this.vieleposten = vieleposten;
 	}
 	public BigDecimal getGesamtpreis() {
 		return gesamtpreis;

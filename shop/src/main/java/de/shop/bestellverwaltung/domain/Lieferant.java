@@ -12,6 +12,7 @@ public class Lieferant implements Serializable {
 	private String name;
 	private Long telefonnum;
 	private Adresse adresse;
+	private Bestellung bestellung;
 	private Date erzeugt;
 	private Date aktualisiert;
 	
@@ -20,6 +21,12 @@ public class Lieferant implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Bestellung getBestellung() {
+		return bestellung;
+	}
+	public void setBestellung(Bestellung bestellung) {
+		this.bestellung = bestellung;
 	}
 	public String getName() {
 		return name;
