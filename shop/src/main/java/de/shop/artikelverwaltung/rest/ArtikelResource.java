@@ -3,8 +3,10 @@ package de.shop.artikelverwaltung.rest;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
+
 import java.net.URI;
 import java.util.Locale;
+
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -22,6 +24,7 @@ import javax.ws.rs.core.UriInfo;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.util.LocaleHelper;
+
 import de.shop.util.Mock;
 import de.shop.util.NotFoundException;
 
@@ -29,8 +32,23 @@ import de.shop.util.NotFoundException;
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
+
 public class ArtikelResource {
 	
+/*private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
+	
+	@Inject
+	private ArtikelService as;
+	
+	@PostConstruct
+	private void postConstruct() {
+		LOGGER.debugf("CDI-faehiges Bean %s wurde erzeugt", this);
+	}
+	
+	@PreDestroy
+	private void preDestroy() {
+		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
+	} */
 	@Context
 	private UriInfo uriInfo;
 	
