@@ -1,8 +1,11 @@
 package de.shop.util;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Bestellung;
@@ -14,6 +17,8 @@ import de.shop.kundenverwaltung.domain.Adresse;
  * Emulation des Anwendungskerns
  */
 public final class Mock {
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
+	
 	private static final int MAX_ID = 99;
 	private static final int MAX_KUNDEN = 8;
 	private static final int MAX_BESTELLUNGEN = 4;
@@ -39,9 +44,9 @@ public final class Mock {
 		return kunde;
 	}
 
-	public static Collection<Kunde> findAllKunden() {
+	public static List<Kunde> findAllKunden() {
 		final int anzahl = MAX_KUNDEN;
-		final Collection<Kunde> kunden = new ArrayList<>(anzahl);
+		final List<Kunde> kunden = new ArrayList<>(anzahl);
 		for (int i = 1; i <= anzahl; i++) {
 			final Kunde kunde = findKundeById(Long.valueOf(i));
 			kunden.add(kunde);			
@@ -49,9 +54,9 @@ public final class Mock {
 		return kunden;
 	}
 
-	public static Collection<Kunde> findKundenByNachname(String nachname) {
+	public static List<Kunde> findKundenByNachname(String nachname) {
 		final int anzahl = nachname.length();
-		final Collection<Kunde> kunden = new ArrayList<>(anzahl);
+		final List<Kunde> kunden = new ArrayList<>(anzahl);
 		for (int i = 1; i <= anzahl; i++) {
 			final Kunde kunde = findKundeById(Long.valueOf(i));
 			kunde.setNachname(nachname);
@@ -60,6 +65,25 @@ public final class Mock {
 		return kunden;
 	}
 	
+	public static Kunde findKundeByEmail(String email) {
+		if (email.startsWith("x")) {
+			return null;
+		}
+		
+		final Kunde kunde = new Kunde();
+		kunde.setId(Long.valueOf(email.length()));
+		kunde.setNachname("Nachname");
+		kunde.setEmail(email);
+		
+		final Adresse adresse = new Adresse();
+		adresse.setId(kunde.getId() + 1);        // andere ID fuer die Adresse
+		adresse.setPlz("12345");
+		adresse.setStadt("Teststadt");
+		adresse.setKunde(kunde);
+		kunde.setAdresse(adresse);
+		
+		return kunde;
+	}
 
 	public static Collection<Bestellung> findBestellungenByKundeId(Long kundeId) {
 		final Kunde kunde = findKundeById(kundeId);
@@ -138,7 +162,7 @@ public final class Mock {
 	}
 
 	public static void updateKunde(Kunde kunde) {
-		System.out.println("Aktualisierter Kunde: " + kunde);
+		LOGGER.infof("Aktualisierter Kunde: %s", kunde);
 	}
 
 	public static void updateArtikel(Artikel artikel) {
@@ -149,8 +173,8 @@ public final class Mock {
 		System.out.println("Aktualisierte Bestellung: " + bestellung);
 	}
 	
-	public static void deleteKunde(Long kundeId) {
-		System.out.println("Kunde mit ID=" + kundeId + " geloescht");
+	public static void deleteKunde(Kunde kunde) {
+		LOGGER.infof("Gelöschter Kunde: %s", kunde);
 	}
 
 	private Mock() { /**/ }
