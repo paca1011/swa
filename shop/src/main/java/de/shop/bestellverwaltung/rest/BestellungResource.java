@@ -19,6 +19,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.shop.bestellverwaltung.domain.Bestellung;
+import de.shop.bestellverwaltung.service.BestellungService;
+import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.LocaleHelper;
 import de.shop.util.Mock;
 import de.shop.util.NotFoundException;
@@ -39,14 +41,15 @@ public class BestellungResource {
 	@Inject
 	private LocaleHelper localeHelper;
 	
+	@Inject
+	private BestellungService bs;
+	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
 	public Bestellung findBestellungById(@PathParam("id") Long id) {
-		@SuppressWarnings("unused")
-		final Locale locale = localeHelper.getLocale(headers);
+		final Bestellung bestellung = bs.findBestellungById(id);
 		
 		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		final Bestellung bestellung = Mock.findBestellungById(id);
 		if (bestellung == null) {
 			throw new NotFoundException("Keine Bestellung mit der ID " + id + " gefunden.");
 		}
@@ -61,12 +64,11 @@ public class BestellungResource {
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
-	public Response createBestellung(Bestellung bestellung) {
-		@SuppressWarnings("unused")
+	public Response createBestellung(Bestellung bestellung, Kunde kunde) {
 		final Locale locale = localeHelper.getLocale(headers);
 		
+		bestellung = bs.createBestellung(bestellung, kunde, locale);
 		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		bestellung = Mock.createBestellung(bestellung);
 		final URI bestellungUri = uriHelperBestellung.getUriBestellung(bestellung, uriInfo);
 		return Response.created(bestellungUri).build();
 	}

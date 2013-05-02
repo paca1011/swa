@@ -2,13 +2,13 @@ package de.shop.util;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Bestellung;
+import de.shop.bestellverwaltung.domain.Lieferant;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.domain.Adresse;
 
@@ -85,7 +85,7 @@ public final class Mock {
 		return kunde;
 	}
 
-	public static Collection<Bestellung> findBestellungenByKundeId(Long kundeId) {
+	public static List<Bestellung> findBestellungenByKundeId(Long kundeId) {
 		final Kunde kunde = findKundeById(kundeId);
 		
 		// Beziehungsgeflecht zwischen Kunde und Bestellungen aufbauen
@@ -139,13 +139,19 @@ public final class Mock {
 		return artikel;
 	}
 	
-	public static Bestellung createBestellung(Bestellung bestellung) {
-		final String status = bestellung.getStatus();
-		bestellung.setId(Long.valueOf(status.length()));
-		
-		System.out.println("Neue Bestellung: " + bestellung);
+	public static Bestellung createBestellung(Bestellung bestellung, Kunde kunde) {
+		LOGGER.infof("Neue Bestellung: %s fuer Kunde: %s", bestellung, kunde);
 		return bestellung;
 	}
+	
+//	public static Bestellung createBestellung(Bestellung bestellung, Kunde kunde) {
+//		final String status = bestellung.getStatus();
+//		bestellung.setId(Long.valueOf(status.length()));
+//		bestellung.setKunde(kunde);
+//		
+//		System.out.println("Neue Bestellung: " + bestellung);
+//		return bestellung;
+//	}
 	
 	public static Kunde createKunde(Kunde kunde) {
 		// Neue IDs fuer Kunde und zugehoerige Adresse
@@ -177,5 +183,10 @@ public final class Mock {
 		LOGGER.infof("Gelöschter Kunde: %s", kunde);
 	}
 
-	private Mock() { /**/ }
+	public static Lieferant findLieferantById(Long id) {
+		final Lieferant lieferant = new Lieferant();
+		lieferant.setId(id);
+		lieferant.setName("Name_" + id);
+		return lieferant;
+	}
 }

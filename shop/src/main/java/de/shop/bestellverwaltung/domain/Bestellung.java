@@ -6,17 +6,26 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
+import static de.shop.util.Constants.MIN_ID;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.shop.kundenverwaltung.domain.Kunde;
+import de.shop.util.IdGroup;
 
 public class Bestellung implements Serializable {
 	private static final long serialVersionUID = 1618359234119003714L;
 	
+	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}", groups = IdGroup.class)
 	private Long id;
 	private String status;
 	private BigDecimal gesamtpreis;
 	private boolean ausgeliefert;
+	
+	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}")
 	@JsonIgnore
 	private Kunde kunde;
 	private URI kundeUri;
