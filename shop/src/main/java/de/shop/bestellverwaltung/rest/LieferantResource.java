@@ -23,7 +23,7 @@ import de.shop.bestellverwaltung.service.LieferantService;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
 
-@Path("/Lieferant")
+@Path("/lieferanten")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped

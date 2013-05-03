@@ -10,4 +10,5 @@ public interface BestellungService {
 	Bestellung findBestellungById(Long id);
 	List<Bestellung> findBestellungenByKundeId(Long kundeId);
 	Bestellung createBestellung(Bestellung bestellung, Kunde kunde, Locale locale);
+	Bestellung updateBestellung(Bestellung bestellung, Locale locale);
 }

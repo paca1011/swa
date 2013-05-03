@@ -22,7 +22,6 @@ import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.LocaleHelper;
-import de.shop.util.Mock;
 import de.shop.util.NotFoundException;
 
 @Path("/bestellungen")
@@ -59,8 +58,6 @@ public class BestellungResource {
 		return bestellung;
 	}
 	
-	
-	
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -68,7 +65,6 @@ public class BestellungResource {
 		final Locale locale = localeHelper.getLocale(headers);
 		
 		bestellung = bs.createBestellung(bestellung, kunde, locale);
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
 		final URI bestellungUri = uriHelperBestellung.getUriBestellung(bestellung, uriInfo);
 		return Response.created(bestellungUri).build();
 	}
@@ -77,12 +73,9 @@ public class BestellungResource {
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response updateBestellung(Bestellung bestellung) {
-		@SuppressWarnings("unused")
 		final Locale locale = localeHelper.getLocale(headers);
 		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		Mock.updateBestellung(bestellung);
+		bestellung = bs.updateBestellung(bestellung, locale);
 		return Response.noContent().build();
 	}
-	
 }

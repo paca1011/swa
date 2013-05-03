@@ -140,18 +140,20 @@ public final class Mock {
 	}
 	
 	public static Bestellung createBestellung(Bestellung bestellung, Kunde kunde) {
+		final String status = bestellung.getStatus();
+		bestellung.setId(Long.valueOf(status.length()));
+		bestellung.setKunde(kunde);
+		kunde.getBestellungen().add(bestellung);
+
 		LOGGER.infof("Neue Bestellung: %s fuer Kunde: %s", bestellung, kunde);
 		return bestellung;
 	}
 	
 //	public static Bestellung createBestellung(Bestellung bestellung, Kunde kunde) {
-//		final String status = bestellung.getStatus();
-//		bestellung.setId(Long.valueOf(status.length()));
-//		bestellung.setKunde(kunde);
-//		
-//		System.out.println("Neue Bestellung: " + bestellung);
+//		LOGGER.infof("Neue Bestellung: %s fuer Kunde: %s", bestellung, kunde);
 //		return bestellung;
 //	}
+	
 	
 	public static Kunde createKunde(Kunde kunde) {
 		// Neue IDs fuer Kunde und zugehoerige Adresse
@@ -176,7 +178,7 @@ public final class Mock {
 	}
 	
 	public static void updateBestellung(Bestellung bestellung) {
-		System.out.println("Aktualisierte Bestellung: " + bestellung);
+		LOGGER.infof("Aktualisierter Kunde: %s" + bestellung);
 	}
 	
 	public static void deleteKunde(Kunde kunde) {
