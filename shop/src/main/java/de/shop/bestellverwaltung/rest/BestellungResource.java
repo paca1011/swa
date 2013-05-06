@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.Kunde;
+import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.LocaleHelper;
 import de.shop.util.NotFoundException;
 
@@ -43,6 +44,9 @@ public class BestellungResource {
 	@Inject
 	private BestellungService bs;
 	
+	@Inject
+	private KundeService ks;
+	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
 	public Bestellung findBestellungById(@PathParam("id") Long id) {
@@ -61,10 +65,23 @@ public class BestellungResource {
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
-	public Response createBestellung(Bestellung bestellung, Kunde kunde) {
+	public Response createBestellung(Bestellung bestellung) {
 		final Locale locale = localeHelper.getLocale(headers);
 		
+//		 TODO kundeId aus URI 
+		URI kundeUri = bestellung.getKundeUri();
+		String path = kundeUri.getPath();
+		String idStr = path.substring(path.lastIndexOf('/') + 1);
+		Long id = Long.parseLong(idStr);
+				
+		final Long kundeId = id;
+		
+		final Kunde kunde = ks.findKundeById(kundeId, locale);
+
 		bestellung = bs.createBestellung(bestellung, kunde, locale);
+		
+		bestellung.getKunde().getBestellungen().add(bestellung);
+		System.out.println(kunde.toString());
 		final URI bestellungUri = uriHelperBestellung.getUriBestellung(bestellung, uriInfo);
 		return Response.created(bestellungUri).build();
 	}
