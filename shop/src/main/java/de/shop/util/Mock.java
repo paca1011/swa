@@ -142,18 +142,18 @@ public final class Mock {
 	public static Bestellung createBestellung(Bestellung bestellung, Kunde kunde) {
 		final String status = bestellung.getStatus();
 		bestellung.setId(Long.valueOf(status.length()));
-		bestellung.setKunde(kunde);
-		kunde.getBestellungen().add(bestellung);
+
+		if (kunde.getBestellungen() == null) {
+			List<Bestellung> bestellungen = new ArrayList<Bestellung>();
+			bestellung.getKunde().setBestellungen(bestellungen);
+		}
+		else
+			bestellung.getKunde().getBestellungen().add(bestellung);
 
 		LOGGER.infof("Neue Bestellung: %s fuer Kunde: %s", bestellung, kunde);
 		return bestellung;
 	}
-	
-//	public static Bestellung createBestellung(Bestellung bestellung, Kunde kunde) {
-//		LOGGER.infof("Neue Bestellung: %s fuer Kunde: %s", bestellung, kunde);
-//		return bestellung;
-//	}
-	
+		
 	
 	public static Kunde createKunde(Kunde kunde) {
 		// Neue IDs fuer Kunde und zugehoerige Adresse

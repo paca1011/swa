@@ -144,7 +144,7 @@ public class Kunde implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "AbstractKunde [id=" + id + ", nachname=" + nachname
+		return "Kunde [id=" + id + ", nachname=" + nachname
 				+ ", email=" + email + ", bestellungenUri=" + bestellungenUri + "]";
 	}
 }

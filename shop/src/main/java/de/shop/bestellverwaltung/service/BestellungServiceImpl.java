@@ -64,8 +64,9 @@ public class BestellungServiceImpl implements BestellungService, Serializable {
 	@Override
 	public Bestellung createBestellung(Bestellung bestellung, Kunde kunde, Locale locale) {
 		if (bestellung == null) {
-			return bestellung;
+			return bestellung;		
 		}
+
 		validateBestellung(bestellung, locale, Default.class);
 		
 		// TODO Datenbanzugriffsschicht statt Mock

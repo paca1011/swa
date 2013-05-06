@@ -68,20 +68,22 @@ public class BestellungResource {
 	public Response createBestellung(Bestellung bestellung) {
 		final Locale locale = localeHelper.getLocale(headers);
 		
-//		 TODO kundeId aus URI 
+		// kundeId aus URI 
 		URI kundeUri = bestellung.getKundeUri();
 		String path = kundeUri.getPath();
 		String idStr = path.substring(path.lastIndexOf('/') + 1);
 		Long id = Long.parseLong(idStr);
 				
 		final Long kundeId = id;
-		
+
 		final Kunde kunde = ks.findKundeById(kundeId, locale);
 
+		bestellung.setKunde(kunde);
+
 		bestellung = bs.createBestellung(bestellung, kunde, locale);
+
+
 		
-		bestellung.getKunde().getBestellungen().add(bestellung);
-		System.out.println(kunde.toString());
 		final URI bestellungUri = uriHelperBestellung.getUriBestellung(bestellung, uriInfo);
 		return Response.created(bestellungUri).build();
 	}
