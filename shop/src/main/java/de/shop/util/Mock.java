@@ -66,7 +66,7 @@ public final class Mock {
 	}
 	
 	public static Kunde findKundeByEmail(String email) {
-		if (email.startsWith("x")) {
+		if (!email.startsWith("x")) {
 			return null;
 		}
 		
