@@ -3,11 +3,12 @@ package de.shop.artikelverwaltung.rest;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
-
+import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.Locale;
 
-
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -22,10 +23,11 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.util.LocaleHelper;
+import org.jboss.logging.Logger;
 
-import de.shop.util.Mock;
+import de.shop.artikelverwaltung.domain.Artikel;
+import de.shop.artikelverwaltung.service.ArtikelService;
+import de.shop.util.LocaleHelper;
 import de.shop.util.NotFoundException;
 
 @Path("/artikel")
@@ -35,7 +37,7 @@ import de.shop.util.NotFoundException;
 
 public class ArtikelResource {
 	
-/*private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
+private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
 	@Inject
 	private ArtikelService as;
@@ -48,7 +50,7 @@ public class ArtikelResource {
 	@PreDestroy
 	private void preDestroy() {
 		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
-	} */
+	} 
 	@Context
 	private UriInfo uriInfo;
 	
@@ -71,40 +73,36 @@ public class ArtikelResource {
 	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
-	public Artikel findArtikelById(@PathParam("id") Long id) {
-		@SuppressWarnings("unused")
-		final Locale locale = localeHelper.getLocale(headers);
-		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		final Artikel artikel = Mock.findArtikelById(id);
+	public Artikel findArtikelById(@PathParam("id") Long id, @Context UriInfo uriInfo) {
+		final Artikel artikel = as.findArtikelById(id);
 		if (artikel == null) {
-			throw new NotFoundException("Kein Artikel mit der ID " + id + " gefunden.");
-		}	
+			final String msg = "Kein Artikel gefunden mit der ID " + id;
+			throw new NotFoundException(msg);
+		}
 		return artikel;
 	}
+	
 	
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response createArtikel(Artikel artikel) {
-		@SuppressWarnings("unused")
 		final Locale locale = localeHelper.getLocale(headers);
-		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		artikel = Mock.createArtikel(artikel);
+		artikel = as.createArtikel(artikel, locale);
 		final URI artikelUri = uriHelperArtikel.getUriArtikel(artikel, uriInfo);
+		
 		return Response.created(artikelUri).build();
 	}
+	
 	
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response updateArtikel(Artikel artikel) {
-		@SuppressWarnings("unused")
+		//@SuppressWarnings("unused")
 		final Locale locale = localeHelper.getLocale(headers);
 		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		Mock.updateArtikel(artikel);
+		as.updateArtikel(artikel, locale);
 		return Response.noContent().build();
 	}
 	
