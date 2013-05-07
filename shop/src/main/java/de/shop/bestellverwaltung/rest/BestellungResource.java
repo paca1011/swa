@@ -82,8 +82,6 @@ public class BestellungResource {
 
 		bestellung = bs.createBestellung(bestellung, kunde, locale);
 
-
-		
 		final URI bestellungUri = uriHelperBestellung.getUriBestellung(bestellung, uriInfo);
 		return Response.created(bestellungUri).build();
 	}
@@ -93,6 +91,18 @@ public class BestellungResource {
 	@Produces
 	public Response updateBestellung(Bestellung bestellung) {
 		final Locale locale = localeHelper.getLocale(headers);
+
+		// kundeId aus URI 
+		URI kundeUri = bestellung.getKundeUri();
+		String path = kundeUri.getPath();
+		String idStr = path.substring(path.lastIndexOf('/') + 1);
+		Long id = Long.parseLong(idStr);
+				
+		final Long kundeId = id;
+
+		final Kunde kunde = ks.findKundeById(kundeId, locale);
+
+		bestellung.setKunde(kunde);
 		
 		bestellung = bs.updateBestellung(bestellung, locale);
 		return Response.noContent().build();
