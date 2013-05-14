@@ -1,20 +1,34 @@
 package de.shop.kundenverwaltung.domain;
 
+import static de.shop.util.Constants.MIN_ID;
+
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.shop.bestellverwaltung.domain.Lieferant;
+import de.shop.util.IdGroup;
 
 public class Adresse implements Serializable {
 	private static final long serialVersionUID = -3029272617931844501L;
 	
+	public static final int STADT_LENGTH_MAX = 128;
+	public static final int STADT_LENGTH_MIN = 3;
+	
+	@Min(value = MIN_ID, message = "{kundenverwaltung.adresse.id.min}", groups = IdGroup.class)
 	private Long id;
 	private String plz;
+	@NotNull(message = "{kundenverwaltung.adresse.stadt.notNull}")
+	@Size(max = STADT_LENGTH_MAX,min = STADT_LENGTH_MIN, message = "{kundenverwaltung.adresse.stadt.length}")
 	private String stadt;
 	private String hausnum;
 	@JsonIgnore
+	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
 	private Kunde kunde;
 	private Lieferant lieferant;
 	private Date erzeugt;

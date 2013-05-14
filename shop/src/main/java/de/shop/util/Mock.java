@@ -54,6 +54,17 @@ public final class Mock {
 		return kunden;
 	}
 
+	public static List<Artikel> findArtikelByBezeichnung(String bezeichnung) {
+		final int anzahl = bezeichnung.length();
+		final List<Artikel> vieleartikel = new ArrayList<>(anzahl);
+		for (int i = 1; i <= anzahl; i++) {
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			artikel.setBezeichnung(bezeichnung);
+			vieleartikel.add(artikel);		
+		}
+		return vieleartikel;
+	}
+	
 	public static List<Kunde> findKundenByNachname(String nachname) {
 		final int anzahl = nachname.length();
 		final List<Kunde> kunden = new ArrayList<>(anzahl);

@@ -4,11 +4,22 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Artikel implements Serializable {
 	private static final long serialVersionUID = 6240743788335631652L;
 	
+	public static final int BEZEICHNUNG_LENGTH_MIN = 15;
+	public static final int BEZEICHNUNG_LENGTH_MAX = 32;
+	
 	private Long id;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
+	@Size(min = BEZEICHNUNG_LENGTH_MIN, max = BEZEICHNUNG_LENGTH_MAX,
+    message = "{artikelverwaltung.artikel.bezeichnung.length}")
 	private String bezeichnung;
+	
 	private String farbe;
 	private BigDecimal preisKunde;
 	private BigDecimal preisLieferant;
