@@ -26,6 +26,7 @@ import javax.ws.rs.core.UriInfo;
 
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.rest.UriHelperBestellung;
+import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.LocaleHelper;
@@ -54,6 +55,10 @@ public class KundeResource {
 	
 	@Inject
 	private KundeService ks;
+	
+	@Inject
+	private BestellungService bs;
+	
 	
 	@GET
 	@Produces(TEXT_PLAIN)

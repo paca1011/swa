@@ -11,6 +11,7 @@ import javax.validation.Validator;
 import javax.validation.groups.Default;
 
 import de.shop.artikelverwaltung.domain.Artikel;
+import de.shop.util.IdGroup;
 import de.shop.util.Log;
 import de.shop.util.Mock;
 import de.shop.util.ValidatorProvider;
@@ -73,7 +74,7 @@ public class ArtikelService implements Serializable {
 		}
 
 		// Werden alle Constraints beim Modifizieren gewahrt?
-		//validateArtikel(artikel, locale, Default.class, IdGroup.class);
+		validateArtikel(artikel, locale, Default.class, IdGroup.class);
 
 		
 		// TODO Datenbanzugriffsschicht statt Mock

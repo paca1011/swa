@@ -15,8 +15,8 @@ import de.shop.util.IdGroup;
 public class Artikel implements Serializable {
 	private static final long serialVersionUID = 6240743788335631652L;
 	
-	public static final int BEZEICHNUNG_LENGTH_MIN = 5;
-	public static final int BEZEICHNUNG_LENGTH_MAX = 32;
+	public static final int BEZEICHNUNG_LENGTH_MIN = 3;
+	public static final int BEZEICHNUNG_LENGTH_MAX = 33;
 	
 	public static final int FARBE_LENGTH_MIN = 3;
 	public static final int FARBE_LENGTH_MAX = 32;

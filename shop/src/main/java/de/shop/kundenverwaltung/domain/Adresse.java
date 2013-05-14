@@ -28,7 +28,7 @@ public class Adresse implements Serializable {
 	private String stadt;
 	private String hausnum;
 	@JsonIgnore
-	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
+//	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
 	private Kunde kunde;
 	private Lieferant lieferant;
 	private Date erzeugt;

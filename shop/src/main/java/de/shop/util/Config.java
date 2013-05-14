@@ -89,3 +89,4 @@ public class Config implements Serializable {
 				+ ", absenderName=" + absenderName + "]";
 	}
 }
+
