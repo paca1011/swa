@@ -1,18 +1,27 @@
 package de.shop.artikelverwaltung.domain;
 
+import static de.shop.util.Constants.MIN_ID;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import de.shop.util.IdGroup;
 
 public class Artikel implements Serializable {
 	private static final long serialVersionUID = 6240743788335631652L;
 	
-	public static final int BEZEICHNUNG_LENGTH_MIN = 15;
+	public static final int BEZEICHNUNG_LENGTH_MIN = 5;
 	public static final int BEZEICHNUNG_LENGTH_MAX = 32;
 	
+	public static final int FARBE_LENGTH_MIN = 3;
+	public static final int FARBE_LENGTH_MAX = 32;
+	
+	@Min(value = MIN_ID, message = "{artikelverwaltung.artikel.id.min}", groups = IdGroup.class)
 	private Long id;
 	
 	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
@@ -20,11 +29,20 @@ public class Artikel implements Serializable {
     message = "{artikelverwaltung.artikel.bezeichnung.length}")
 	private String bezeichnung;
 	
+	@Size(min = FARBE_LENGTH_MIN, max = FARBE_LENGTH_MAX,
+	message = "{artikelverwaltung.artikel.farbe.length}")
 	private String farbe;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.preiskunde.notNull}")
 	private BigDecimal preisKunde;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.preislieferant.notNull}")
 	private BigDecimal preisLieferant;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.bestand.notNull}")
+	@Min(value = 1, message = "{artikelverwaltung.artikel.bestand.min}")
 	private Long bestand;
-	// TODO kommt hier jeweils @Jsonignore?
+	
 	private Date erzeugt;
 	private Date aktualisiert;
 	
