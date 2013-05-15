@@ -121,7 +121,7 @@ public final class Mock {
 		
 		final Bestellung bestellung = new Bestellung();
 		bestellung.setId(id);
-		bestellung.setStatus("laeuft");
+		bestellung.setStatus("steht_noch_aus");
 		bestellung.setAusgeliefert(false);
 		bestellung.setKunde(kunde);
 
@@ -160,6 +160,7 @@ public final class Mock {
 		}
 		else
 			bestellung.getKunde().getBestellungen().add(bestellung);
+//		bestellung.setGesamtpreis(new BigDecimal(0.0));
 
 		LOGGER.infof("Neue Bestellung: %s fuer Kunde: %s", bestellung, kunde);
 		return bestellung;

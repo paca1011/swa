@@ -10,6 +10,7 @@ import static de.shop.util.Constants.MIN_ID;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -21,7 +22,12 @@ public class Bestellung implements Serializable {
 	
 	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}", groups = IdGroup.class)
 	private Long id;
+	@NotNull(message = "{bestellverwaltung.bestellung.status.notNull}")
+	@Pattern(regexp = "(steht_noch_aus)|(in_bearbeitung)|(abgeschickt)",
+			message = "{bestellverwaltung.bestellung.status.pattern}")
 	private String status;
+	@NotNull(message = "{bestellverwaltung.bestellung.gesamtpreis.notNull}")
+	@Min(value = 0, message = "{bestellverwaltung.bestellung.gesamtpreis.Min}")
 	private BigDecimal gesamtpreis;
 	private boolean ausgeliefert;
 	
