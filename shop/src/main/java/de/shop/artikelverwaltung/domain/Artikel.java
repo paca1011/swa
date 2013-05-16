@@ -34,11 +34,9 @@ public class Artikel implements Serializable {
 	private String farbe;
 	
 	@NotNull(message = "{artikelverwaltung.artikel.preiskunde.notNull}")
-	@Min(value = 0, message = "{artikelverwaltung.artikel.preiskunde.min}")
 	private BigDecimal preisKunde;
 	
 	@NotNull(message = "{artikelverwaltung.artikel.preislieferant.notNull}")
-	@Min(value = 0, message = "{artikelverwaltung.artikel.preislieferant.min}")
 	private BigDecimal preisLieferant;
 	
 	@NotNull(message = "{artikelverwaltung.artikel.bestand.notNull}")

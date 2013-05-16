@@ -69,10 +69,10 @@ public class BestellungResource {
 		final Locale locale = localeHelper.getLocale(headers);
 		
 		// kundeId aus URI 
-		URI kundeUri = bestellung.getKundeUri();
-		String path = kundeUri.getPath();
-		String idStr = path.substring(path.lastIndexOf('/') + 1);
-		Long id = Long.parseLong(idStr);
+		final URI kundeUri = bestellung.getKundeUri();
+		final String path = kundeUri.getPath();
+		final String idStr = path.substring(path.lastIndexOf('/') + 1);
+		final Long id = Long.parseLong(idStr);
 				
 		final Long kundeId = id;
 
@@ -93,10 +93,10 @@ public class BestellungResource {
 		final Locale locale = localeHelper.getLocale(headers);
 
 		// kundeId aus URI 
-		URI kundeUri = bestellung.getKundeUri();
-		String path = kundeUri.getPath();
-		String idStr = path.substring(path.lastIndexOf('/') + 1);
-		Long id = Long.parseLong(idStr);
+		final URI kundeUri = bestellung.getKundeUri();
+		final String path = kundeUri.getPath();
+		final String idStr = path.substring(path.lastIndexOf('/') + 1);
+		final Long id = Long.parseLong(idStr);
 				
 		final Long kundeId = id;
 

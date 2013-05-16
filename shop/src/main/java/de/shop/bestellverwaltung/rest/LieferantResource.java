@@ -21,7 +21,6 @@ import org.jboss.logging.Logger;
 import de.shop.bestellverwaltung.domain.Lieferant;
 import de.shop.bestellverwaltung.service.LieferantService;
 import de.shop.util.Log;
-import de.shop.util.NotFoundException;
 
 @Path("/lieferanten")
 @Produces(APPLICATION_JSON)
@@ -48,10 +47,6 @@ public class LieferantResource {
 	@Path("{id:[1-9][0-9]*}")
 	public Lieferant findLieferantById(@PathParam("id") Long id, @Context UriInfo uriInfo) {
 		final Lieferant lieferant = ls.findLieferantById(id);
-		if (lieferant == null) {
-			final String msg = "Kein Lieferant gefunden mit der ID " + id;
-			throw new NotFoundException(msg);
-		}
 		return lieferant;
 	}
 }

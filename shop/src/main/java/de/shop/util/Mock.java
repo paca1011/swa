@@ -155,7 +155,7 @@ public final class Mock {
 		bestellung.setId(Long.valueOf(status.length()));
 
 		if (kunde.getBestellungen() == null) {
-			List<Bestellung> bestellungen = new ArrayList<Bestellung>();
+			final List<Bestellung> bestellungen = new ArrayList<Bestellung>();
 			bestellung.getKunde().setBestellungen(bestellungen);
 		}
 		else

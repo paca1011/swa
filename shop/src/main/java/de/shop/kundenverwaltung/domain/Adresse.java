@@ -24,7 +24,7 @@ public class Adresse implements Serializable {
 	private Long id;
 	private String plz;
 	@NotNull(message = "{kundenverwaltung.adresse.stadt.notNull}")
-	@Size(max = STADT_LENGTH_MAX,min = STADT_LENGTH_MIN, message = "{kundenverwaltung.adresse.stadt.length}")
+	@Size(max = STADT_LENGTH_MAX, min = STADT_LENGTH_MIN, message = "{kundenverwaltung.adresse.stadt.length}")
 	private String stadt;
 	private String hausnum;
 	@JsonIgnore

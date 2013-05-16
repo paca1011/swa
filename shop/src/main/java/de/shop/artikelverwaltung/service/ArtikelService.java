@@ -37,7 +37,7 @@ public class ArtikelService implements Serializable {
 		validateBezeichnung(bezeichnung, locale);
 		
 		// TODO Datenbanzugriffsschicht statt Mock
-		List<Artikel> vieleartikel = Mock.findArtikelByBezeichnung(bezeichnung);
+		final List<Artikel> vieleartikel = Mock.findArtikelByBezeichnung(bezeichnung);
 		return vieleartikel;
 	}
 	
