@@ -26,6 +26,7 @@ public class Adresse implements Serializable {
 	@NotNull(message = "{kundenverwaltung.adresse.stadt.notNull}")
 	@Size(max = STADT_LENGTH_MAX, min = STADT_LENGTH_MIN, message = "{kundenverwaltung.adresse.stadt.length}")
 	private String stadt;
+	private String strasse;
 	private String hausnum;
 	@JsonIgnore
 //	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
@@ -39,6 +40,12 @@ public class Adresse implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getStraﬂe() {
+		return strasse;
+	}
+	public void setStraﬂe(String straﬂe) {
+		this.strasse = straﬂe;
 	}
 	public Lieferant getLieferant() {
 		return lieferant;
@@ -124,6 +131,6 @@ public class Adresse implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Adresse [id=" + id + ", plz=" + plz + ", ort=" + stadt + "]";
+		return "Adresse [id=" + id + ", plz=" + plz + ", stadt=" + stadt + ", strasse=" + strasse + ", hausnum =" + hausnum +"]";
 	}
 }
