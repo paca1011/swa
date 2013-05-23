@@ -122,7 +122,7 @@ public final class Mock {
 		final Bestellung bestellung = new Bestellung();
 		bestellung.setId(id);
 		bestellung.setStatus("steht_noch_aus");
-		bestellung.setAusgeliefert(false);
+		bestellung.setAusgeliefert(0);
 		bestellung.setKunde(kunde);
 
 		

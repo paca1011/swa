@@ -1,47 +1,150 @@
 package de.shop.bestellverwaltung.domain;
 
 import java.io.Serializable;
+import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import static de.shop.util.Constants.MIN_ID;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.TemporalType.TIMESTAMP;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.jboss.logging.Logger;
 
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.IdGroup;
 
+@Entity
+@Table(name = "bestellung")
+@NamedQueries({
+	@NamedQuery(name  = Bestellung.FIND_BESTELLUNGEN_BY_KUNDE,
+                query = "SELECT b"
+			            + " FROM   Bestellung b"
+						+ " WHERE  b.kunde = :" + Bestellung.PARAM_KUNDE),
+	@NamedQuery(name  = Bestellung.FIND_KUNDE_BY_ID,
+ 			    query = "SELECT b.kunde"
+                        + " FROM   Bestellung b"
+  			            + " WHERE  b.id = :" + Bestellung.PARAM_ID)
+})
+
 public class Bestellung implements Serializable {
 	private static final long serialVersionUID = 1618359234119003714L;
 	
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
+	
+	private static final String PREFIX = "Bestellung.";
+	public static final String FIND_BESTELLUNGEN_BY_KUNDE = PREFIX + "findBestellungenByKunde";
+
+	public static final String FIND_KUNDE_BY_ID = PREFIX + "findBestellungKundeById";
+	
+	public static final String PARAM_KUNDE = "kunde";
+	public static final String PARAM_ID = "id";
+	
+	@Id
+	@GeneratedValue
+	@Column (nullable = false, updatable = false)
 	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}", groups = IdGroup.class)
 	private Long id;
+	
+	@Column (nullable = false)
 	@NotNull(message = "{bestellverwaltung.bestellung.status.notNull}")
 	@Pattern(regexp = "(steht_noch_aus)|(in_bearbeitung)|(abgeschickt)",
 			message = "{bestellverwaltung.bestellung.status.pattern}")
 	private String status;
+	
+	@Column (nullable = false)
 	@NotNull(message = "{bestellverwaltung.bestellung.gesamtpreis.notNull}")
 	@Min(value = 0, message = "{bestellverwaltung.bestellung.gesamtpreis.Min}")
 	private BigDecimal gesamtpreis;
-	private boolean ausgeliefert;
 	
+	@Column (nullable = false)
+	private Integer ausgeliefert;
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "kunde_fk", nullable = false, insertable = false, updatable = false)
 	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}")
 	@JsonIgnore
 	private Kunde kunde;
+	
+	@Transient
 	private URI kundeUri;
+	
 	@JsonIgnore
 	private Lieferant lieferant;
+	
+	@Transient
 	private URI lieferantUri;
-	@JsonIgnore
+	
+	@OneToMany(fetch = EAGER, cascade = { PERSIST, REMOVE })
+	@JoinColumn(name = "bestellung_fk", nullable = false)
+	@OrderColumn(name = "idx", nullable = false)
+	@Valid
 	private List<Posten> vieleposten;
-	private Date erzeugt;
+	
+	@Column (nullable = false)
+	@Temporal (TIMESTAMP)
+	@JsonIgnore
+	private Date erzeugt;	
+	
+	@Column (nullable = false)
+	@Temporal (TIMESTAMP)
+	@JsonIgnore
 	private Date aktualisiert;
+	
+	public Bestellung() {
+		super();
+	}
+	
+	public Bestellung(List<Posten> vieleposten) {
+		super();
+		this.vieleposten = vieleposten;
+	}
+
+	@PrePersist
+	private void prePersist() {
+		erzeugt = new Date();
+		aktualisiert = new Date();
+	}
+	
+	@PostPersist
+	private void postPersist() {
+		LOGGER.debugf("Neue Bestellung mit ID=%d", id);
+	}
+	
+	@PreUpdate
+	private void preUpdate() {
+		aktualisiert = new Date();
+	}
+	
 	
 	public Long getId() {
 		return id;
@@ -50,17 +153,40 @@ public class Bestellung implements Serializable {
 		this.id = id;
 	}
 	public List<Posten> getVieleposten() {
-		return vieleposten;
+		if (vieleposten == null) {
+			return null;
+		}
+		return Collections.unmodifiableList(vieleposten);
 	}
 	public void setVieleposten(List<Posten> vieleposten) {
-		this.vieleposten = vieleposten;
+		if (this.vieleposten == null) {
+			this.vieleposten = vieleposten;
+			return;
+		}
+		
+		// Wiederverwendung der vorhanenen Collection
+		this.vieleposten.clear();
+		if (vieleposten != null) {
+			this.vieleposten.addAll(vieleposten);
+		}
 	}
+	
+	public  Bestellung addVieleposten(Posten posten) {
+		if (vieleposten == null) {
+			vieleposten = new ArrayList<>();
+		}
+		vieleposten.add(posten);
+		return this;
+	}
+	
 	public BigDecimal getGesamtpreis() {
 		return gesamtpreis;
 	}
 	public void setGesamtpreis(BigDecimal gesamtpreis) {
 		this.gesamtpreis = gesamtpreis;
 	}
+	
+	@JsonProperty("datum")
 	public Date getErzeugt() {
 		return erzeugt == null ? null : (Date) erzeugt.clone();
 	}
@@ -91,10 +217,10 @@ public class Bestellung implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public boolean isAusgeliefert() {
+	public Integer isAusgeliefert() {
 		return ausgeliefert;
 	}
-	public void setAusgeliefert(boolean ausgeliefert) {
+	public void setAusgeliefert(Integer ausgeliefert) {
 		this.ausgeliefert = ausgeliefert;
 	}
 	public Kunde getKunde() {
@@ -114,30 +240,51 @@ public class Bestellung implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((kunde == null) ? 0 : kunde.hashCode());
+		result = prime * result + ((erzeugt == null) ? 0 : erzeugt.hashCode());
 		return result;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final Bestellung other = (Bestellung) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
 		}
-		else if (!id.equals(other.id))
+		if (obj == null) {
 			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Bestellung other = (Bestellung) obj;
+		
+		if (kunde == null) {
+			if (other.kunde != null) {
+				return false;
+			}
+		}
+		else if (!kunde.equals(other.kunde)) {
+			return false;
+		}
+		
+		if (erzeugt == null) {
+			if (other.erzeugt != null) {
+				return false;
+			}
+		}
+		else if (!erzeugt.equals(other.erzeugt)) {
+			return false;
+		}
+		
 		return true;
 	}
 	
 	@Override
 	public String toString() {
-		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert + ", kundeUri=" + kundeUri + "]";
+		final Long kundeId = kunde == null ? null : kunde.getId();
+		return "Bestellung [id=" + id + ", kundeId=" + kundeId
+			   + ", kundeUri=" + kundeUri
+		       + ", erzeugt=" + erzeugt
+		       + ", aktualisiert=" + aktualisiert + ']';
 	}
 }
