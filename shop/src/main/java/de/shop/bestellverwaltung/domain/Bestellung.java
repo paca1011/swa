@@ -146,6 +146,12 @@ public class Bestellung implements Serializable {
 	}
 	
 	
+	public void setValues(Bestellung b) {
+		status = b.status;
+		gesamtpreis = b.gesamtpreis;
+		ausgeliefert = b.ausgeliefert;
+	}
+	
 	public Long getId() {
 		return id;
 	}

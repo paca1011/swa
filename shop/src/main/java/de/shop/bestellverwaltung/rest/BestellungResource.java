@@ -35,6 +35,7 @@ import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.rest.UriHelperKunde;
 import de.shop.kundenverwaltung.service.KundeService;
+import de.shop.kundenverwaltung.service.KundeService.FetchType;
 import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
@@ -223,7 +224,7 @@ public class BestellungResource {
 		// Bestellpositionen mit nicht-gefundene Artikel werden eliminiert.
 		int i = 0;
 		final List<Posten> neueBestellpositionen = new ArrayList<>(vieleposten.size());
-		for (Posten bp : vieleposten) {
+		for (Posten p : vieleposten) {
 			// Artikel-ID der aktuellen Bestellposition (s.o.):
 			// artikelIds haben gleiche Reihenfolge wie bestellpositionen
 			final long artikelId = artikelIds.get(i++);
@@ -232,8 +233,8 @@ public class BestellungResource {
 			for (Artikel artikel : gefundeneArtikel) {
 				if (artikel.getId().longValue() == artikelId) {
 					// Der Artikel wurde gefunden
-					bp.setArtikel(artikel);
-					neueBestellpositionen.add(bp);
+					p.setArtikel(artikel);
+					neueBestellpositionen.add(p);
 					break;					
 				}
 			}
@@ -253,22 +254,41 @@ public class BestellungResource {
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
-	public Response updateBestellung(Bestellung bestellung) {
+	public void updateBestellung(Bestellung bestellung) {
 		final Locale locale = localeHelper.getLocale(headers);
 
-		// kundeId aus URI 
-		final URI kundeUri = bestellung.getKundeUri();
-		final String path = kundeUri.getPath();
-		final String idStr = path.substring(path.lastIndexOf('/') + 1);
-		final Long id = Long.parseLong(idStr);
-				
-		final Long kundeId = id;
-
-		final Kunde kunde = ks.findKundeById(kundeId, null, locale);
-
-		bestellung.setKunde(kunde);
+		final Bestellung origBestellung = bs.findBestellungById(bestellung.getId());
+		if (origBestellung == null) {
+			// TODO msg passend zu locale
+			final String msg = "Kein Kunde gefunden mit der ID " + bestellung.getId();
+			throw new NotFoundException(msg);
+		}
+		LOGGER.tracef("Bestellung vorher: %s", origBestellung);
+	
+		// Daten des vorhandenen Kunden ueberschreiben
+		origBestellung.setValues(bestellung);
+		LOGGER.tracef("Bestellung nachher: %s", origBestellung);
 		
-		bestellung = bs.updateBestellung(bestellung, locale);
-		return Response.noContent().build();
+		// Update durchfuehren
+		bestellung = bs.updateBestellung(origBestellung, locale);
+		if (bestellung == null) {
+			// TODO msg passend zu locale
+			final String msg = "Kein Kunde gefunden mit der ID " + origBestellung.getId();
+			throw new NotFoundException(msg);
+		}
+//		// kundeId aus URI 
+//		final URI kundeUri = bestellung.getKundeUri();
+//		final String path = kundeUri.getPath();
+//		final String idStr = path.substring(path.lastIndexOf('/') + 1);
+//		final Long id = Long.parseLong(idStr);
+//				
+//		final Long kundeId = id;
+//
+//		final Kunde kunde = ks.findKundeById(kundeId, null, locale);
+//
+//		bestellung.setKunde(kunde);
+//		
+//		bestellung = bs.updateBestellung(bestellung, locale);
+//		return Response.noContent().build();
 	}
 }

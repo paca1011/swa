@@ -53,7 +53,7 @@ public class KundeResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	private static final String VERSION = "1.0";
 
-    @Context
+    @Contedxt
     private UriInfo uriInfo;
     
     @Context
