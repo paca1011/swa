@@ -28,17 +28,25 @@ import org.jboss.logging.Logger;
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.util.LocaleHelper;
+import de.shop.util.Log;
 import de.shop.util.NotFoundException;
+import de.shop.util.Transactional;
 
 @Path("/artikel")
-@Produces(APPLICATION_JSON)
+@Produces({ APPLICATION_XML, TEXT_XML, APPLICATION_JSON })
 @Consumes
 @RequestScoped
+@Transactional
+@Log
+
 
 public class ArtikelResource {
 	
 private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
+	@Context
+	private UriInfo uriInfo;
+
 	@Inject
 	private ArtikelService as;
 	
@@ -51,8 +59,19 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 	private void preDestroy() {
 		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
 	} 
-	@Context
-	private UriInfo uriInfo;
+	
+	@GET
+	@Path("{id:[1-9][0-9]*}")
+	public Artikel findArtikel(@PathParam("id") Long id) {
+		final Artikel artikel = as.findArtikelById(id);
+		if (artikel == null) {
+			final String msg = "Kein Artikel gefunden mit der ID " + id;
+			throw new NotFoundException(msg);
+		}
+
+		return artikel;
+	}
+	
 	
 	@Context
 	private HttpHeaders headers;
