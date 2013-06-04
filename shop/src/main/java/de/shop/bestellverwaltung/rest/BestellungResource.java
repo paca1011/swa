@@ -260,7 +260,7 @@ public class BestellungResource {
 		final Bestellung origBestellung = bs.findBestellungById(bestellung.getId());
 		if (origBestellung == null) {
 			// TODO msg passend zu locale
-			final String msg = "Kein Kunde gefunden mit der ID " + bestellung.getId();
+			final String msg = "Keine Bestellung gefunden mit der ID " + bestellung.getId();
 			throw new NotFoundException(msg);
 		}
 		LOGGER.tracef("Bestellung vorher: %s", origBestellung);
@@ -273,7 +273,7 @@ public class BestellungResource {
 		bestellung = bs.updateBestellung(origBestellung, locale);
 		if (bestellung == null) {
 			// TODO msg passend zu locale
-			final String msg = "Kein Kunde gefunden mit der ID " + origBestellung.getId();
+			final String msg = "Keine Bestellung gefunden mit der ID " + origBestellung.getId();
 			throw new NotFoundException(msg);
 		}
 //		// kundeId aus URI 

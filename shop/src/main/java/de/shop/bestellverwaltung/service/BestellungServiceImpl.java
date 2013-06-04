@@ -34,6 +34,8 @@ import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.Kunde;
+import de.shop.kundenverwaltung.domain.PasswordGroup;
+import de.shop.kundenverwaltung.service.EmailExistsException;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.IdGroup;
 import de.shop.util.Log;
@@ -72,11 +74,15 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	 */
 	@Override
 	public Bestellung findBestellungById(Long id) {
-		final Bestellung bestellung = em.find(Bestellung.class, id);
-		return bestellung;
+		try {
+			final Bestellung bestellung = em.find(Bestellung.class, id);
+			return bestellung;
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+
 	}
-
-
 
 	/**
 	 */
@@ -182,7 +188,21 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		return artikel;
 	}
 	
-	@Override
+//	@Override
+//	public Bestellung updateBestellung(Bestellung bestellung, Locale locale) {
+//		if (bestellung == null) {
+//			return null;
+//		}
+//
+//		// Werden alle Constraints beim Modifizieren gewahrt?
+//		validateBestellung(bestellung, locale, Default.class, IdGroup.class);
+//
+//		// TODO Datenbanzugriffsschicht statt Mock
+//		Mock.updateBestellung(bestellung);
+//		
+//		return bestellung;
+//	}
+	
 	public Bestellung updateBestellung(Bestellung bestellung, Locale locale) {
 		if (bestellung == null) {
 			return null;
@@ -190,10 +210,9 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 
 		// Werden alle Constraints beim Modifizieren gewahrt?
 		validateBestellung(bestellung, locale, Default.class, IdGroup.class);
-
-		// TODO Datenbanzugriffsschicht statt Mock
-		Mock.updateBestellung(bestellung);
 		
+
+		em.merge(bestellung);
 		return bestellung;
 	}
 	
