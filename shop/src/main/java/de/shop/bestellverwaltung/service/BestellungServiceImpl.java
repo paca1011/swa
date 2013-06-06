@@ -218,9 +218,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 			return null;
 		}
 		
-		// SELECT b
-		// FROM   Bestellung b LEFT JOIN FETCH b.lieferungen
-		// WHERE  b.id = <id> OR ...
+		// TODO braucht man das?
 
 		final CriteriaBuilder builder = em.getCriteriaBuilder();
 		final CriteriaQuery<Bestellung> criteriaQuery  = builder.createQuery(Bestellung.class);
