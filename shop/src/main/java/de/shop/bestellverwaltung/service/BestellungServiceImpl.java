@@ -34,12 +34,9 @@ import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.Kunde;
-import de.shop.kundenverwaltung.domain.PasswordGroup;
-import de.shop.kundenverwaltung.service.EmailExistsException;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.IdGroup;
 import de.shop.util.Log;
-import de.shop.util.Mock;
 import de.shop.util.ValidatorProvider;
 
 @Log
