@@ -22,7 +22,6 @@ import com.google.common.base.Strings;
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.util.IdGroup;
 import de.shop.util.Log;
-import de.shop.util.Mock;
 import de.shop.util.ValidatorProvider;
 
 @Log
@@ -86,9 +85,8 @@ public class ArtikelService implements Serializable {
 	}
 	
 	public Artikel findArtikelById(Long id) {
-		// TODO id pruefen
-		// TODO Datenbanzugriffsschicht statt Mock
-		return Mock.findArtikelById(id);
+		final Artikel artikel = em.find(Artikel.class, id);
+		return artikel;
 	}
 	
 	public Artikel createArtikel(Artikel artikel, Locale locale) {
@@ -97,8 +95,8 @@ public class ArtikelService implements Serializable {
 		}
 		validateArtikel(artikel, locale, Default.class);
 		
-		artikel = Mock.createArtikel(artikel);
-
+		//artikel = Mock.createArtikel(artikel);
+		em.persist(artikel);
 		return artikel;
 	}
 	
@@ -106,13 +104,12 @@ public class ArtikelService implements Serializable {
 		if (artikel == null) {
 			return null;
 		}
-
-		// Werden alle Constraints beim Modifizieren gewahrt?
+		
 		validateArtikel(artikel, locale, Default.class, IdGroup.class);
 
 		
-		// TODO Datenbanzugriffsschicht statt Mock
-		Mock.updateArtikel(artikel);
+		em.merge(artikel);
+		//Mock.updateArtikel(artikel);
 		
 		return artikel;
 	}

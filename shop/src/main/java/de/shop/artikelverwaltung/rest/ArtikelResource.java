@@ -1,7 +1,9 @@
 package de.shop.artikelverwaltung.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static javax.ws.rs.core.MediaType.TEXT_XML;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
@@ -65,7 +67,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 	public Artikel findArtikel(@PathParam("id") Long id) {
 		final Artikel artikel = as.findArtikelById(id);
 		if (artikel == null) {
-			final String msg = "Kein Artikel gefunden mit der ID " + id;
+			final String msg = "Kein Artikel mit der ID " + id + "gefunden.";
 			throw new NotFoundException(msg);
 		}
 
