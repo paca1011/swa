@@ -5,6 +5,8 @@ import static de.shop.util.Constants.MIN_ID;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,8 +30,12 @@ public class Adresse implements Serializable {
 	private String stadt;
 	private String strasse;
 	private String hausnum;
+	
+	
+	@OneToOne
+	@JoinColumn(name = "kunde_fk", nullable = false)
+	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
 	@JsonIgnore
-//	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
 	private Kunde kunde;
 	private Lieferant lieferant;
 	private Date erzeugt;
