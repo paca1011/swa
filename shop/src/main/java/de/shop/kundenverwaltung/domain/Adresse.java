@@ -5,40 +5,53 @@ import static de.shop.util.Constants.MIN_ID;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import de.shop.bestellverwaltung.domain.Lieferant;
 import de.shop.util.IdGroup;
 
+@Entity
+@Table(name = "adresse")
 public class Adresse implements Serializable {
 	private static final long serialVersionUID = -3029272617931844501L;
 	
 	public static final int STADT_LENGTH_MAX = 128;
 	public static final int STADT_LENGTH_MIN = 3;
 	
+	@Id
+	@GeneratedValue
+	@Column(nullable = false, updatable = false)
 	@Min(value = MIN_ID, message = "{kundenverwaltung.adresse.id.min}", groups = IdGroup.class)
 	private Long id;
+	
 	private String plz;
+	
 	@NotNull(message = "{kundenverwaltung.adresse.stadt.notNull}")
 	@Size(max = STADT_LENGTH_MAX, min = STADT_LENGTH_MIN, message = "{kundenverwaltung.adresse.stadt.length}")
 	private String stadt;
-	private String strasse;
-	private String hausnum;
 	
+	private String strasse;
+	
+	private String hausnum;
 	
 	@OneToOne
 	@JoinColumn(name = "kunde_fk", nullable = false)
 	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
 	@JsonIgnore
 	private Kunde kunde;
-	private Lieferant lieferant;
+
 	private Date erzeugt;
+	
 	private Date aktualisiert;
 	
 	public Long getId() {
@@ -52,12 +65,6 @@ public class Adresse implements Serializable {
 	}
 	public void setStraﬂe(String straﬂe) {
 		this.strasse = straﬂe;
-	}
-	public Lieferant getLieferant() {
-		return lieferant;
-	}
-	public void setLieferant(Lieferant lieferant) {
-		this.lieferant = lieferant;
 	}
 	public String getHausnum() {
 		return hausnum;

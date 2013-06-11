@@ -14,7 +14,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-// import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -24,10 +24,10 @@ import javax.validation.groups.Default;
 
 import org.jboss.logging.Logger;
 
-// import de.shop.bestellverwaltung.domain.Posten;
-// import de.shop.bestellverwaltung.domain.Posten_;
-// import de.shop.bestellverwaltung.domain.Bestellung;
-// import de.shop.bestellverwaltung.domain.Bestellung_;
+import de.shop.bestellverwaltung.domain.Bestellung;
+import de.shop.bestellverwaltung.domain.Bestellung_;
+import de.shop.bestellverwaltung.domain.Posten;
+import de.shop.bestellverwaltung.domain.Posten_;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.domain.Kunde_;
 import de.shop.kundenverwaltung.domain.PasswordGroup;
@@ -340,23 +340,21 @@ public class KundeService implements Serializable {
 		final List<Kunde> kunden = em.createQuery(criteriaQuery).getResultList();
 		return kunden;
 	}
-	
+
 	/**
 	 */
-	// TODO Wartschleife
-	/*
 	public List<Kunde> findKundenMitMinBestMenge(short minMenge) {
 		final CriteriaBuilder builder = em.getCriteriaBuilder();
 		final CriteriaQuery<Kunde> criteriaQuery  = builder.createQuery(Kunde.class);
 		final Root<Kunde> k = criteriaQuery.from(Kunde.class);
 
 		final Join<Kunde, Bestellung> b = k.join(Kunde_.bestellungen);
-		final Join<Bestellung, Posten> bp = b.join(Bestellung_.Postenen);
+		final Join<Bestellung, Posten> bp = b.join(Bestellung_.vieleposten);
 		criteriaQuery.where(builder.gt(bp.<Short>get(Posten_.anzahl), minMenge))
 		             .distinct(true);
 		
 		final List<Kunde> kunden = em.createQuery(criteriaQuery).getResultList();
 		return kunden;
 	}
-	*/
+
 }
