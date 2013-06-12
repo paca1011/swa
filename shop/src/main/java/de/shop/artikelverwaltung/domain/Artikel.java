@@ -34,18 +34,18 @@ import de.shop.util.IdGroup;
 	@NamedQuery(name  = Artikel.FIND_VERFUEGBARE_ARTIKEL,
         	query = "SELECT      a"
         	        + " FROM     Artikel a"
-					+ " WHERE    a.ausgesondert = FALSE"
+					+ " WHERE    a.bestand > 0"
                     + " ORDER BY a.id ASC"),
 	@NamedQuery(name  = Artikel.FIND_ARTIKEL_BY_BEZ,
             	query = "SELECT      a"
                         + " FROM     Artikel a"
 						+ " WHERE    a.bezeichnung LIKE :" + Artikel.PARAM_BEZEICHNUNG
-						+ "          AND a.ausgesondert = FALSE"
+						+ "          AND a.bestand > 0"
 			 	        + " ORDER BY a.id ASC"),
    	@NamedQuery(name  = Artikel.FIND_ARTIKEL_MAX_PREIS,
             	query = "SELECT      a"
                         + " FROM     Artikel a"
-						+ " WHERE    a.preis < :" + Artikel.PARAM_PREIS
+						+ " WHERE    a.preisKunde < :" + Artikel.PARAM_PREIS
 			 	        + " ORDER BY a.id ASC")
 })
 
@@ -65,7 +65,7 @@ public class Artikel implements Serializable {
 	public static final String FIND_ARTIKEL_MAX_PREIS = PREFIX + "findArtikelByMaxPreis";
 
 	public static final String PARAM_BEZEICHNUNG = "bezeichnung";
-	public static final String PARAM_PREIS = "preis";
+	public static final String PARAM_PREIS = "preisKunde";
 	
 	@Id
 	@GeneratedValue

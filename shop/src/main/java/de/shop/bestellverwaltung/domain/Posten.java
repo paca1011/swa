@@ -26,18 +26,18 @@ import org.jboss.logging.Logger;
 import de.shop.artikelverwaltung.domain.Artikel;
 
 @Entity
-@Table(name = "bestellposition")
+@Table(name = "posten")
 @NamedQueries({
     @NamedQuery(name  = Posten.FIND_LADENHUETER,
    	            query = "SELECT a"
    	            	    + " FROM   Artikel a"
-   	            	    + " WHERE  a NOT IN (SELECT bp.artikel FROM Bestellposition bp)")
+   	            	    + " WHERE  a NOT IN (SELECT p.artikel FROM Posten p)")
 })
 public class Posten implements Serializable {
 	private static final long serialVersionUID = 2222771733641950913L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
-	private static final String PREFIX = "Bestellposition.";
+	private static final String PREFIX = "Posten.";
 	public static final String FIND_LADENHUETER = PREFIX + "findLadenhueter";
 	private static final int ANZAHL_MIN = 1;
 	
@@ -48,7 +48,7 @@ public class Posten implements Serializable {
 	
 	@ManyToOne(optional = false)
     @JoinColumn(name = "artikel_fk", nullable = false)
-	@NotNull(message = "{bestellverwaltung.bestellposition.artikel.notNull}")
+	@NotNull(message = "{bestellverwaltung.posten.artikel.notNull}")
 	@JsonIgnore
 	private Artikel artikel;
 
@@ -56,7 +56,7 @@ public class Posten implements Serializable {
 	private URI artikelUri;
 
 	@Column(name = "anzahl", nullable = false)
-	@Min(value = ANZAHL_MIN, message = "{bestellverwaltung.bestellposition.anzahl.min}")
+	@Min(value = ANZAHL_MIN, message = "{bestellverwaltung.posten.anzahl.min}")
 	private short anzahl;
 	
 	public Posten() {
@@ -77,7 +77,7 @@ public class Posten implements Serializable {
 	
 	@PostPersist
 	private void postPersist() {
-		LOGGER.debugf("Neue Bestellposition mit ID=%d", id);
+		LOGGER.debugf("Neur Posten mit ID=%d", id);
 	}
 
 	public Long getId() {
@@ -114,7 +114,7 @@ public class Posten implements Serializable {
 	@Override
 	public String toString() {
 		final Long artikelId = artikel == null ? null : artikel.getId();
-		return "Bestellposition [id=" + id + ", artikel=" + artikelId
+		return "Posten [id=" + id + ", artikel=" + artikelId
 			   + ", artikelUri=" + artikelUri + ", anzahl=" + anzahl + "]";
 	}
 
