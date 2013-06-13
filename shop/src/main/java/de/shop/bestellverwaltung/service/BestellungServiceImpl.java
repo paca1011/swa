@@ -4,7 +4,6 @@ import static de.shop.util.Constants.KEINE_ID;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -17,13 +16,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
@@ -212,7 +205,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		em.merge(bestellung);
 		return bestellung;
 	}
-	
+	/*
 	private List<Bestellung> findBestellungenByIds(List<Long> ids) {
 		if (ids == null || ids.isEmpty()) {
 			return null;
@@ -240,7 +233,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		final TypedQuery<Bestellung> query = em.createQuery(criteriaQuery);
 		final List<Bestellung> bestellungen = query.getResultList();
 		return bestellungen;
-	}
+	}*/
 
 	@Override
 	public List<Bestellung> findBestellungenByKundeId(Long kundeId) {

@@ -14,11 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -59,8 +57,6 @@ import de.shop.util.IdGroup;
 
 @Entity
 @Table(name = "kunde")
-@Inheritance
-@DiscriminatorColumn(name = "art", length = 1)
 @NamedQueries({
 	@NamedQuery(name  = Kunde.FIND_KUNDEN,
                 query = "SELECT k"
