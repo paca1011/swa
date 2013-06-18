@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.Valid;
@@ -60,7 +59,7 @@ public class Lieferant implements Serializable {
 	private Adresse adresse;
 	
 	@OneToMany
-	@JoinColumn(name = "lieferant_fk", nullable = false)
+	@JoinColumn(name = "lieferant_fk")
 	@JsonIgnore
 	private List<Bestellung> bestellung;
 	

@@ -98,8 +98,8 @@ public class Bestellung implements Serializable {
 	@Transient
 	private URI kundeUri;
 	
-	@ManyToOne(optional = true)
-	@JoinColumn(name = "lieferant_fk", nullable = false, insertable = false, updatable = false)
+	@ManyToOne
+	@JoinColumn(name = "lieferant_fk", nullable = true, insertable = false, updatable = false)
 	@JsonIgnore
 	private Lieferant lieferant;
 	
