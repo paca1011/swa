@@ -3,19 +3,21 @@ package de.shop.bestellverwaltung.domain;
 import static de.shop.util.Constants.MIN_ID;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -27,6 +29,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.util.IdGroup;
 
+@Entity
+@Table(name = "lieferant")
 public class Lieferant implements Serializable {
 	private static final long serialVersionUID = -1890561212075707472L;
 
@@ -47,7 +51,7 @@ public class Lieferant implements Serializable {
 	private String name;
 	
 	@Column(name = "telefonnum", nullable = false)
-	private Short telefonnum;
+	private Long telefonnum;
 	
 	
 	@OneToOne(cascade = { PERSIST, REMOVE }, mappedBy = "lieferant")
@@ -57,9 +61,8 @@ public class Lieferant implements Serializable {
 	
 	@OneToMany
 	@JoinColumn(name = "lieferant_fk", nullable = false)
-	@OrderColumn(name = "idx", nullable = false)
 	@JsonIgnore
-	private Bestellung bestellung;
+	private List<Bestellung> bestellung;
 	
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
@@ -77,10 +80,10 @@ public class Lieferant implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Bestellung getBestellung() {
+	public List<Bestellung> getBestellung() {
 		return bestellung;
 	}
-	public void setBestellung(Bestellung bestellung) {
+	public void setBestellung(List<Bestellung> bestellung) {
 		this.bestellung = bestellung;
 	}
 	public String getName() {
@@ -89,10 +92,10 @@ public class Lieferant implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Short getTelefonnum() {
+	public Long getTelefonnum() {
 		return telefonnum;
 	}
-	public void setTelefonnum(Short telefonnum) {
+	public void setTelefonnum(Long telefonnum) {
 		this.telefonnum = telefonnum;
 	}
 	public Adresse getAdresse() {

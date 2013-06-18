@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import de.shop.bestellverwaltung.domain.Lieferant;
 import de.shop.util.IdGroup;
 
 @Entity
@@ -44,11 +45,17 @@ public class Adresse implements Serializable {
 	
 	private String hausnum;
 	
+	// TODO Kunde muss jetzt null sein dürfen
 	@OneToOne
-	@JoinColumn(name = "kunde_fk", nullable = false)
-	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
+	@JoinColumn(name = "kunde_fk", nullable = true)
+//	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
 	@JsonIgnore
 	private Kunde kunde;
+	
+	@OneToOne
+	@JoinColumn(name = "lieferant_fk", nullable = true)
+	@JsonIgnore
+	private Lieferant lieferant;
 
 	private Date erzeugt;
 	
@@ -89,6 +96,12 @@ public class Adresse implements Serializable {
 	}
 	public void setKunde(Kunde kunde) {
 		this.kunde = kunde;
+	}
+	public Lieferant getLieferant() {
+		return lieferant;
+	}
+	public void setLieferant(Lieferant lieferant) {
+		this.lieferant = lieferant;
 	}
 	public Date getErzeugt() {
 		return erzeugt == null ? null : (Date) erzeugt.clone();
