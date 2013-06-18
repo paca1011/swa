@@ -1,19 +1,74 @@
 package de.shop.bestellverwaltung.domain;
 
+import static de.shop.util.Constants.MIN_ID;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.TemporalType.TIMESTAMP;
+
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
+import javax.persistence.Temporal;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import de.shop.kundenverwaltung.domain.Adresse;
+import de.shop.util.IdGroup;
 
 public class Lieferant implements Serializable {
 	private static final long serialVersionUID = -1890561212075707472L;
+
+
+	private static final int NAME_LENGTH_MIN = 2;
+	private static final int NAME_LENGTH_MAX = 32;
 	
+	
+	@Id
+	@GeneratedValue
+	@Min(value = MIN_ID, message = "{bestellverwaltung.lieferant.id.min}", groups = IdGroup.class)
+	@Column(nullable = false, updatable = false)
 	private Long id;
+	
+	@NotNull(message = "{beststellverwaltung.lieferung.name.notNull}")
+	@Size(min = NAME_LENGTH_MIN, max = NAME_LENGTH_MAX,
+	      message = "{bestellverwaltung.lieferant.name.length}")
 	private String name;
-	private Long telefonnum;
+	
+	@Column(name = "telefonnum", nullable = false)
+	private Short telefonnum;
+	
+	
+	@OneToOne(cascade = { PERSIST, REMOVE }, mappedBy = "lieferant")
+	@Valid
+	@NotNull(message = "{kundenverwaltung.kunde.adresse.notNull}")
 	private Adresse adresse;
+	
+	@OneToMany
+	@JoinColumn(name = "lieferant_fk", nullable = false)
+	@OrderColumn(name = "idx", nullable = false)
+	@JsonIgnore
 	private Bestellung bestellung;
+	
+	@Column(nullable = false)
+	@Temporal(TIMESTAMP)
+	@JsonIgnore
 	private Date erzeugt;
+	
+	@Column(nullable = false)
+	@Temporal(TIMESTAMP)
+	@JsonIgnore
 	private Date aktualisiert;
 	
 	public Long getId() {
@@ -34,10 +89,10 @@ public class Lieferant implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Long getTelefonnum() {
+	public Short getTelefonnum() {
 		return telefonnum;
 	}
-	public void setTelefonnum(Long telefonnum) {
+	public void setTelefonnum(Short telefonnum) {
 		this.telefonnum = telefonnum;
 	}
 	public Adresse getAdresse() {
