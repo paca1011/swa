@@ -6,6 +6,7 @@ import static de.shop.util.Constants.KEINE_ID;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -30,11 +31,12 @@ import javax.ws.rs.core.UriInfo;
 
 import org.jboss.logging.Logger;
 
-// import de.shop.bestellverwaltung.domain.Bestellung;
+import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.rest.UriHelperBestellung;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.domain.Adresse;
+
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
 import de.shop.util.LocaleHelper;
@@ -167,8 +169,6 @@ public class KundeResource {
 	 * @param kundeId ID des Kunden
 	 * @return Objekt mit Bestellungsdaten, falls die ID vorhanden ist
 	 */
-	// TODO Warteschleife
-	/*
 	@GET
 	@Path("{id:[1-9][0-9]*}/bestellungen")
 	public Collection<Bestellung> findBestellungenByKundeId(@PathParam("id") Long kundeId) {
@@ -189,7 +189,6 @@ public class KundeResource {
 		return bestellungen;
 	}
 
-
 	@GET
 	@Path("{id:[1-9][0-9]*}/bestellungenIds")
 	public Collection<Long> findBestellungenIdsByKundeId(@PathParam("id") Long kundeId) {
@@ -207,7 +206,7 @@ public class KundeResource {
 		
 		return bestellungenIds;
 	}
-    */
+
 
 	/**
 	 * Mit der URL /kunden einen Privatkunden per POST anlegen.
@@ -217,11 +216,10 @@ public class KundeResource {
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
-	public Response createPrivatkunde(Kunde kunde) {
+	public Response createKunde(Kunde kunde) {
 		final Locale locale = localeHelper.getLocale(headers);
 
 		kunde.setId(KEINE_ID);
-		kunde.setPasswordWdh(kunde.getPasswort());
 		
 		final Adresse adresse = kunde.getAdresse();
 		if (adresse != null) {

@@ -23,7 +23,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
-import javax.persistence.PostLoad;
 import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -176,18 +175,6 @@ public class Kunde implements Serializable {
 	@Column(length = PASSWORD_LENGTH_MAX)
 	private String passwort;
 	
-	@Transient
-	@JsonIgnore
-	private String passwordWdh;
-	
-//	@AssertTrue(groups = PasswordGroup.class, message = "{kundenverwaltung.kunde.password.notEqual}")
-//	public boolean isPasswordEqual() {
-//		if (password == null) {
-//			return passwordWdh == null;
-//		}
-//		return password.equals(passwordWdh);
-//	}
-	
 	@OneToOne(cascade = { PERSIST, REMOVE }, mappedBy = "kunde")
 	@Valid
 	@NotNull(message = "{kundenverwaltung.kunde.adresse.notNull}")
@@ -228,17 +215,12 @@ public class Kunde implements Serializable {
 		aktualisiert = new Date();
 	}
 	
-	@PostLoad
-	protected void postLoad() {
-		passwordWdh = passwort;
-	}
 	
 	public void setValues(Kunde k) {
 		nachname = k.nachname;
 		vorname = k.vorname;
 		email = k.email;
 		passwort = k.passwort;
-		passwordWdh = k.passwort;
 	}
 	
 	public Long getId() {
@@ -252,13 +234,6 @@ public class Kunde implements Serializable {
 	}
 	public void setPasswort(String passwort) {
 		this.passwort = passwort;
-	}
-	public String getPasswordWdh() {
-		return passwordWdh;
-	}
-
-	public void setPasswordWdh(String passwordWdh) {
-		this.passwordWdh = passwordWdh;
 	}
 	public String getNachname() {
 		return nachname;

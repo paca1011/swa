@@ -21,5 +21,4 @@ public class InvalidEmailException extends KundeValidationException {
 	public String getEmail() {
 		return email;
 	}
-
 }

@@ -2,6 +2,7 @@ package de.shop.kundenverwaltung.service;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -24,13 +25,12 @@ import javax.validation.groups.Default;
 
 import org.jboss.logging.Logger;
 
-import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.bestellverwaltung.domain.Bestellung_;
 import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Posten_;
+import de.shop.bestellverwaltung.domain.Bestellung;
+import de.shop.bestellverwaltung.domain.Bestellung_;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.domain.Kunde_;
-import de.shop.kundenverwaltung.domain.PasswordGroup;
 import de.shop.util.IdGroup;
 import de.shop.util.Log;
 import de.shop.util.ValidatorProvider;
@@ -164,7 +164,10 @@ public class KundeService implements Serializable {
 					kunde = em.createNamedQuery(Kunde.FIND_KUNDE_BY_ID_FETCH_BESTELLUNGEN, Kunde.class)
 							  .setParameter(Kunde.PARAM_KUNDE_ID, id)
 							  .getSingleResult();
-					break;	
+					break;
+					
+
+	
 				default:
 					kunde = em.find(Kunde.class, id);
 					break;
@@ -228,7 +231,7 @@ public class KundeService implements Serializable {
 		}
 
 		// Werden alle Constraints beim Einfuegen gewahrt?
-		validateKunde(kunde, locale, Default.class, PasswordGroup.class);
+		validateKunde(kunde, locale, Default.class);
 		
 		// Pruefung, ob die Email-Adresse schon existiert
 		try {
@@ -264,7 +267,7 @@ public class KundeService implements Serializable {
 		}
 
 		// Werden alle Constraints beim Modifizieren gewahrt?
-		validateKunde(kunde, locale, Default.class, PasswordGroup.class, IdGroup.class);
+		validateKunde(kunde, locale, Default.class, IdGroup.class);
 		
 		// kunde vom EntityManager trennen, weil anschliessend z.B. nach Id und Email gesucht wird
 		em.detach(kunde);
@@ -321,6 +324,15 @@ public class KundeService implements Serializable {
 
 	/**
 	 */
+	public List<Kunde> findKundenBySeit(Date seit) {
+		final List<Kunde> kunden = em.createNamedQuery(Kunde.FIND_KUNDEN_BY_DATE, Kunde.class)
+                                             .setParameter(Kunde.PARAM_KUNDE_SEIT, seit)
+                                             .getResultList();
+		return kunden;
+	}
+	
+	/**
+	 */
 	public List<Kunde> findKundenByNachnameCriteria(String nachname) {
 		final CriteriaBuilder builder = em.getCriteriaBuilder();
 		final CriteriaQuery<Kunde> criteriaQuery = builder.createQuery(Kunde.class);
@@ -340,7 +352,7 @@ public class KundeService implements Serializable {
 		final List<Kunde> kunden = em.createQuery(criteriaQuery).getResultList();
 		return kunden;
 	}
-
+	
 	/**
 	 */
 	public List<Kunde> findKundenMitMinBestMenge(short minMenge) {
@@ -356,5 +368,9 @@ public class KundeService implements Serializable {
 		final List<Kunde> kunden = em.createQuery(criteriaQuery).getResultList();
 		return kunden;
 	}
+	
+	/**
+	 */
+	
 
 }

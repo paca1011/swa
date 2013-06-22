@@ -45,7 +45,7 @@ public class Adresse implements Serializable {
 	
 	private String hausnum;
 	
-	// TODO Kunde muss jetzt null sein dürfen
+	// TODO Kunde muss jetzt null sein dï¿½rfen
 	@OneToOne
 	@JoinColumn(name = "kunde_fk", nullable = true)
 //	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
@@ -67,11 +67,11 @@ public class Adresse implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getStraße() {
+	public String getStrasse() {
 		return strasse;
 	}
-	public void setStraße(String straße) {
-		this.strasse = straße;
+	public void setStrasse(String strasse) {
+		this.strasse = strasse;
 	}
 	public String getHausnum() {
 		return hausnum;

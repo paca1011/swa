@@ -21,7 +21,7 @@ import de.shop.util.Log;
 @Log
 public class KundeValidationExceptionMapper implements ExceptionMapper<KundeValidationException> {
 	private static final String NEWLINE = System.getProperty("line.separator");
-
+	
 	@Override
 	public Response toResponse(KundeValidationException e) {
 		final Collection<ConstraintViolation<Kunde>> violations = e.getViolations();
