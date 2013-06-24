@@ -99,7 +99,7 @@ public class Artikel implements Serializable {
 	@Min(value = 1, message = "{artikelverwaltung.artikel.bestand.min}")
 	private Long bestand;
 	
-	@Column(nullable = true)
+	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
 	@JsonIgnore
 	private Date erzeugt;
@@ -134,6 +134,7 @@ public class Artikel implements Serializable {
 	@PreUpdate
 	private void preUpdate() {
 		aktualisiert = new Date();
+		erzeugt = new Date();
 	}
 	
 	public Long getId() {
