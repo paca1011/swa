@@ -6,7 +6,7 @@ import javax.validation.ConstraintViolation;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 
-public class InvalidBezeichnungException extends ArtikelValidationException {
+public class InvalidBezeichnungException extends AbstractArtikelValidationException {
 	private static final long serialVersionUID = -8973151010781329074L;
 	
 	private final String bezeichnung;

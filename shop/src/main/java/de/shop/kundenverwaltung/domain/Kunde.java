@@ -95,7 +95,7 @@ import de.shop.util.IdGroup;
     @NamedQuery(name  = Kunde.FIND_KUNDEN_BY_PLZ,
 	            query = "SELECT k"
 				        + " FROM  Kunde k"
-			            + " WHERE k.adresse.plz = :" + Kunde.PARAM_KUNDE_ADRESSE_PLZ),
+			            + " WHERE k.adresse.plz = :" + Kunde.PARAM_KUNDE_ADRESSE_PLZ)
 })
 @ScriptAssert(lang = "javascript",
 	          script = "(_this.password == null && _this.passwordWdh == null)"

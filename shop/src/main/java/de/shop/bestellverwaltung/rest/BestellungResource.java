@@ -34,7 +34,6 @@ import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.rest.UriHelperKunde;
-import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
@@ -60,9 +59,6 @@ public class BestellungResource {
 	
 	@Inject
 	private ArtikelService as;
-	
-	@Inject
-	private KundeService ks;
 	
 	@Inject
 	private UriHelperBestellung uriHelperBestellung;
@@ -102,21 +98,6 @@ public class BestellungResource {
 		return bestellung;
 	}
 	
-//	@GET
-//	@Path("{id:[1-9][0-9]*}")
-//	public Bestellung findBestellungById(@PathParam("id") Long id) {
-//		final Bestellung bestellung = bs.findBestellungById(id);
-//		
-//		// TODO Anwendungskern statt Mock, Verwendung von Locale
-//		if (bestellung == null) {
-//			throw new NotFoundException("Keine Bestellung mit der ID " + id + " gefunden.");
-//		}
-//		
-//		// URLs innerhalb der gefundenen Bestellung anpassen
-//		uriHelperBestellung.updateUriBestellung(bestellung, uriInfo);
-//		return bestellung;
-//	}
-	
 	/**
 	 * Mit der URL /bestellungen/{id}/kunde den Kunden einer Bestellung ermitteln
 	 * @param id ID der Bestellung
@@ -143,29 +124,6 @@ public class BestellungResource {
 	 * @return Objekt mit Bestelldaten, falls die ID vorhanden ist
 	 */
 	
-//	@POST
-//	@Consumes(APPLICATION_JSON)
-//	@Produces
-//	public Response createBestellung(Bestellung bestellung) {
-//		final Locale locale = localeHelper.getLocale(headers);
-//		
-//		// kundeId aus URI 
-//		final URI kundeUri = bestellung.getKundeUri();
-//		final String path = kundeUri.getPath();
-//		final String idStr = path.substring(path.lastIndexOf('/') + 1);
-//		final Long id = Long.parseLong(idStr);
-//				
-//		final Long kundeId = id;
-//
-//		final Kunde kunde = ks.findKundeById(kundeId, null, locale);
-//
-//		bestellung.setKunde(kunde);
-//
-//		bestellung = bs.createBestellung(bestellung, kunde, locale);
-//
-//		final URI bestellungUri = uriHelperBestellung.getUriBestellung(bestellung, uriInfo);
-//		return Response.created(bestellungUri).build();
-//	}
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -275,19 +233,5 @@ public class BestellungResource {
 			final String msg = "Keine Bestellung gefunden mit der ID " + origBestellung.getId();
 			throw new NotFoundException(msg);
 		}
-//		// kundeId aus URI 
-//		final URI kundeUri = bestellung.getKundeUri();
-//		final String path = kundeUri.getPath();
-//		final String idStr = path.substring(path.lastIndexOf('/') + 1);
-//		final Long id = Long.parseLong(idStr);
-//				
-//		final Long kundeId = id;
-//
-//		final Kunde kunde = ks.findKundeById(kundeId, null, locale);
-//
-//		bestellung.setKunde(kunde);
-//		
-//		bestellung = bs.updateBestellung(bestellung, locale);
-//		return Response.noContent().build();
 	}
 }

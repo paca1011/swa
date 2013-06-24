@@ -157,6 +157,7 @@ public class Adresse implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Adresse [id=" + id + ", plz=" + plz + ", stadt=" + stadt + ", strasse=" + strasse + ", hausnum =" + hausnum +"]";
+		return "Adresse [id=" + id + ", plz=" + plz + ", stadt=" + stadt 
+				+ ", strasse=" + strasse + ", hausnum =" + hausnum + "]";
 	}
 }
