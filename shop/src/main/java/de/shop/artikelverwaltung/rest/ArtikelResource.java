@@ -91,7 +91,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 	public String getVersion() {
 		return "1.0";
 	}
-	
+	/*
 	@GET
 	@Path("{id:[1-9][0-9]*}")
 	public Artikel findArtikelById(@PathParam("id") Long id, @Context UriInfo uriInfo) {
@@ -101,7 +101,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 			throw new NotFoundException(msg);
 		}
 		return artikel;
-	}
+	}*/
 	
 	
 	@POST

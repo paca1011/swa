@@ -99,7 +99,7 @@ public class Artikel implements Serializable {
 	@Min(value = 1, message = "{artikelverwaltung.artikel.bestand.min}")
 	private Long bestand;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	@Temporal(TIMESTAMP)
 	@JsonIgnore
 	private Date erzeugt;
