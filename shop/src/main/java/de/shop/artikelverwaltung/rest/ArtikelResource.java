@@ -1,9 +1,7 @@
 package de.shop.artikelverwaltung.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import static javax.ws.rs.core.MediaType.TEXT_XML;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
@@ -35,7 +33,7 @@ import de.shop.util.NotFoundException;
 import de.shop.util.Transactional;
 
 @Path("/artikel")
-@Produces({ APPLICATION_XML, TEXT_XML, APPLICATION_JSON })
+@Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
 @Transactional
@@ -91,7 +89,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 	public String getVersion() {
 		return "1.0";
 	}
-	/*
+
 	@GET
 	@Path("{id:[1-9][0-9]*}")
 	public Artikel findArtikelById(@PathParam("id") Long id, @Context UriInfo uriInfo) {
@@ -101,7 +99,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 			throw new NotFoundException(msg);
 		}
 		return artikel;
-	}*/
+	}
 	
 	
 	@POST

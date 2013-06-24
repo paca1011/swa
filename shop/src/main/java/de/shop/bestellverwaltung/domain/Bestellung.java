@@ -86,7 +86,7 @@ public class Bestellung implements Serializable {
 	@Min(value = 0, message = "{bestellverwaltung.bestellung.gesamtpreis.Min}")
 	private BigDecimal gesamtpreis;
 	
-	@Column (nullable = false)
+	@Column
 	private Integer ausgeliefert;
 	
 	@ManyToOne(optional = false)
@@ -112,7 +112,7 @@ public class Bestellung implements Serializable {
 	@Valid
 	private List<Posten> vieleposten;
 	
-	@Column (nullable = false)
+	@Column
 	@Temporal (TIMESTAMP)
 	@JsonIgnore
 	private Date erzeugt;	

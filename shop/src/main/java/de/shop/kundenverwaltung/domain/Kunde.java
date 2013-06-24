@@ -36,7 +36,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.hibernate.validator.constraints.Email;
 
 
@@ -102,7 +101,6 @@ import de.shop.util.IdGroup;
 	          script = "(_this.password == null && _this.passwordWdh == null)"
 	                   + "|| (_this.password != null && _this.password.equals(_this.passwordWdh))",
 	          message = "{kundenverwaltung.kunde.password.notEqual}")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public class Kunde implements Serializable {
 	private static final long serialVersionUID = 7401524595142572933L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -229,6 +227,22 @@ public class Kunde implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	public String getVorname() {
+		return vorname;
+	}
+
+	public void setVorname(String vorname) {
+		this.vorname = vorname;
+	}
+
+	public String getGeschlecht() {
+		return geschlecht;
+	}
+
+	public void setGeschlecht(String geschlecht) {
+		this.geschlecht = geschlecht;
+	}
+
 	public String getPasswort() {
 		return passwort;
 	}
