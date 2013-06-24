@@ -178,20 +178,6 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		return artikel;
 	}
 	
-//	@Override
-//	public Bestellung updateBestellung(Bestellung bestellung, Locale locale) {
-//		if (bestellung == null) {
-//			return null;
-//		}
-//
-//		// Werden alle Constraints beim Modifizieren gewahrt?
-//		validateBestellung(bestellung, locale, Default.class, IdGroup.class);
-//
-//		// TODO Datenbanzugriffsschicht statt Mock
-//		Mock.updateBestellung(bestellung);
-//		
-//		return bestellung;
-//	}
 	
 	public Bestellung updateBestellung(Bestellung bestellung, Locale locale) {
 		if (bestellung == null) {
