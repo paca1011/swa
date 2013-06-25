@@ -118,7 +118,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response updateArtikel(Artikel artikel) {
-		//@SuppressWarnings("unused")
+		
 		final Locale locale = localeHelper.getLocale(headers);
 		
 		as.updateArtikel(artikel, locale);

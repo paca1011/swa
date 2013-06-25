@@ -53,7 +53,7 @@ public class ArtikelService implements Serializable {
 	private ValidatorProvider validatorProvider;
 
 	private void validateArtikel(Artikel artikel, Locale locale, Class<?>... groups) {
-		// Werden alle Constraints beim Einfuegen gewahrt?
+		
 		final Validator validator = validatorProvider.getValidator(locale);
 		
 		final Set<ConstraintViolation<Artikel>> violations = validator.validate(artikel, groups);
@@ -111,11 +111,11 @@ public class ArtikelService implements Serializable {
 		final Root<Artikel> a = criteriaQuery.from(Artikel.class);
 
 		final Path<Long> idPath = a.get("id");
-		//final Path<String> idPath = a.get(Artikel_.id);   // Metamodel-Klassen funktionieren nicht mit Eclipse
+		
 		
 		Predicate pred = null;
 		if (ids.size() == 1) {
-			// Genau 1 id: kein OR notwendig
+			// Ohne OR da nur eine ID
 			pred = builder.equal(idPath, ids.get(0));
 		}
 		else {
@@ -143,7 +143,6 @@ public class ArtikelService implements Serializable {
 		}
 		validateArtikel(artikel, locale, Default.class);
 		
-		//artikel = Mock.createArtikel(artikel);
 		em.persist(artikel);
 		return artikel;
 	}
@@ -157,7 +156,6 @@ public class ArtikelService implements Serializable {
 
 		
 		em.merge(artikel);
-		//Mock.updateArtikel(artikel);
 		
 		return artikel;
 	}

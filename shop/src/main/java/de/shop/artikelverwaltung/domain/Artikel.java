@@ -173,7 +173,7 @@ public class Artikel implements Serializable {
 	public void setBestand(Long bestand) {
 		this.bestand = bestand;
 	}
-	//TODO hier dann @JsonProperty("datum") ??
+	
 	public Date getErzeugt() {
 		return erzeugt == null ? null : (Date) erzeugt.clone();
 	}
