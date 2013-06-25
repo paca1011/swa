@@ -228,6 +228,9 @@ public class Bestellung implements Serializable {
 	public Integer isAusgeliefert() {
 		return ausgeliefert;
 	}
+	public Integer getAusgeliefert() {
+		return ausgeliefert;
+	}
 	public void setAusgeliefert(Integer ausgeliefert) {
 		this.ausgeliefert = ausgeliefert;
 	}
