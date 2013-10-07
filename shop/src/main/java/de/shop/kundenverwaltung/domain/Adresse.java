@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -50,6 +51,7 @@ public class Adresse implements Serializable {
 	@JoinColumn(name = "kunde_fk", nullable = true)
 //	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
 	@JsonIgnore
+	@XmlTransient
 	private Kunde kunde;
 	
 	@OneToOne

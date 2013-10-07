@@ -3,6 +3,7 @@ package de.shop.kundenverwaltung.domain;
 import static de.shop.util.Constants.MIN_ID;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 import java.io.Serializable;
@@ -14,9 +15,11 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,27 +37,26 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.hibernate.validator.constraints.Email;
 
-
-
-
-
-
-
-
-
+import de.shop.util.persistence.File;
 
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.util.IdGroup;
 
 @Entity
 @Table(name = "kunde")
+@Inheritance  // Alternativen: strategy = SINGLE_TABLE (=default), TABLE_PER_CLASS, JOINED
+@DiscriminatorColumn(name = "art", length = 1)
 @NamedQueries({
 	@NamedQuery(name  = Kunde.FIND_KUNDEN,
                 query = "SELECT k"
@@ -62,6 +64,10 @@ import de.shop.util.IdGroup;
 	@NamedQuery(name  = Kunde.FIND_KUNDEN_FETCH_BESTELLUNGEN,
 				query = "SELECT  DISTINCT k"
 						+ " FROM Kunde k LEFT JOIN FETCH k.bestellungen"),
+	@NamedQuery(name  = Kunde.FIND_KUNDEN_OHNE_BESTELLUNGEN,
+                query = "SELECT k"
+				        + " FROM   AbstractKunde k"
+				        + " WHERE  k.bestellungen IS EMPTY"),
 	@NamedQuery(name  = Kunde.FIND_KUNDEN_ORDER_BY_ID,
 		        query = "SELECT   k"
 				        + " FROM  Kunde k"
@@ -95,15 +101,23 @@ import de.shop.util.IdGroup;
     @NamedQuery(name  = Kunde.FIND_KUNDEN_BY_PLZ,
 	            query = "SELECT k"
 				        + " FROM  Kunde k"
-			            + " WHERE k.adresse.plz = :" + Kunde.PARAM_KUNDE_ADRESSE_PLZ)
+			            + " WHERE k.adresse.plz = :" + Kunde.PARAM_KUNDE_ADRESSE_PLZ),
+	@NamedQuery(name  = Kunde.FIND_KUNDEN_BY_ID_PREFIX,
+				query = "SELECT   k"
+				        + " FROM  AbstractKunde k"
+				        + " WHERE CONCAT('', k.id) LIKE :" + Kunde.PARAM_KUNDE_ID_PREFIX
+				        + " ORDER BY k.id"),
 })
 @ScriptAssert(lang = "javascript",
 	          script = "(_this.password == null && _this.passwordWdh == null)"
 	                   + "|| (_this.password != null && _this.password.equals(_this.passwordWdh))",
 	          message = "{kundenverwaltung.kunde.password.notEqual}")
-public class Kunde implements Serializable {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@XmlRootElement
+@Formatted
+public class Kunde implements Serializable, Cloneable {
 	private static final long serialVersionUID = 7401524595142572933L;
-	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 	
 	//Pattern mit UTF-8 (statt Latin-1 bzw. ISO-8859-1) Schreibweise fuer Umlaute:
 	private static final String NAME_PATTERN = "[A-Z\u00C4\u00D6\u00DC][a-z\u00E4\u00F6\u00FC\u00DF]+";
@@ -120,9 +134,11 @@ public class Kunde implements Serializable {
 
 	private static final String PREFIX = "Kunde.";
 	public static final String FIND_KUNDEN = PREFIX + "findKunden";
+	public static final String FIND_KUNDEN_BY_ID_PREFIX = PREFIX + "findKundenByIdPrefix";
 	public static final String FIND_KUNDEN_FETCH_BESTELLUNGEN = PREFIX + "findKundenFetchBestellungen";
 	public static final String FIND_KUNDEN_ORDER_BY_ID = PREFIX + "findKundenOrderById";
 	public static final String FIND_IDS_BY_PREFIX = PREFIX + "findIdsByPrefix";
+	public static final String FIND_KUNDEN_OHNE_BESTELLUNGEN = PREFIX + "findKundenOhneBestellungen";
 	public static final String FIND_KUNDEN_BY_NACHNAME = PREFIX + "findKundenByNachname";
 	public static final String FIND_KUNDEN_BY_NACHNAME_FETCH_BESTELLUNGEN =
 		                       PREFIX + "findKundenByNachnameFetchBestellungen";
@@ -140,6 +156,8 @@ public class Kunde implements Serializable {
 	public static final String PARAM_KUNDE_ADRESSE_PLZ = "plz";
 	public static final String PARAM_KUNDE_SEIT = "seit";
 	public static final String PARAM_KUNDE_EMAIL = "email";
+	
+	public static final String GRAPH_BESTELLUNGEN = "bestellungen";
 	
 	@Id
 	@GeneratedValue
@@ -184,6 +202,11 @@ public class Kunde implements Serializable {
 	@JsonIgnore
 	private List<Bestellung> bestellungen;
 	
+	@OneToOne(fetch = LAZY, cascade = { PERSIST, REMOVE })
+	@JoinColumn(name = "file_fk")
+	@XmlTransient
+	private File file;
+	
 	@Transient
 	private URI bestellungenUri;
 	
@@ -219,6 +242,14 @@ public class Kunde implements Serializable {
 		vorname = k.vorname;
 		email = k.email;
 		passwort = k.passwort;
+	}
+	
+	public File getFile() {
+		return file;
+	}
+	
+	public void setFile(File file) {
+		this.file = file;
 	}
 	
 	public Long getId() {
