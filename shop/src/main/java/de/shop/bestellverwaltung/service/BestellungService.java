@@ -8,13 +8,32 @@ import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.Kunde;
 
 public interface BestellungService {
+	/*
+	 * 
+	 */
 	Bestellung findBestellungById(Long id);
-	List<Bestellung> findBestellungenByKundeId(Long kundeId);
-	Bestellung createBestellung(Bestellung bestellung, Kunde kunde, Locale locale);
+	/*
+	 * 
+	 */
+	Bestellung createBestellung(Bestellung bestellung, String username);
+	/*
+	 * 
+	 */
+	Bestellung createBestellung(Bestellung bestellung, Kunde kunde);
+	/*
+	 * 
+	 */
 	Bestellung updateBestellung(Bestellung bestellung, Locale locale);
-	Bestellung createBestellung(Bestellung bestellung, Long kundeId,
-			Locale locale);
+	/*
+	 * 
+	 */
 	Kunde findKundeById(Long id);
+	/*
+	 * 
+	 */
 	List<Bestellung> findBestellungenByKunde(Kunde kunde);
+	/*
+	 * 
+	 */
 	List<Artikel> ladenhueter(int anzahl);
 }
