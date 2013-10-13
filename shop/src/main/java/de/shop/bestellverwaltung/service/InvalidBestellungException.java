@@ -23,4 +23,10 @@ public class InvalidBestellungException extends AbstractBestellungValidationExce
 	public Bestellung getBestellung() {
 		return bestellung;
 	}
+
+	@Override
+	public String getMessageKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
