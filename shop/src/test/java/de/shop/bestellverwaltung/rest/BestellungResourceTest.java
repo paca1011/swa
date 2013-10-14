@@ -26,16 +26,16 @@ import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.shop.bestellverwaltung.domain.Bestellposition;
+import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.rest.KundeResource;
 import de.shop.util.AbstractResourceTest;
 
 
 //Logging durch java.util.logging
 /**
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
+ * @author <a href="mailto:stto1016@HS-Karlsruhe.de">Tobias Steiner</a>
  */
 
 @RunWith(Arquillian.class)
@@ -66,7 +66,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		final Bestellung bestellung = response.readEntity(Bestellung.class);
 		
 		assertThat(bestellung.getId()).isEqualTo(bestellungId);
-		assertThat(bestellung.getBestellpositionen()).isNotEmpty();
+		assertThat(bestellung.getVieleposten()).isNotEmpty();
 
 		LOGGER.finer("ENDE");
 	}
@@ -88,7 +88,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 			
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
+		final Kunde kunde = response.readEntity(Kunde.class);
 		assertThat(kunde).isNotNull();
 		
 		response = getHttpsClient().target(KUNDEN_ID_URI)
@@ -115,15 +115,15 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		// Neues, client-seitiges Bestellungsobjekt als JSON-Datensatz
 		final Bestellung bestellung = new Bestellung();
 		
-		Bestellposition bp = new Bestellposition();
-		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
-		bp.setAnzahl((short) 1);
-		bestellung.addBestellposition(bp);
+		Posten p = new Posten();
+		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
+		p.setAnzahl((short) 1);
+		bestellung.addVieleposten(p);
 
-		bp = new Bestellposition();
-		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
-		bp.setAnzahl((short) 1);
-		bestellung.addBestellposition(bp);
+		p = new Posten();
+		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
+		p.setAnzahl((short) 1);
+		bestellung.addVieleposten(p);
 		
 		// When
 		Long id;

@@ -7,7 +7,8 @@ import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+
+
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -17,9 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.groups.Default;
+
+
 
 import org.jboss.logging.Logger;
 
@@ -28,9 +28,8 @@ import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.service.KundeService;
-import de.shop.util.IdGroup;
 import de.shop.util.Log;
-import de.shop.util.ValidatorProvider;
+
 
 @Log
 public class BestellungServiceImpl implements Serializable, BestellungService {
@@ -43,8 +42,8 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	@Inject
 	private KundeService ks;
 	
-	@Inject
-	private ValidatorProvider validatorProvider;
+//	@Inject
+//	private ValidatorProvider validatorProvider;
 	
 	@Inject
 	@NeueBestellung
@@ -71,7 +70,6 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		catch (NoResultException e) {
 			return null;
 		}
-
 	}
 
 	/**
@@ -104,70 +102,9 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	}
 
 
-	/**
-	 * Zuordnung einer neuen, transienten Bestellung zu einem existierenden, persistenten Kunden.
-	 * Der Kunde ist fuer den EntityManager bekannt, die Bestellung dagegen nicht. Das Zusammenbauen
-	 * wird sowohl fuer einen Web Service aus auch fuer eine Webanwendung benoetigt.
-	 */
-	@Override
-	public Bestellung createBestellung(Bestellung bestellung,
-			                           Long kundeId,
-			                           Locale locale) {
-		if (bestellung == null) {
-			return null;
-		}
-		
-		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
-		final Kunde kunde = ks.findKundeById(kundeId, KundeService.FetchType.MIT_BESTELLUNGEN, locale);
-		return createBestellung(bestellung, kunde, locale);
-	}
+
 	
-	/**
-	 * Zuordnung einer neuen, transienten Bestellung zu einem existierenden, persistenten Kunden.
-	 * Der Kunde ist fuer den EntityManager bekannt, die Bestellung dagegen nicht. Das Zusammenbauen
-	 * wird sowohl fuer einen Web Service aus auch fuer eine Webanwendung benoetigt.
-	 */
-	@Override
-	public Bestellung createBestellung(Bestellung bestellung,
-			                           Kunde kunde,
-			                           Locale locale) {
-		if (bestellung == null) {
-			return null;
-		}
-		
-		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
-		if (!em.contains(kunde)) {
-			kunde = ks.findKundeById(kunde.getId(), KundeService.FetchType.MIT_BESTELLUNGEN, locale);
-		}
-		kunde.addBestellung(bestellung);
-		bestellung.setKunde(kunde);
-		
-		// Vor dem Abspeichern IDs zuruecksetzen:
-		// IDs koennten einen Wert != null haben, wenn sie durch einen Web Service uebertragen wurden
-		bestellung.setId(KEINE_ID);
-		for (Posten bp : bestellung.getVieleposten()) {
-			bp.setId(KEINE_ID);
-			LOGGER.tracef("Bestellposition: %s", bp);				
-		}
-		
-		validateBestellung(bestellung, locale, Default.class);
-		em.persist(bestellung);
-		event.fire(bestellung);
-
-		return bestellung;
-	}
 	
-	private void validateBestellung(Bestellung bestellung, Locale locale, Class<?>... groups) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		
-		final Set<ConstraintViolation<Bestellung>> violations = validator.validate(bestellung);
-		if (violations != null && !violations.isEmpty()) {
-			LOGGER.debugf("createBestellung: violations=%s", violations);
-			throw new InvalidBestellungException(bestellung, violations);
-		}
-	}
-
-
 	/**
 	 */
 	@Override
@@ -178,52 +115,51 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		return artikel;
 	}
 	
-	
+	@Override
 	public Bestellung updateBestellung(Bestellung bestellung, Locale locale) {
 		if (bestellung == null) {
 			return null;
 		}
-
-		// Werden alle Constraints beim Modifizieren gewahrt?
-		validateBestellung(bestellung, locale, Default.class, IdGroup.class);
-		
+	
 
 		em.merge(bestellung);
 		return bestellung;
 	}
-	/*
-	private List<Bestellung> findBestellungenByIds(List<Long> ids) {
-		if (ids == null || ids.isEmpty()) {
-			return null;
-		}
-		
-		// TODO braucht man das?
-
-		final CriteriaBuilder builder = em.getCriteriaBuilder();
-		final CriteriaQuery<Bestellung> criteriaQuery  = builder.createQuery(Bestellung.class);
-		final Root<Bestellung> b = criteriaQuery.from(Bestellung.class);
-		b.fetch("lieferungen", JoinType.LEFT);
-		
-		// Die Vergleichen mit "=" als Liste aufbauen
-		final Path<Long> idPath = b.get("id");
-		final List<Predicate> predList = new ArrayList<>();
-		for (Long id : ids) {
-			final Predicate equal = builder.equal(idPath, id);
-			predList.add(equal);
-		}
-		// Die Vergleiche mit "=" durch "or" verknuepfen
-		final Predicate[] predArray = new Predicate[predList.size()];
-		final Predicate pred = builder.or(predList.toArray(predArray));
-		criteriaQuery.where(pred).distinct(true);
-
-		final TypedQuery<Bestellung> query = em.createQuery(criteriaQuery);
-		final List<Bestellung> bestellungen = query.getResultList();
-		return bestellungen;
-	}*/
 
 	@Override
-	public List<Bestellung> findBestellungenByKundeId(Long kundeId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Bestellung createBestellung(Bestellung bestellung, String username) {
+		if (bestellung == null) {
+			return null;
+		}
+
+		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
+		final Kunde kunde = ks.findKundeByUserName(username);
+		return createBestellung(bestellung, kunde);
+	}
+	
+	@Override
+	public Bestellung createBestellung(Bestellung bestellung, Kunde kunde) {
+		if (bestellung == null || kunde == null) {
+			return null;
+		}
+
+		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
+		if (!em.contains(kunde)) {
+			kunde = ks.findKundeById(kunde.getId(), KundeService.FetchType.MIT_BESTELLUNGEN);
+		}
+		bestellung.setKunde(kunde);
+		kunde.addBestellung(bestellung);
+		
+		// Vor dem Abspeichern IDs zuruecksetzen:
+		// IDs koennten einen Wert != null haben, wenn sie durch einen Web Service uebertragen wurden
+		bestellung.setId(KEINE_ID);
+		for (Posten p : bestellung.getVieleposten()) {
+			p.setId(KEINE_ID);
+		}
+		
+		em.persist(bestellung);
+		event.fire(bestellung);
+		
+		return bestellung;
 	}
 }
