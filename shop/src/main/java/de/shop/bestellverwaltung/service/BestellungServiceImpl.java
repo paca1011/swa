@@ -127,13 +127,13 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	}
 
 	@Override
-	public Bestellung createBestellung(Bestellung bestellung, String username) {
+	public Bestellung createBestellung(Bestellung bestellung, String email) {
 		if (bestellung == null) {
 			return null;
 		}
 
 		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
-		final Kunde kunde = ks.findKundeByUserName(username);
+		final Kunde kunde = ks.findKundeByEmail(email);
 		return createBestellung(bestellung, kunde);
 	}
 	

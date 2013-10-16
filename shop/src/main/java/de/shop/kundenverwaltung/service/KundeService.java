@@ -129,10 +129,6 @@ public class KundeService implements Serializable {
 				// FIXME https://hibernate.atlassian.net/browse/HHH-8285 : @NamedEntityGraph ab Java EE 7 bzw. JPA 2.1
 				//kunde = em.find(Kunde.class, id, GRAPH_BESTELLUNGEN);
 				break;
-				
-			case MIT_WARTUNGSVERTRAEGEN:
-				kunde = em.find(Kunde.class, id, GRAPH_WARTUNGSVERTRAEGE);
-				break;
 
 			default:
 				kunde = em.find(Kunde.class, id);

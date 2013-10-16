@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -32,6 +33,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -165,6 +167,10 @@ public class Kunde implements Serializable, Cloneable {
 	@Column(nullable = false, updatable = false)
 	private Long id;
 	
+	@Version
+	@Basic(optional = false)
+	private int version = 1;
+	
 	@NotNull(message = "{kundenverwaltung.kunde.vorname.notNull}")
 	@Size(min = NACHNAME_LENGTH_MIN, max = NACHNAME_LENGTH_MAX,
 	      message = "{kundenverwaltung.kunde.vorname.length}")
@@ -258,6 +264,14 @@ public class Kunde implements Serializable, Cloneable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 	public String getVorname() {
 		return vorname;
 	}

@@ -15,7 +15,7 @@ public interface BestellungService {
 	/*
 	 * 
 	 */
-	Bestellung createBestellung(Bestellung bestellung, String username);
+	Bestellung createBestellung(Bestellung bestellung, String email);
 	/*
 	 * 
 	 */

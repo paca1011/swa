@@ -56,13 +56,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.shop.auth.domain.RolleType;
-import de.shop.bestellverwaltung.domain.Bestellposition;
+import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.domain.Adresse;
-import de.shop.kundenverwaltung.domain.GeschlechtType;
-import de.shop.kundenverwaltung.domain.Privatkunde;
 import de.shop.util.AbstractResourceTest;
 
 
@@ -148,11 +145,10 @@ public class KundeResourceTest extends AbstractResourceTest {
 	
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
+		final Kunde kunde = response.readEntity(Kunde.class);
 		assertThat(kunde.getId()).isEqualTo(kundeId);
 		assertThat(kunde.getNachname()).isNotEmpty();
 		assertThat(kunde.getAdresse()).isNotNull();
-		assertThat(kunde.isAgbAkzeptiert()).isTrue();
 		
 		// Link-Header fuer Bestellungen pruefen
 		assertThat(response.getLinks()).isNotEmpty();
@@ -222,8 +218,8 @@ public class KundeResourceTest extends AbstractResourceTest {
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
 		
-		final Collection<AbstractKunde> kunden =
-				                        response.readEntity(new GenericType<Collection<AbstractKunde>>() { });
+		final Collection<Kunde> kunden =
+				                        response.readEntity(new GenericType<Collection<Kunde>>() { });
 		assertThat(kunden).isNotEmpty()
 		                  .doesNotContainNull()
 		                  .doesNotHaveDuplicates();
@@ -232,7 +228,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		assertThat(response.getLink(FIRST_LINK)).isNotNull();
 		assertThat(response.getLink(LAST_LINK)).isNotNull();
 
-		for (AbstractKunde k : kunden) {
+		for (Kunde k : kunden) {
 			assertThat(k.getNachname()).isEqualTo(nachname);
 			
 			final URI bestellungenUri = k.getBestellungenUri();
@@ -304,7 +300,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 
 		LOGGER.finer("ENDE");
 	}
-	
+	/*
 	@Test
 	@InSequence(30)
 	public void findKundenByGeschlecht() {
@@ -331,10 +327,11 @@ public class KundeResourceTest extends AbstractResourceTest {
 		
 		LOGGER.finer("ENDE");
 	}
+	*/
 	
 	@Test
 	@InSequence(40)
-	public void createPrivatkunde() throws URISyntaxException {
+	public void createKunde() throws URISyntaxException {
 		LOGGER.finer("BEGINN");
 		
 		// Given
@@ -352,17 +349,19 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final String hausnr = NEUE_HAUSNR;
 		final String neuesPassword = NEUES_PASSWORD;
 		
-		final Privatkunde kunde = new Privatkunde(nachname, vorname, email, seit);
+		final Kunde kunde = new Kunde();
 		kunde.setVorname(vorname);
-		kunde.setKategorie(kategorie);
-		kunde.setRabatt(rabatt);
-		kunde.setUmsatz(umsatz);
-		kunde.setAgbAkzeptiert(agbAkzeptiert);
-		final Adresse adresse = new Adresse(plz, ort, strasse, hausnr);
+		kunde.setNachname(nachname);
+		kunde.setEmail(email);
+		final Adresse adresse = new Adresse();
+		adresse.setPlz(plz);
+		adresse.setStadt(ort);
+		adresse.setStrasse(strasse);
+		adresse.setHausnum(hausnr);
+		// TODO notwendig?
+		// adresse.setKunde(kunde);
 		kunde.setAdresse(adresse);
-		kunde.setPassword(neuesPassword);
-		kunde.setPasswordWdh(neuesPassword);
-		kunde.addRollen(Arrays.asList(RolleType.KUNDE, RolleType.MITARBEITER));
+		kunde.setPasswort(neuesPassword);
 		
 		Response response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
                                                               .request()
@@ -386,10 +385,11 @@ public class KundeResourceTest extends AbstractResourceTest {
 
 		// When (2)
 		final Bestellung bestellung = new Bestellung();
-		final Bestellposition bp = new Bestellposition();
-		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId));
-		bp.setAnzahl((short) 1);
-		bestellung.addBestellposition(bp);
+		final Posten p = new Posten();
+		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId));
+		p.setAnzahl((short) 1);
+		//TODO Tobias?
+		bestellung.addPosten(p);
 		
 		// Then (2)
 		response = getHttpsClient(username, neuesPassword).target(BESTELLUNGEN_URI)
@@ -414,7 +414,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final String nachname = NEUER_NACHNAME_INVALID;
 		final String vorname = NEUER_VORNAME;
 		final String email = NEUE_EMAIL_INVALID;
-		final Date seit = NEU_SEIT;
 		final boolean agbAkzeptiert = false;
 		final String password = NEUES_PASSWORD;
 		final String passwordWdh = NEUES_PASSWORD + "x";
@@ -423,12 +422,15 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final String strasse = NEUE_STRASSE;
 		final String hausnr = NEUE_HAUSNR;
 
-		final Privatkunde kunde = new Privatkunde(nachname, vorname, email, seit);
+		final Kunde kunde = new Kunde();
 		kunde.setVorname(vorname);
-		kunde.setAgbAkzeptiert(agbAkzeptiert);
-		kunde.setPassword(password);
-		kunde.setPasswordWdh(passwordWdh);
-		final Adresse adresse = new Adresse(plz, ort, strasse, hausnr);
+		kunde.setNachname(nachname);
+		kunde.setEmail(email);
+		final Adresse adresse = new Adresse();
+		adresse.setPlz(plz);
+		adresse.setStadt(ort);
+		adresse.setStrasse(strasse);
+		adresse.setHausnum(hausnr);
 		adresse.setKunde(kunde);
 		kunde.setAdresse(adresse);
 		
@@ -507,7 +509,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		
 		// Given
 		// Bei falschem Passwort muss der Inhalt des JSON-Datensatzes egal sein
-		final AbstractKunde kunde = new AbstractKunde() {
+		final Kunde kunde = new Kunde() {
 			private static final long serialVersionUID = 1L;
 		};
 		
@@ -539,7 +541,7 @@ public class KundeResourceTest extends AbstractResourceTest {
                                             .request()
                                             .accept(APPLICATION_JSON)
                                             .get();
-		AbstractKunde kunde = response.readEntity(AbstractKunde.class);
+		Kunde kunde = response.readEntity(Kunde.class);
 		assertThat(kunde.getId()).isEqualTo(kundeId);
 		final int origVersion = kunde.getVersion();
     	
@@ -552,7 +554,7 @@ public class KundeResourceTest extends AbstractResourceTest {
                                                      .put(json(kunde));
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		kunde = response.readEntity(AbstractKunde.class);
+		kunde = response.readEntity(Kunde.class);
 		assertThat(kunde.getVersion()).isGreaterThan(origVersion);
 		
 		// Erneutes Update funktioniert, da die Versionsnr. aktualisiert ist

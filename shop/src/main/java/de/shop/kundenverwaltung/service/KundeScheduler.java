@@ -1,7 +1,6 @@
 package de.shop.kundenverwaltung.service;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Collection;
 import java.util.List;
 
 import javax.ejb.Schedule;
@@ -11,7 +10,6 @@ import javax.persistence.EntityManager;
 
 import org.jboss.logging.Logger;
 
-import de.shop.auth.domain.RolleType;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.interceptor.Log;
 
@@ -34,14 +32,9 @@ public class KundeScheduler {
 		final List<Kunde> kunden =
 				                  em.createNamedQuery(Kunde.FIND_KUNDEN_OHNE_BESTELLUNGEN, Kunde.class)
 				                    .getResultList();
-		for (Kunde k : kunden) {
-			final Collection<RolleType> rollen = k.getRollen();
-			if (rollen != null && rollen.contains(RolleType.ADMIN)) {
-				// Admin nicht loeschen
-				continue;
-			}
+		for (Kunde k : kunden) 
 			ks.deleteKunde(k);
-			LOGGER.infof("Kunde #%d wurde geloescht (ohne Bestellungen)", k.getId());
+			LOGGER.infof("Kunde #%d wurde geloescht (ohne Bestellungen)");
 		}
-	}
+	
 }

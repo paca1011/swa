@@ -29,7 +29,7 @@ import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.AbstractResourceTest;
 import de.shop.util.HttpsConcurrencyHelper;
 
@@ -67,7 +67,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
                                             .accept(APPLICATION_JSON)
                                             .get();
 
-    	final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
+    	final Kunde kunde = response.readEntity(Kunde.class);
 
     	// Konkurrierendes Update
 		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
@@ -123,7 +123,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
                                              .accept(APPLICATION_JSON)
                                              .get();
 
-		final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
+		final Kunde kunde = response.readEntity(Kunde.class);
 
 		// Konkurrierendes Delete
     	final Callable<Integer> concurrentDelete = new Callable<Integer>() {
@@ -175,7 +175,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
                                             .accept(APPLICATION_JSON)
                                             .get();
 
-		final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
+		final Kunde kunde = response.readEntity(Kunde.class);
 
 		// Konkurrierendes Update
 		kunde.setNachname(neuerNachname);
