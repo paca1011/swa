@@ -9,12 +9,15 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static de.shop.util.Constants.ERSTE_VERSION;
+import static de.shop.util.Constants.KEINE_ID;
 import static de.shop.util.Constants.MIN_ID;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,12 +34,14 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.jboss.logging.Logger;
 
@@ -73,7 +78,11 @@ public class Bestellung implements Serializable {
 	@GeneratedValue
 	@Column (nullable = false, updatable = false)
 	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}", groups = IdGroup.class)
-	private Long id;
+	private Long id = KEINE_ID;
+	
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
 	
 	@Column (nullable = false)
 	@NotNull(message = "{bestellverwaltung.bestellung.status.notNull}")
@@ -91,8 +100,7 @@ public class Bestellung implements Serializable {
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "kunde_fk", nullable = false, insertable = false, updatable = false)
-	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}")
-	@JsonIgnore
+	@XmlTransient
 	private Kunde kunde;
 	
 	@Transient
@@ -100,7 +108,7 @@ public class Bestellung implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "lieferant_fk", nullable = true, insertable = false, updatable = false)
-	@JsonIgnore
+	@XmlTransient
 	private Lieferant lieferant;
 	
 	@Transient
@@ -112,14 +120,14 @@ public class Bestellung implements Serializable {
 	@Valid
 	private List<Posten> vieleposten;
 	
-	@Column
+	@Basic(optional = false)
 	@Temporal (TIMESTAMP)
-	@JsonIgnore
+	@XmlElement(name="datum")
 	private Date erzeugt;	
 	
-	@Column (nullable = false)
+	@Basic(optional = false)
 	@Temporal (TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date aktualisiert;
 	
 	public Bestellung() {

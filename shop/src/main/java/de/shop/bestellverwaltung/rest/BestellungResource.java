@@ -76,12 +76,6 @@ public class BestellungResource {
 	@Inject
 	private ArtikelService as;
 	
-//	@Inject
-//	private UriHelperBestellung uriHelperBestellung;
-	
-//	@Inject
-//	private UriHelperKunde uriHelperKunde;
-	
 	@Inject
 	private UriHelper uriHelper;
 	
@@ -239,10 +233,10 @@ public class BestellungResource {
 			throw new NotFoundException(NOT_FOUND_ID_ARTIKEL, artikelIds.get(0));
 		}
 		
-		// Bestellpositionen haben URIs fuer persistente Artikel.
+		// Posten haben URIs fuer persistente Artikel.
 		// Diese persistenten Artikel wurden in einem DB-Zugriff ermittelt (s.o.)
-		// Fuer jede Bestellposition wird der Artikel passend zur Artikel-URL bzw. Artikel-ID gesetzt.
-		// Bestellpositionen mit nicht-gefundene Artikel werden eliminiert.
+		// Fuer jeder Posten wird der Artikel passend zur Artikel-URL bzw. Artikel-ID gesetzt.
+		// BPosten mit nicht-gefundene Artikel werden eliminiert.
 		int i = 0;
 		final List<Posten> neuePosten =
 			                        new ArrayList<>(posten.size());
