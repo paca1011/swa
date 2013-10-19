@@ -1,5 +1,6 @@
 package de.shop.bestellverwaltung.domain;
 
+import static de.shop.util.Constants.ERSTE_VERSION;
 import static de.shop.util.Constants.MIN_ID;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Version;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -43,6 +46,10 @@ public class Lieferant implements Serializable {
 	@Min(value = MIN_ID, message = "{bestellverwaltung.lieferant.id.min}", groups = IdGroup.class)
 	@Column(nullable = false, updatable = false)
 	private Long id;
+	
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
 	
 	@NotNull(message = "{beststellverwaltung.lieferung.name.notNull}")
 	@Size(min = NAME_LENGTH_MIN, max = NAME_LENGTH_MAX,
