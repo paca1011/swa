@@ -274,8 +274,7 @@ public class KundeResource {
 		if (kunde == null) {
 			throw new NotFoundException(NOT_FOUND_ID, id);
 		}
-		final List<Bestellung> bestellungen = bs.findBestellungenByKunde(kunde,
-				                                                         BestellungService.FetchType.NUR_BESTELLUNG);
+		final List<Bestellung> bestellungen = bs.findBestellungenByKunde(kunde);
 		
 		// URIs innerhalb der gefundenen Bestellungen anpassen
 		if (bestellungen != null) {
@@ -321,7 +320,7 @@ public class KundeResource {
 			throw new NotFoundException(NOT_FOUND_ID, kundeId);
 		}
 		final Collection<Bestellung> bestellungen =
-				                     bs.findBestellungenByKunde(kunde, BestellungService.FetchType.NUR_BESTELLUNG);
+				                     bs.findBestellungenByKunde(kunde);
 		
 		final int anzahl = bestellungen.size();
 		final Collection<Long> bestellungenIds = new ArrayList<>(anzahl);
