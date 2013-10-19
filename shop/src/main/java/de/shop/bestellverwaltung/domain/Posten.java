@@ -51,7 +51,7 @@ public class Posten implements Serializable {
 	
 	@Version
 	@Basic(optional = false)
-	private int version = ERSTE_VERSION;S
+	private int version = ERSTE_VERSION;
 	
 	@ManyToOne(optional = false)
     @JoinColumn(name = "artikel_fk", nullable = false)

@@ -388,8 +388,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final Posten p = new Posten();
 		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId));
 		p.setAnzahl((short) 1);
-		//TODO Tobias?
-		bestellung.addPosten(p);
+		bestellung.addVieleposten(p);
 		
 		// Then (2)
 		response = getHttpsClient(username, neuesPassword).target(BESTELLUNGEN_URI)
