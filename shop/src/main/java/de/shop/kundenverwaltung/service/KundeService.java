@@ -28,10 +28,7 @@ import javax.persistence.criteria.Root;
 import org.jboss.logging.Logger;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
 
-import de.shop.auth.domain.RolleType;
-import de.shop.auth.service.AuthService;
 import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Posten_;
 import de.shop.bestellverwaltung.domain.Bestellung;
@@ -68,7 +65,6 @@ public class KundeService implements Serializable {
 	
 	// genau 1 Eintrag mit 100 % Fuellgrad
 	private static final Map<String, Object> GRAPH_BESTELLUNGEN = new HashMap<>(1, 1);
-	private static final Map<String, Object> GRAPH_WARTUNGSVERTRAEGE = new HashMap<>(1, 1); 
 	
 	static {
 		GRAPH_BESTELLUNGEN.put("javax.persistence.loadgraph", Kunde.GRAPH_BESTELLUNGEN);
@@ -76,9 +72,6 @@ public class KundeService implements Serializable {
 	
 	@Inject
 	private transient EntityManager em;
-	
-	@Inject
-	private AuthService authService;
 	
 	@Inject
 	private FileHelper fileHelper;
@@ -362,12 +355,6 @@ public class KundeService implements Serializable {
 		if (tmp != null) {
 			throw new EmailExistsException(kunde.getEmail());
 		}
-		
-		// Password verschluesseln
-		passwordVerschluesseln(kunde);
-		
-		// Rolle setzen
-		kunde.addRollen(Sets.newHashSet(RolleType.KUNDE));
 	
 		em.persist(kunde);
 		event.fire(kunde);
@@ -405,11 +392,6 @@ public class KundeService implements Serializable {
 				// anderes Objekt mit gleichem Attributwert fuer email
 				throw new EmailExistsException(kunde.getEmail());
 			}
-		}
-		
-		// Password verschluesseln
-		if (geaendertPassword) {
-			passwordVerschluesseln(kunde);
 		}
 
 		kunde = em.merge(kunde);   // OptimisticLockException
@@ -524,14 +506,4 @@ public class KundeService implements Serializable {
 		return result;
 	}
 
-	
-	private void passwordVerschluesseln(Kunde kunde) {
-		LOGGER.debugf("passwordVerschluesseln BEGINN: %s", kunde);
-
-		final String unverschluesselt = kunde.getPasswort();
-		final String verschluesselt = authService.verschluesseln(unverschluesselt);
-		kunde.setPasswort(verschluesselt);
-
-		LOGGER.debugf("passwordVerschluesseln ENDE: %s", verschluesselt);
-	}
 }

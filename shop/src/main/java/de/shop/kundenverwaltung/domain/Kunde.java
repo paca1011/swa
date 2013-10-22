@@ -68,7 +68,7 @@ import de.shop.util.IdGroup;
 						+ " FROM Kunde k LEFT JOIN FETCH k.bestellungen"),
 	@NamedQuery(name  = Kunde.FIND_KUNDEN_OHNE_BESTELLUNGEN,
                 query = "SELECT k"
-				        + " FROM   AbstractKunde k"
+				        + " FROM   Kunde k"
 				        + " WHERE  k.bestellungen IS EMPTY"),
 	@NamedQuery(name  = Kunde.FIND_KUNDEN_ORDER_BY_ID,
 		        query = "SELECT   k"
@@ -106,7 +106,7 @@ import de.shop.util.IdGroup;
 			            + " WHERE k.adresse.plz = :" + Kunde.PARAM_KUNDE_ADRESSE_PLZ),
 	@NamedQuery(name  = Kunde.FIND_KUNDEN_BY_ID_PREFIX,
 				query = "SELECT   k"
-				        + " FROM  AbstractKunde k"
+				        + " FROM  Kunde k"
 				        + " WHERE CONCAT('', k.id) LIKE :" + Kunde.PARAM_KUNDE_ID_PREFIX
 				        + " ORDER BY k.id"),
 })
