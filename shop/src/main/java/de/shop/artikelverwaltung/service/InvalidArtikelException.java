@@ -23,4 +23,10 @@ public class InvalidArtikelException extends AbstractArtikelValidationException 
 	public Artikel getArtikel() {
 		return artikel;
 	}
+
+	@Override
+	public String getMessageKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

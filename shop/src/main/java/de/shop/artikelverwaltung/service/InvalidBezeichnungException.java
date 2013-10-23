@@ -19,5 +19,11 @@ public class InvalidBezeichnungException extends AbstractArtikelValidationExcept
 	public String getBezeichnung() {
 		return bezeichnung;
 	}
+
+	@Override
+	public String getMessageKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
