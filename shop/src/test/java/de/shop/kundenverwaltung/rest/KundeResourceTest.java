@@ -33,15 +33,11 @@ import static org.fest.assertions.api.Assertions.filter;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -85,10 +81,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final String NEUER_VORNAME = "Vorname";
 	private static final String NEUE_EMAIL = NEUER_NACHNAME + "@test.de";
 	private static final String NEUE_EMAIL_INVALID = "?";
-	private static final short NEUE_KATEGORIE = 1;
-	private static final BigDecimal NEUER_RABATT = new BigDecimal("0.15");
-	private static final BigDecimal NEUER_UMSATZ = new BigDecimal(10_000_000);
-	private static final Date NEU_SEIT = new GregorianCalendar(2000, 0, 31).getTime();
 	private static final String NEUE_PLZ = "76133";
 	private static final String NEUE_PLZ_FALSCH = "1234";
 	private static final String NEUER_ORT = "Karlsruhe";
@@ -338,11 +330,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final String nachname = NEUER_NACHNAME;
 		final String vorname = NEUER_VORNAME;
 		final String email = NEUE_EMAIL;
-		final short kategorie = NEUE_KATEGORIE;
-		final BigDecimal rabatt = NEUER_RABATT;
-		final BigDecimal umsatz = NEUER_UMSATZ;
-		final Date seit = NEU_SEIT;
-		final boolean agbAkzeptiert = true;
 		final String plz = NEUE_PLZ;
 		final String ort = NEUER_ORT;
 		final String strasse = NEUE_STRASSE;

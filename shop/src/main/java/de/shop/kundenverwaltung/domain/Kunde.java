@@ -39,6 +39,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -216,16 +217,16 @@ public class Kunde implements Serializable, Cloneable {
 	@Transient
 	private URI bestellungenUri;
 	
-	@Column(nullable = false)
-	@Temporal(TIMESTAMP)
-	@JsonIgnore
-	private Date erzeugt;
+	@Basic(optional = false)
+	@Temporal (TIMESTAMP)
+	@XmlElement(name="datum")
+	private Date erzeugt;	
 	
-	@Column(nullable = false)
-	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@Basic(optional = false)
+	@Temporal (TIMESTAMP)
+	@XmlTransient
 	private Date aktualisiert;
-
+	
 	@PrePersist
 	protected void prePersist() {
 		erzeugt = new Date();
