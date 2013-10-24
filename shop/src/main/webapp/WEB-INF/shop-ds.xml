@@ -8,13 +8,13 @@
    <!-- The datasource is bound into JNDI at this location. We reference 
       this in META-INF/persistence.xml -->
    <datasource jndi-name="java:jboss/datasources/shopDS"
-      pool-name="{artifactId}" enabled="true"
+      pool-name="shop" enabled="true"
       use-java-context="true">
-      <connection-url>jdbc:h2:mem:shop;DB_CLOSE_DELAY=-1</connection-url>
-      <driver>h2</driver>
+      <connection-url>jdbc:oracle:thin:@localhost:1521:XE</connection-url>
+      <driver>oracle</driver>
       <security>
-         <user-name>sa</user-name>
-         <password>sa</password>
+         <user-name>shop</user-name>
+         <password>p</password>
       </security>
    </datasource>
 </datasources>
