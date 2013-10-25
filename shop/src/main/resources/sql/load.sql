@@ -21,20 +21,12 @@ INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, 
 -- CALL insert_file_kunde(102,2,0,'video.mp4','Privatkunde_102.mp4','mp4','V','01.01.2007 01:00:00','01.01.2007 01:00:00');
 
 --
--- kunde_rolle
+-- lieferant
 --
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (1,'admin');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (1,'mitarbeiter');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (1,'abteilungsleiter');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (1,'kunde');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (101,'admin');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (101,'mitarbeiter');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (101,'kunde');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (102,'mitarbeiter');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (102,'kunde');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (103,'mitarbeiter');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (103,'kunde');
--- INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (104,'kunde');
+
+INSERT INTO lieferant (id, version, name, telefonnum, erzeugt, aktualisiert) VALUES (600, 0, 'DDS',94345346,'01.08.2006 00:00:00','01.08.2006 00:00:00');
+INSERT INTO lieferant (id, version, name, telefonnum, erzeugt, aktualisiert) VALUES (601, 0, 'POS',34535455,'01.08.2006 00:00:00','01.08.2006 00:00:00');
+INSERT INTO lieferant (id, version, name, telefonnum, erzeugt, aktualisiert) VALUES (602, 0, 'GGH',45656566,'01.08.2006 00:00:00','01.08.2006 00:00:00');
 
 --
 -- adresse
@@ -47,6 +39,8 @@ INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, e
 INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, erzeugt, aktualisiert) VALUES (205,'69117','lieferantenstadt','lieferstrasse','15',null,600,'03.08.2006 00:00:00','03.08.2006 00:00:00');
 INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, erzeugt, aktualisiert) VALUES (206,'69117','lieferantenstadt','lieferstrasse','16',null,601,'03.08.2006 00:00:00','03.08.2006 00:00:00');
 INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, erzeugt, aktualisiert) VALUES (207,'69117','lieferantenstadt','lieferstrasse','17',null,602,'03.08.2006 00:00:00','03.08.2006 00:00:00');
+
+
 
 --
 -- wartungsvertrag
@@ -76,23 +70,19 @@ INSERT INTO bestellung (id, version, status, gesamtpreis, ausgeliefert, kunde_fk
 --
 -- bestellposition
 --
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (500, 0, 400,300,1,0);
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (501, 0, 400,301,4,1);
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (502, 0, 401,302,5,0);
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (503, 0, 402,303,3,0);
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (504, 0, 402,304,2,1);
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (505, 0, 403,305,1,0);
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (506, 0, 404,300,5,0);
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (507, 0, 404,301,2,1);
-INSERT INTO posten (id, verson, bestellung_fk, artikel_fk, anzahl, idx) VALUES (508, 0, 404,302,8,2);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (500, 0, 400,300,1,0);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (501, 0, 400,301,4,1);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (502, 0, 401,302,5,0);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (503, 0, 402,303,3,0);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (504, 0, 402,304,2,1);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (505, 0, 403,305,1,0);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (506, 0, 404,300,5,0);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (507, 0, 404,301,2,1);
+INSERT INTO posten (id, version, bestellung_fk, artikel_fk, anzahl, idx) VALUES (508, 0, 404,302,8,2);
 
---
--- lieferant
---
 
-INSERT INTO lieferant (id, version, name, telefonnum, erzeugt, aktualisiert) VALUES (600, 0, 'DDS',94345346,'01.08.2006 00:00:00','01.08.2006 00:00:00');
-INSERT INTO lieferant (id, version, name, telefonnum, erzeugt, aktualisiert) VALUES (601, 0, 'POS',34535455,'01.08.2006 00:00:00','01.08.2006 00:00:00');
-INSERT INTO lieferant (id, version, name, telefonnum, erzeugt, aktualisiert) VALUES (602, 0, 'GGH',45656566,'01.08.2006 00:00:00','01.08.2006 00:00:00');
+
+
 --
 -- bestellung_lieferung
 

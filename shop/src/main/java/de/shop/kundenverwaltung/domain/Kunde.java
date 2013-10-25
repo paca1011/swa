@@ -59,7 +59,6 @@ import de.shop.util.IdGroup;
 @Entity
 @Table(name = "kunde")
 @Inheritance  // Alternativen: strategy = SINGLE_TABLE (=default), TABLE_PER_CLASS, JOINED
-@DiscriminatorColumn(name = "art", length = 1)
 @NamedQueries({
 	@NamedQuery(name  = Kunde.FIND_KUNDEN,
                 query = "SELECT k"
