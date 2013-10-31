@@ -9,7 +9,9 @@ import static de.shop.util.TestConstants.KUNDEN_ID_URI;
 import static de.shop.util.TestConstants.PASSWORD;
 import static de.shop.util.TestConstants.USERNAME;
 import static java.net.HttpURLConnection.HTTP_CREATED;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
+import static java.util.Locale.GERMAN;
 import static javax.ws.rs.client.Entity.json;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -45,9 +47,17 @@ public class BestellungResourceTest extends AbstractResourceTest {
 	private static final Long BESTELLUNG_ID_VORHANDEN = Long.valueOf(400);
 	private static final Long ARTIKEL_ID_VORHANDEN_1 = Long.valueOf(300);
 	private static final Long ARTIKEL_ID_VORHANDEN_2 = Long.valueOf(301);
+
+	private static final Long BESTELLUNG_ID_NICHT_VORHANDEN = Long.valueOf(444);
 	
 	@Test
 	@InSequence(1)
+	public void validate() {
+		assertThat(true).isTrue();
+	}
+	
+	@Test
+	@InSequence(2)
 	public void findBestellungById() {
 		LOGGER.finer("BEGINN");
 		
@@ -72,7 +82,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 	}
 
 	@Test
-	@InSequence(2)
+	@InSequence(3)
 	public void findKundeByBestellungId() {
 		LOGGER.finer("BEGINN");
 		
@@ -100,6 +110,30 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		assertThat(response.getLinks()).isNotEmpty();
 		response.close();    // response.readEntity() wurde nicht aufgerufen
 
+		LOGGER.finer("ENDE");
+	}
+	
+	@Test
+	@InSequence(11)
+	public void findBestellungByIdNichtVorhanden() {
+		LOGGER.finer("BEGINN");
+		
+		// Given
+		final Long BestellungId = BESTELLUNG_ID_NICHT_VORHANDEN;
+		
+		// When
+		final Response response = getHttpsClient().target(BESTELLUNGEN_ID_URI)
+                                                  .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, BestellungId)
+                                                  .request()
+                                                  .acceptLanguage(GERMAN)
+                                                  .get();
+
+    	// Then
+    	assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
+    	final String fehlermeldung = response.readEntity(String.class);
+    	assertThat(fehlermeldung).startsWith("Keie Bestellung mit der ID")
+    	                         .endsWith("gefunden.");
+		
 		LOGGER.finer("ENDE");
 	}
 
