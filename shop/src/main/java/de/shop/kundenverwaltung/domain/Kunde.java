@@ -1,6 +1,7 @@
 package de.shop.kundenverwaltung.domain;
 
 import static de.shop.util.Constants.MIN_ID;
+import static de.shop.util.Constants.ERSTE_VERSION;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.LAZY;
@@ -16,7 +17,6 @@ import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -169,12 +169,10 @@ public class Kunde implements Serializable, Cloneable {
 	
 	@Version
 	@Basic(optional = false)
-	private int version = 1;
+	private int version = ERSTE_VERSION;
 	
-	@NotNull(message = "{kundenverwaltung.kunde.vorname.notNull}")
 	@Size(min = NACHNAME_LENGTH_MIN, max = NACHNAME_LENGTH_MAX,
 	      message = "{kundenverwaltung.kunde.vorname.length}")
-	@Pattern(regexp = NACHNAME_PATTERN, message = "{kundenverwaltung.kunde.vorname.pattern}")
 	private String vorname;
 	
 	@NotNull(message = "{kundenverwaltung.kunde.nachname.notNull}")
