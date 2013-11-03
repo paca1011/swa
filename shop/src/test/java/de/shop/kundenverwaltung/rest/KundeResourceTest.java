@@ -39,8 +39,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
@@ -120,6 +122,32 @@ public class KundeResourceTest extends AbstractResourceTest {
 		fail("Beispiel fuer fail()");
 	}
 	
+	@Test
+	@InSequence(4)
+	public void findKundeById() {
+		LOGGER.finer("BEGINN");
+		
+		// Given
+		final Long kundeId = Long.valueOf(101);
+		
+		// When
+		Response response = ClientBuilder.newClient()
+									.target("http://localhost:8080/shop/rest/kunden/{id}")
+									.resolveTemplate("id", kundeId)
+									.request()
+									.accept(APPLICATION_JSON)
+									.acceptLanguage(Locale.GERMAN)
+									.get();
+	
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
+		Kunde kunde = response.readEntity(Kunde.class);
+		assertThat(kunde.getId()).isEqualTo(kundeId);		
+		
+		LOGGER.finer("ENDE");
+	}
+	
+	/*
 	@Test
 	@InSequence(10)
 	public void findKundeMitBestellungenById() {
@@ -319,7 +347,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		
 		LOGGER.finer("ENDE");
 	}
-	*/
+	
 	
 	@Test
 	@InSequence(40)
@@ -722,4 +750,5 @@ public class KundeResourceTest extends AbstractResourceTest {
 		assertThat(response.getStatus()).isEqualTo(HTTP_UNSUPPORTED_TYPE);
 		response.close();
 	}
+	*/
 }
