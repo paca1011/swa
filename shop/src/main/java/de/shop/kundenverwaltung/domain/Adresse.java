@@ -17,8 +17,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import de.shop.bestellverwaltung.domain.Lieferant;
 import de.shop.util.IdGroup;
 
@@ -46,17 +44,16 @@ public class Adresse implements Serializable {
 	
 	private String hausnum;
 	
-	// TODO Kunde muss jetzt null sein d�rfen
+	// TODO Kunde muss jetzt null sein duerfen
 	@OneToOne
 	@JoinColumn(name = "kunde_fk", nullable = true)
 //	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
-	@JsonIgnore
 	@XmlTransient
 	private Kunde kunde;
 	
 	@OneToOne
 	@JoinColumn(name = "lieferant_fk", nullable = true)
-	@JsonIgnore
+	@XmlTransient
 	private Lieferant lieferant;
 
 	private Date erzeugt;

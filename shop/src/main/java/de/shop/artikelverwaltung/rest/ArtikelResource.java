@@ -7,11 +7,12 @@ import static javax.ws.rs.core.MediaType.TEXT_XML;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -29,7 +30,6 @@ import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
-import de.shop.util.LocaleHelper;
 import de.shop.util.interceptor.Log;
 import de.shop.util.rest.NotFoundException;
 import de.shop.util.rest.UriHelper;
@@ -37,9 +37,9 @@ import de.shop.util.rest.UriHelper;
 @Path("/artikel")
 @Produces({ APPLICATION_JSON, APPLICATION_XML + ";qs=0.75", TEXT_XML + ";qs=0.5" })
 @Consumes
+@Transactional
+@RequestScoped
 @Log
-
-
 public class ArtikelResource {
 	
 private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -82,10 +82,6 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	
 	@Inject
 	private UriHelperArtikel uriHelperArtikel;
-
-	
-	@Inject
-	private LocaleHelper localeHelper;
 	
 	@GET
 	@Path("version")
@@ -134,8 +130,7 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response createArtikel(Artikel artikel) {
-		final Locale locale = localeHelper.getLocale(headers);
-		artikel = as.createArtikel(artikel, locale);
+		artikel = as.createArtikel(artikel);
 		final URI artikelUri = uriHelperArtikel.getUriArtikel(artikel, uriInfo);
 		
 		return Response.created(artikelUri).build();
@@ -145,11 +140,8 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
-	public Response updateArtikel(Artikel artikel) {
-		
-		final Locale locale = localeHelper.getLocale(headers);
-		
-		as.updateArtikel(artikel, locale);
+	public Response updateArtikel(Artikel artikel) {	
+		as.updateArtikel(artikel);
 		return Response.noContent().build();
 	}
 	

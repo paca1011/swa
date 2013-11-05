@@ -20,7 +20,7 @@ import org.jboss.logging.Logger;
 
 import de.shop.bestellverwaltung.domain.Lieferant;
 import de.shop.bestellverwaltung.service.LieferantService;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 
 @Path("/lieferanten")
 @Produces(APPLICATION_JSON)

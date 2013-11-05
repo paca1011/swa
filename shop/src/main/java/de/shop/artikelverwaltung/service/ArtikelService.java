@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -17,19 +16,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.groups.Default;
 
 import org.jboss.logging.Logger;
 
 import com.google.common.base.Strings;
 
 import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.util.IdGroup;
-import de.shop.util.Log;
-import de.shop.util.ValidatorProvider;
+import de.shop.util.interceptor.Log;
 
+@Dependent
 @Log
 public class ArtikelService implements Serializable {
 	private static final long serialVersionUID = -5105686816948437276L;
@@ -47,23 +42,8 @@ public class ArtikelService implements Serializable {
 	private void preDestroy() {
 		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
 	}
-	
-	@Inject
-	private ValidatorProvider validatorProvider;
 
-	private void validateArtikel(Artikel artikel, Locale locale, Class<?>... groups) {
-		
-		final Validator validator = validatorProvider.getValidator(locale);
-		
-		final Set<ConstraintViolation<Artikel>> violations = validator.validate(artikel, groups);
-		if (!violations.isEmpty()) {
-			throw new InvalidArtikelException(artikel, violations);
-		}
-	}
-	
-	public List<Artikel> findArtikelByBezeichnung(String bezeichnung, Locale locale) {
-		validateBezeichnung(bezeichnung, locale);
-		
+	public List<Artikel> findArtikelByBezeichnung(String bezeichnung) {
 		if (Strings.isNullOrEmpty(bezeichnung)) {
 			final List<Artikel> vieleartikel = findVerfuegbareArtikel();
 			return vieleartikel;
@@ -72,16 +52,6 @@ public class ArtikelService implements Serializable {
                 .setParameter(Artikel.PARAM_BEZEICHNUNG, "%" + bezeichnung + "%")
                 .getResultList();
 		return vieleartikel;
-	}
-	
-	private void validateBezeichnung(String bezeichnung, Locale locale) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		final Set<ConstraintViolation<Artikel>> violations = validator.validateValue(Artikel.class,
-				                                                                           "bezeichnung",
-				                                                                           bezeichnung,
-				                                                                           Default.class);
-		if (!violations.isEmpty())
-			throw new InvalidBezeichnungException(bezeichnung, violations);
 	}
 	
 	public List<Artikel> findVerfuegbareArtikel() {
@@ -136,24 +106,19 @@ public class ArtikelService implements Serializable {
 		return artikel;
 	}
 	
-	public Artikel createArtikel(Artikel artikel, Locale locale) {
+	public Artikel createArtikel(Artikel artikel) {
 		if (artikel == null) {
 			return artikel;
 		}
-		validateArtikel(artikel, locale, Default.class);
 		
 		em.persist(artikel);
 		return artikel;
 	}
 	
-	public Artikel updateArtikel(Artikel artikel, Locale locale) {
+	public Artikel updateArtikel(Artikel artikel) {
 		if (artikel == null) {
 			return null;
 		}
-		
-		validateArtikel(artikel, locale, Default.class, IdGroup.class);
-
-		
 		em.merge(artikel);
 		
 		return artikel;

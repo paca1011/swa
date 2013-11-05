@@ -25,14 +25,15 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.util.IdGroup;
 
 @Entity
 @Table(name = "lieferant")
+@XmlRootElement
 public class Lieferant implements Serializable {
 	private static final long serialVersionUID = -1890561212075707472L;
 
@@ -67,17 +68,17 @@ public class Lieferant implements Serializable {
 	
 	@OneToMany
 	@JoinColumn(name = "lieferant_fk")
-	@JsonIgnore
+	@XmlTransient
 	private List<Bestellung> bestellung;
 	
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date erzeugt;
 	
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date aktualisiert;
 	
 	public Long getId() {

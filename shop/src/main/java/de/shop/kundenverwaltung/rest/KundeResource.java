@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -66,6 +67,8 @@ import de.shop.util.rest.UriHelper;
 @Path("/kunden")
 @Produces({ APPLICATION_JSON, APPLICATION_XML + ";qs=0.75", TEXT_XML + ";qs=0.5" })
 @Consumes
+@Transactional
+@RequestScoped
 @Log
 public class KundeResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -364,7 +367,6 @@ public class KundeResource {
 	@POST
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces
-	@Transactional
 	public Response createKunde(@Valid Kunde kunde) {
 		kunde.setId(KEINE_ID);
 		final Adresse adresse = kunde.getAdresse();
@@ -386,7 +388,6 @@ public class KundeResource {
 	@PUT
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
-	@Transactional
 	public Response updateKunde(@Valid Kunde kunde) {
 		// Vorhandenen Kunden ermitteln
 		final Kunde origKunde = ks.findKundeById(kunde.getId(), FetchType.NUR_KUNDE);
@@ -417,7 +418,6 @@ public class KundeResource {
 	@Path("{id:[1-9][0-9]*}")
 	@DELETE
 	@Produces
-	@Transactional
 	public void deleteKunde(@PathParam("id") long kundeId) {
 		ks.deleteKundeById(kundeId);
 	}
@@ -426,7 +426,6 @@ public class KundeResource {
 	@Path("{id:[1-9][0-9]*}/file")
 	@POST
 	@Consumes({ "image/jpeg", "image/pjpeg", "image/png" })  // RESTEasy unterstuetzt nicht video/mp4
-	@Transactional
 	public Response upload(@PathParam("id") Long kundeId, byte[] bytes) {
 		ks.setFile(kundeId, bytes);
 		return Response.created(uriHelper.getUri(KundeResource.class, "download", kundeId, uriInfo))
@@ -436,7 +435,6 @@ public class KundeResource {
 	@Path("{id:[1-9][0-9]*}/file")
 	@GET
 	@Produces({ "image/jpeg", "image/pjpeg", "image/png" })
-	@Transactional  // Nachladen der Datei : Kunde referenziert File mit Lazy Fetching
 	public byte[] download(@PathParam("id") Long kundeId) {
 		final Kunde kunde = ks.findKundeById(kundeId, FetchType.NUR_KUNDE);
 		if (kunde == null) {

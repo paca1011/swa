@@ -22,8 +22,8 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlTransient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
@@ -56,7 +56,7 @@ public class Posten implements Serializable {
 	@ManyToOne(optional = false)
     @JoinColumn(name = "artikel_fk", nullable = false)
 	@NotNull(message = "{bestellverwaltung.posten.artikel.notNull}")
-	@JsonIgnore
+	@XmlTransient
 	private Artikel artikel;
 
 	@Transient

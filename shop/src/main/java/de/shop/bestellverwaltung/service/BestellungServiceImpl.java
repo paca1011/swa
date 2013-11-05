@@ -6,20 +6,15 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-
-
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-
-
-
 
 import org.jboss.logging.Logger;
 
@@ -28,9 +23,9 @@ import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.service.KundeService;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 
-
+@Dependent
 @Log
 public class BestellungServiceImpl implements Serializable, BestellungService {
 	private static final long serialVersionUID = -9145947650157430928L;
@@ -116,7 +111,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	}
 	
 	@Override
-	public Bestellung updateBestellung(Bestellung bestellung, Locale locale) {
+	public Bestellung updateBestellung(Bestellung bestellung) {
 		if (bestellung == null) {
 			return null;
 		}

@@ -1,5 +1,13 @@
 package de.shop.bestellverwaltung.domain;
 
+import static de.shop.util.Constants.ERSTE_VERSION;
+import static de.shop.util.Constants.KEINE_ID;
+import static de.shop.util.Constants.MIN_ID;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.TemporalType.TIMESTAMP;
+
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
@@ -8,14 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import static de.shop.util.Constants.ERSTE_VERSION;
-import static de.shop.util.Constants.KEINE_ID;
-import static de.shop.util.Constants.MIN_ID;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.TemporalType.TIMESTAMP;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -40,9 +40,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.jboss.logging.Logger;
 
 import de.shop.kundenverwaltung.domain.Kunde;
@@ -60,7 +60,7 @@ import de.shop.util.IdGroup;
                         + " FROM   Bestellung b"
   			            + " WHERE  b.id = :" + Bestellung.PARAM_ID)
 })
-
+@XmlRootElement
 public class Bestellung implements Serializable {
 	private static final long serialVersionUID = 1618359234119003714L;
 	
@@ -202,7 +202,7 @@ public class Bestellung implements Serializable {
 		this.gesamtpreis = gesamtpreis;
 	}
 	
-	@JsonProperty("datum")
+	@XmlElement(name = "datum")
 	public Date getErzeugt() {
 		return erzeugt == null ? null : (Date) erzeugt.clone();
 	}

@@ -6,6 +6,7 @@ import static org.jboss.resteasy.api.validation.ConstraintType.Type.PARAMETER;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -30,6 +31,7 @@ import de.shop.util.interceptor.Log;
  * Ergaenzt um ViolationReport und ResteasyConstraintViolation
  */
 @Provider
+@ApplicationScoped
 @Log
 public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 	@Override

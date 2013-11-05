@@ -3,6 +3,7 @@ package de.shop.util.interceptor;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -17,6 +18,7 @@ import org.jboss.logging.Logger;
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
 @Interceptor
+@Dependent
 @Log
 public class LogInterceptor implements Serializable {
 	private static final long serialVersionUID = 6225006198548883927L;

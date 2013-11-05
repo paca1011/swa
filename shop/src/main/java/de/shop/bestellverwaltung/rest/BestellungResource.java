@@ -12,11 +12,12 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -41,15 +42,15 @@ import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.rest.KundeResource;
-import de.shop.util.LocaleHelper;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 import de.shop.util.rest.NotFoundException;
-import de.shop.util.Transactional;
 import de.shop.util.rest.UriHelper;
 
 @Path("/bestellungen")
 @Produces({ APPLICATION_JSON, APPLICATION_XML + ";qs=0.75", TEXT_XML + ";qs=0.5" })
 @Consumes
+@Transactional
+@RequestScoped
 @Log
 public class BestellungResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -77,9 +78,6 @@ public class BestellungResource {
 	
 	@Inject
 	private UriHelper uriHelper;
-	
-	@Inject
-	private LocaleHelper localeHelper;
 	
 	@Inject
 	private Principal principal;
@@ -179,7 +177,6 @@ public class BestellungResource {
 	
 	@POST
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
-	@Transactional
 	public Response createBestellung(@Valid Bestellung bestellung) {
 		if (bestellung == null) {
 			return null;
@@ -270,10 +267,7 @@ public class BestellungResource {
 	@PUT
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
-	@Transactional
 	public Response updateBestellung(@Valid Bestellung bestellung) {
-		final Locale locale = localeHelper.getLocale(headers);
-
 		final Bestellung origBestellung = bs.findBestellungById(bestellung.getId());
 		if (origBestellung == null) {
 			throw new NotFoundException(NOT_FOUND_ID, bestellung.getId());
@@ -285,7 +279,7 @@ public class BestellungResource {
 		LOGGER.tracef("Bestellung nachher: %s", origBestellung);
 		
 		// Update durchfuehren
-		bestellung = bs.updateBestellung(origBestellung, locale);
+		bestellung = bs.updateBestellung(origBestellung);
 		setStructuralLinks(bestellung, uriInfo);
 		return Response.ok(bestellung)
 			       .links(getTransitionalLinks(bestellung, uriInfo))

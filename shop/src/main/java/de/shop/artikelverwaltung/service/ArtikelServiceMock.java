@@ -1,8 +1,8 @@
 package de.shop.artikelverwaltung.service;
 
 import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.util.Log;
-import de.shop.util.MockService;
+import de.shop.util.cdi.MockService;
+import de.shop.util.interceptor.Log;
 
 @MockService
 @Log

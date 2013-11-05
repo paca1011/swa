@@ -20,7 +20,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -43,8 +42,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.hibernate.validator.constraints.Email;
 
 import de.shop.util.persistence.File;
@@ -58,7 +55,6 @@ import de.shop.util.IdGroup;
 
 @Entity
 @Table(name = "kunde")
-@Inheritance  // Alternativen: strategy = SINGLE_TABLE (=default), TABLE_PER_CLASS, JOINED
 @NamedQueries({
 	@NamedQuery(name  = Kunde.FIND_KUNDEN,
                 query = "SELECT k"
@@ -114,9 +110,8 @@ import de.shop.util.IdGroup;
 	          script = "(_this.password == null && _this.passwordWdh == null)"
 	                   + "|| (_this.password != null && _this.password.equals(_this.passwordWdh))",
 	          message = "{kundenverwaltung.kunde.password.notEqual}")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @XmlRootElement
-@Formatted
+//@Formatted
 public class Kunde implements Serializable, Cloneable {
 	private static final long serialVersionUID = 7401524595142572933L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
@@ -206,13 +201,13 @@ public class Kunde implements Serializable, Cloneable {
 	@XmlTransient
 	private List<Bestellung> bestellungen;
 	
+	@Transient
+	private URI bestellungenUri;
+	
 	@OneToOne(fetch = LAZY, cascade = { PERSIST, REMOVE })
 	@JoinColumn(name = "file_fk")
 	@XmlTransient
 	private File file;
-	
-	@Transient
-	private URI bestellungenUri;
 	
 	@Basic(optional = false)
 	@Temporal (TIMESTAMP)

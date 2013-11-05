@@ -13,6 +13,7 @@ import org.jboss.logging.Logger;
 /**
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
+@ApplicationScoped
 public class Initializer {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
