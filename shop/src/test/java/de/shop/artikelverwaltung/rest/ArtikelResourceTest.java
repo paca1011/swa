@@ -1,14 +1,14 @@
 package de.shop.artikelverwaltung.rest;
 
-import static de.shop.util.TestConstants.ARTIKEL_URI;
-import static de.shop.util.TestConstants.ARTIKEL_ID_PATH_PARAM;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Locale;
 import java.util.logging.Logger;
 
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.jboss.arquillian.junit.Arquillian;
@@ -40,11 +40,13 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 		final Long artikelId = ARTIKEL_ID_VORHANDEN;
 		
 		// When
-		final Response response = getHttpsClient().target(ARTIKEL_URI)
-												  .resolveTemplate(ARTIKEL_ID_PATH_PARAM, artikelId)
-                                                  .request()
-                                                  .accept(APPLICATION_JSON)
-                                                  .get();
+		Response response = ClientBuilder.newClient()
+						.target("http://localhost:8080/shop/rest/artikel/{id}")
+						.resolveTemplate("id", artikelId)
+						.request()
+						.accept(APPLICATION_JSON)
+						.acceptLanguage(Locale.GERMAN)
+						.get();
 		
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
