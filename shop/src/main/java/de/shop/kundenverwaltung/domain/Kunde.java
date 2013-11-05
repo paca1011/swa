@@ -203,7 +203,7 @@ public class Kunde implements Serializable, Cloneable {
 	@OneToMany
 	@JoinColumn(name = "kunde_fk", nullable = false)
 	@OrderColumn(name = "idx", nullable = false)
-	@JsonIgnore
+	@XmlTransient
 	private List<Bestellung> bestellungen;
 	
 	@OneToOne(fetch = LAZY, cascade = { PERSIST, REMOVE })
