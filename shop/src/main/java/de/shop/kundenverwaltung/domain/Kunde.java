@@ -4,6 +4,7 @@ import static de.shop.util.Constants.MIN_ID;
 import static de.shop.util.Constants.ERSTE_VERSION;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
@@ -11,12 +12,17 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,6 +39,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -50,6 +57,7 @@ import org.hibernate.validator.constraints.ScriptAssert;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
+import de.shop.auth.domain.RolleType;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.util.IdGroup;
 
@@ -100,6 +108,14 @@ import de.shop.util.IdGroup;
 	            query = "SELECT k"
 				        + " FROM  Kunde k"
 			            + " WHERE k.adresse.plz = :" + Kunde.PARAM_KUNDE_ADRESSE_PLZ),
+	@NamedQuery(name  = Kunde.FIND_KUNDE_BY_USERNAME,
+			            query = "SELECT   k"
+						+ " FROM  Kunde k"
+			            + " WHERE CONCAT('', k.id) = :" + Kunde.PARAM_KUNDE_USERNAME),
+	@NamedQuery(name  = Kunde.FIND_USERNAME_BY_USERNAME_PREFIX,
+		  	            query = "SELECT   CONCAT('', k.id)"
+		  				+ " FROM  Kunde k"
+		   	            + " WHERE CONCAT('', k.id) LIKE :" + Kunde.PARAM_USERNAME_PREFIX),		      
 	@NamedQuery(name  = Kunde.FIND_KUNDEN_BY_ID_PREFIX,
 				query = "SELECT   k"
 				        + " FROM  Kunde k"
@@ -134,6 +150,10 @@ public class Kunde implements Serializable, Cloneable {
 	public static final String FIND_KUNDEN_BY_ID_PREFIX = PREFIX + "findKundenByIdPrefix";
 	public static final String FIND_KUNDEN_FETCH_BESTELLUNGEN = PREFIX + "findKundenFetchBestellungen";
 	public static final String FIND_KUNDEN_ORDER_BY_ID = PREFIX + "findKundenOrderById";
+	public static final String FIND_KUNDE_BY_USERNAME = PREFIX + "findKundeByUsername";
+	public static final String PARAM_KUNDE_USERNAME = "username";
+	public static final String PARAM_USERNAME_PREFIX = "usernamePrefix";
+	public static final String FIND_USERNAME_BY_USERNAME_PREFIX = PREFIX + "findKundeByUsernamePrefix";
 	public static final String FIND_IDS_BY_PREFIX = PREFIX + "findIdsByPrefix";
 	public static final String FIND_KUNDEN_OHNE_BESTELLUNGEN = PREFIX + "findKundenOhneBestellungen";
 	public static final String FIND_KUNDEN_BY_NACHNAME = PREFIX + "findKundenByNachname";
@@ -203,6 +223,13 @@ public class Kunde implements Serializable, Cloneable {
 	
 	@Transient
 	private URI bestellungenUri;
+	
+	@ElementCollection(fetch = EAGER)
+	@CollectionTable(name = "kunde_rolle",
+	                 joinColumns = @JoinColumn(name = "kunde_fk", nullable = false),
+   	                 uniqueConstraints =  @UniqueConstraint(columnNames = { "kunde_fk", "rolle" }))
+	@Column(table = "kunde_rolle", name = "rolle", length = 32, nullable = false)
+	private Set<RolleType> rollen;
 	
 	@OneToOne(fetch = LAZY, cascade = { PERSIST, REMOVE })
 	@JoinColumn(name = "file_fk")
@@ -335,6 +362,45 @@ public class Kunde implements Serializable, Cloneable {
 	}
 	public void setBestellungenUri(URI bestellungenUri) {
 		this.bestellungenUri = bestellungenUri;
+	}
+	public Set<RolleType> getRollen() {
+		if (rollen == null) {
+			return null;
+		}
+		
+		return Collections.unmodifiableSet(rollen);
+	}
+	public void setRollen(Set<RolleType> rollen) {
+		if (this.rollen == null) {
+			this.rollen = rollen;
+			return;
+		}
+		
+		// Wiederverwendung der vorhandenen Collection
+		this.rollen.clear();
+		if (rollen != null) {
+			this.rollen.addAll(rollen);
+		}
+	}
+	
+	public Kunde addRollen(Collection<RolleType> rollen) {
+		LOGGER.tracef("neue Rollen: %s", rollen);
+		if (this.rollen == null) {
+			this.rollen = new HashSet<>();
+		}
+		this.rollen.addAll(rollen);
+		LOGGER.tracef("Rollen nachher: %s", this.rollen);
+		return this;
+	}
+	
+	public Kunde removeRollen(Collection<RolleType> rollen) {
+		LOGGER.tracef("zu entfernende Rollen: %s", rollen);
+		if (this.rollen == null) {
+			return this;
+		}
+		this.rollen.removeAll(rollen);
+		LOGGER.tracef("Rollen nachher: %s", this.rollen);
+		return this;
 	}
 	public Date getErzeugt() {
 		return erzeugt == null ? null : (Date) erzeugt.clone();
