@@ -55,7 +55,6 @@ import de.shop.util.persistence.File;
 
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
 import de.shop.auth.domain.RolleType;
 import de.shop.bestellverwaltung.domain.Bestellung;
