@@ -55,6 +55,7 @@ import de.shop.util.persistence.File;
 
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
 import de.shop.auth.domain.RolleType;
 import de.shop.bestellverwaltung.domain.Bestellung;
@@ -126,7 +127,7 @@ import de.shop.util.IdGroup;
 	                   + "|| (_this.password != null && _this.password.equals(_this.passwordWdh))",
 	          message = "{kundenverwaltung.kunde.password.notEqual}")
 @XmlRootElement
-//@Formatted
+@Formatted
 public class Kunde implements Serializable, Cloneable {
 	private static final long serialVersionUID = 7401524595142572933L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
