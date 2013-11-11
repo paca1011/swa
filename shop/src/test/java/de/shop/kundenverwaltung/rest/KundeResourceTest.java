@@ -103,8 +103,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 	}
 	
 	@Test
-	@InSequence(4)
-	@Ignore
+	@InSequence(5)
 	public void findKundeByIdNichtVorhanden() {
 		LOGGER.finer("BEGINN");
 		
@@ -129,7 +128,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 	}
 
 	@Test
-	@InSequence(40)
+	@InSequence(6)
 	public void createKunde() throws URISyntaxException {
 		LOGGER.finer("BEGINN");
 		
