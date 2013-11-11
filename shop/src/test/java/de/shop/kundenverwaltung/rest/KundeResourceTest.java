@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.logging.Logger;
-
 import java.net.URI;
 
 import javax.ws.rs.client.ClientBuilder;
@@ -46,6 +45,7 @@ import static javax.ws.rs.client.Entity.json;
 public class KundeResourceTest extends AbstractResourceTest {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 	
+	private static final Integer NEUE_VERSION = 0;
 	private static final String NEUER_NACHNAME = "Nachnameneu";
 	private static final String NEUER_VORNAME = "Vorname";
 	private static final String NEUE_EMAIL = NEUER_NACHNAME + "@test.de";
@@ -129,7 +129,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 
 	@Test
 	@InSequence(6)
-	public void createKunde() throws URISyntaxException {
+	public void createKunde() {
 		LOGGER.finer("BEGINN");
 		
 		// Given
@@ -138,6 +138,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final String email = NEUE_EMAIL;
 		final String geschlecht = NEUES_GESCHLECHT;
 		final String passwort = NEUES_PASSWORT;
+		final Integer version = NEUE_VERSION;
 		final String plz = NEUE_PLZ;
 		final String stadt = NEUE_STADT;
 		final String strasse = NEUE_STRASSE;
@@ -149,13 +150,14 @@ public class KundeResourceTest extends AbstractResourceTest {
 		kunde.setEmail(email);
 		kunde.setGeschlecht(geschlecht);
 		kunde.setPasswort(passwort);
+		kunde.setVersion(version);
+
 		final Adresse adresse = new Adresse();
 		adresse.setStadt(stadt);
 		adresse.setHausnum(hausnum);
 		adresse.setPlz(plz);
 		adresse.setStrasse(strasse);
 		kunde.setAdresse(adresse);
-		kunde.addRollen(Arrays.asList(RolleType.KUNDE, RolleType.MITARBEITER));
 		
 		Response response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
                                                               .request()
@@ -170,29 +172,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final String idStr = location.substring(startPos + 1);
 		final Long id = Long.valueOf(idStr);
 		assertThat(id).isPositive();
-		
-		// Einloggen als neuer Kunde und Bestellung aufgeben
-
-		// Given (2)
-		final Long artikelId = ARTIKEL_ID_VORHANDEN;
-		final String username = idStr;
-
-		// When (2)
-		final Bestellung bestellung = new Bestellung();
-		final Posten p = new Posten();
-		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId));
-		p.setAnzahl((short) 1);
-		bestellung.addVieleposten(p);
-		
-		// Then (2)
-		response = getHttpsClient(username, passwort).target(BESTELLUNGEN_URI)
-                                                          .request()
-                                                          .post(json(bestellung));
-
-		assertThat(response.getStatus()).isEqualTo(HTTP_CREATED);
-		location = response.getLocation().toString();
-		response.close();
-		assertThat(location).isNotEmpty();
 
 		LOGGER.finer("ENDE");
 	}
