@@ -6,11 +6,11 @@
 --
 -- kunde
 --
-INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (101, 0, 'Admin','Admin','m','admin@web.de','admin','01.08.2006 00:00:00','01.08.2006 00:00:00');
-INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (102, 0, 'Müller','Hans','m','hans@web.de','broetchen','02.08.2006 00:00:00','02.08.2006 00:00:00');
-INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (103, 0, 'Reinhard','Elisabeth','w','elli@web.de','prinzpi','03.08.2006 00:00:00','03.08.2006 00:00:00');
-INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (104, 0, 'Maier','Elisabeth','w','elli2@web.de','prinzpi','04.08.2006 00:00:00','04.08.2006 00:00:00');
-INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (105, 0, 'Frei','Elisabeth','w','elli3@web.de','prinzpi','05.08.2006 00:00:00','05.08.2006 00:00:00');
+INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (101, 0, 'Admin','Admin','m','admin@web.de','Ftw2iom0KLJIVIQxO6Z6ORLKA/KytCQpF0pPiz3ITkQ=','01.08.2006 00:00:00','01.08.2006 00:00:00');
+INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (102, 0, 'Müller','Hans','m','hans@web.de','N4NPLyV2LyPh90pTHL5EXbc9Z2Xr5gh4p9++zX1K9uE=','02.08.2006 00:00:00','02.08.2006 00:00:00');
+INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (103, 0, 'Reinhard','Elisabeth','w','elli@web.de','RU9jrDDIMimX7wJe3/ar0j4NvnuKPVEmqJTkoWjBtZs=','03.08.2006 00:00:00','03.08.2006 00:00:00');
+INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (104, 0, 'Maier','Elisabeth','w','elli2@web.de','Xvb98yUTqnzRH3K+zPEyuSJNM/JxRx//QCdCiHoXHt8=','04.08.2006 00:00:00','04.08.2006 00:00:00');
+INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (105, 0, 'Frei','Elisabeth','w','elli3@web.de','ElPpNz54G3UAJmyqVRUOCOIQvIzYzHDYmYXjYAFV6GA=','05.08.2006 00:00:00','05.08.2006 00:00:00');
 
 --
 -- file_tbl
@@ -19,6 +19,18 @@ INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, 
 -- der u.a. eine Datei enthaelt 
 -- CALL insert_file_kunde(101,1,0,'image.png','Privatkunde_101.png','png','I','01.01.2007 01:00:00','01.01.2007 01:00:00');
 -- CALL insert_file_kunde(102,2,0,'video.mp4','Privatkunde_102.mp4','mp4','V','01.01.2007 01:00:00','01.01.2007 01:00:00');
+
+--
+-- Kunde Rolle
+--
+INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (101,'admin');
+INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (101,'mitarbeiter');
+INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (101,'kunde');
+INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (102,'mitarbeiter');
+INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (102,'kunde');
+INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (103,'mitarbeiter');
+INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (103,'kunde');
+INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (104,'kunde');
 
 --
 -- lieferant

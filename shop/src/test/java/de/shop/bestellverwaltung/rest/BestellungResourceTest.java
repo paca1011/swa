@@ -11,7 +11,6 @@ import static de.shop.util.TestConstants.USERNAME;
 import static java.net.HttpURLConnection.HTTP_CREATED;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
-import static java.util.Locale.GERMAN;
 import static javax.ws.rs.client.Entity.json;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -19,15 +18,12 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Locale;
 import java.util.logging.Logger;
 
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

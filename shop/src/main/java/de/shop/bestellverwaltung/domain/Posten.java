@@ -21,7 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.jboss.logging.Logger;

@@ -127,7 +127,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		if (bestellung == null) {
 			return null;
 		}
-
+	
 		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
 		final Kunde kunde = ks.findKundeByUserName(username);
 		return createBestellung(bestellung, kunde);

@@ -8,11 +8,8 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.fail;
 
 import java.lang.invoke.MethodHandles;
-import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.logging.Logger;
-import java.net.URI;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
@@ -23,17 +20,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.shop.auth.domain.RolleType;
-import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.AbstractResourceTest;
 import static de.shop.util.TestConstants.USERNAME;
 import static de.shop.util.TestConstants.PASSWORD;
 import static de.shop.util.TestConstants.KUNDEN_URI;
-import static de.shop.util.TestConstants.ARTIKEL_URI;
-import static de.shop.util.TestConstants.BESTELLUNGEN_URI;
+
 import static javax.ws.rs.client.Entity.json;
 
 
@@ -55,7 +48,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final String NEUE_STRASSE = "Testweg";
 	private static final String NEUE_HAUSNUM = "1";
 	private static final String NEUES_PASSWORT = "neuesPassword";
-	private static final Long ARTIKEL_ID_VORHANDEN = Long.valueOf(300);
+//	private static final Long ARTIKEL_ID_VORHANDEN = Long.valueOf(300);
 	
 	@Test
 	@InSequence(1)
