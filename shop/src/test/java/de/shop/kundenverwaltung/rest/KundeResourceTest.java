@@ -2,6 +2,7 @@ package de.shop.kundenverwaltung.rest;
 
 import static java.net.HttpURLConnection.HTTP_CREATED;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -23,10 +24,11 @@ import org.junit.runner.RunWith;
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.AbstractResourceTest;
+import static de.shop.util.TestConstants.PASSWORD_ADMIN;
+import static de.shop.util.TestConstants.USERNAME_ADMIN;
 import static de.shop.util.TestConstants.USERNAME;
 import static de.shop.util.TestConstants.PASSWORD;
 import static de.shop.util.TestConstants.KUNDEN_URI;
-
 import static javax.ws.rs.client.Entity.json;
 
 
@@ -48,6 +50,8 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final String NEUE_STRASSE = "Testweg";
 	private static final String NEUE_HAUSNUM = "1";
 	private static final String NEUES_PASSWORT = "neuesPassword";
+	private static final Long KUNDE_ID_UPDATE = Long.valueOf(103);
+	private static final Long KUNDE_ID_DELETE = Long.valueOf(105);
 //	private static final Long ARTIKEL_ID_VORHANDEN = Long.valueOf(300);
 	
 	@Test
@@ -113,9 +117,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 									.get();
 	
 		// Then
-		assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
-		Kunde kunde = response.readEntity(Kunde.class);
-		assertThat(kunde.getId()).isEqualTo(kundeId);		
+		assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);	
 		
 		LOGGER.finer("ENDE");
 	}
@@ -169,5 +171,78 @@ public class KundeResourceTest extends AbstractResourceTest {
 		LOGGER.finer("ENDE");
 	}
 
+	@Test
+	@InSequence(7)
+	public void updateKunde() {
+		LOGGER.finer("BEGINN");
+		
+		// Given
+		final Long kundeId = KUNDE_ID_UPDATE;
+		final String neuesPasswort = NEUES_PASSWORT;
+		
+		// When
+		Response response = ClientBuilder.newClient()
+						.target("http://localhost:8080/shop/rest/kunden/{id}")
+						.resolveTemplate("id", kundeId)
+						.request()
+						.accept(APPLICATION_JSON)
+						.acceptLanguage(Locale.GERMAN)
+						.get();
+		
+		Kunde kunde = response.readEntity(Kunde.class);
+		assertThat(kunde.getId()).isEqualTo(kundeId);
+
+		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
+		kunde.setPasswort(neuesPasswort);
+		
+		response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
+						.request()
+						.accept(APPLICATION_JSON)
+						.put(json(kunde));
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
+		kunde = response.readEntity(Kunde.class);
+		
+		LOGGER.finer("ENDE");
+	}
+	
+	@Test
+	@Ignore
+	@InSequence(8)
+	public void deleteKunde() {
+		LOGGER.finer("BEGINN");
+		
+		// Given
+		final Long kundeId = KUNDE_ID_DELETE;
+		
+		// When
+		Response response = getHttpsClient().target(KUNDEN_URI)
+                                            .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+                                            .request()
+                                            .accept(APPLICATION_JSON)
+                                            .get();
+		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
+		response.close();
+		
+		response = getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN).target(KUNDEN_URI)
+                                                                 .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
+                                                                		          kundeId)
+                                                                 .request()
+                                                                 .delete();
+		
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_NO_CONTENT);
+		response.close();
+		
+		response = getHttpsClient().target(KUNDEN_URI)
+                                   .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+                                   .request()
+                                   .accept(APPLICATION_JSON)
+                                   .get();
+       	assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
+		response.close();
+        
+		LOGGER.finer("ENDE");
+	}
 
 }
