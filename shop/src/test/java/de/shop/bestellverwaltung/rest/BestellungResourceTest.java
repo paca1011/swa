@@ -19,12 +19,15 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.logging.Logger;
 
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -48,7 +51,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 	private static final Long ARTIKEL_ID_VORHANDEN_1 = Long.valueOf(300);
 	private static final Long ARTIKEL_ID_VORHANDEN_2 = Long.valueOf(301);
 
-	private static final Long BESTELLUNG_ID_NICHT_VORHANDEN = Long.valueOf(444);
+	private static final Long BESTELLUNG_ID_NICHT_VORHANDEN = Long.valueOf(414);
 	
 	@Test
 	@InSequence(1)
@@ -113,32 +116,34 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		LOGGER.finer("ENDE");
 	}
 	
+	
+	
 	@Test
-	@InSequence(11)
+	@InSequence(4)
 	public void findBestellungByIdNichtVorhanden() {
 		LOGGER.finer("BEGINN");
 		
 		// Given
-		final Long BestellungId = BESTELLUNG_ID_NICHT_VORHANDEN;
+		final Long bestellungId = BESTELLUNG_ID_NICHT_VORHANDEN;
 		
 		// When
 		final Response response = getHttpsClient().target(BESTELLUNGEN_ID_URI)
-                                                  .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, BestellungId)
+                                                  .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, bestellungId)
                                                   .request()
-                                                  .acceptLanguage(GERMAN)
+                                                  .accept(APPLICATION_JSON)
                                                   .get();
-
-    	// Then
-    	assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
-    	final String fehlermeldung = response.readEntity(String.class);
-    	assertThat(fehlermeldung).startsWith("Keie Bestellung mit der ID")
-    	                         .endsWith("gefunden.");
 		
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
+    	final String fehlermeldung = response.readEntity(String.class);
+    	assertThat(fehlermeldung).startsWith("Keine Bestellung mit der ID")
+    	                         .endsWith("gefunden.");
+
 		LOGGER.finer("ENDE");
 	}
-
+	
 	@Test
-	@InSequence(10)
+	@InSequence(11)
 	public void createBestellung() throws URISyntaxException {
 		LOGGER.finer("BEGINN");
 		

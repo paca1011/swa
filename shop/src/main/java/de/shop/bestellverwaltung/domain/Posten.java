@@ -55,7 +55,8 @@ public class Posten implements Serializable {
 	
 	@ManyToOne(optional = false)
     @JoinColumn(name = "artikel_fk", nullable = false)
-	@NotNull(message = "{bestellverwaltung.posten.artikel.notNull}")
+	//  Nicht @NotNUll weil der Artikel durch seine URI übergeben wird
+    //	@NotNull(message = "{bestellverwaltung.posten.artikel.notNull}")
 	@XmlTransient
 	private Artikel artikel;
 

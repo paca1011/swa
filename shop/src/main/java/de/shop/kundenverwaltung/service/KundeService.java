@@ -508,4 +508,20 @@ public class KundeService implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Den Kunden zu einem Benutzernamen suchen.
+	 * @param userName Der Benutzername, zu dem der passende Kunde gesucht wird.
+	 * @return Der gefundene Kunde oder null, falls es zum angegebenen Benutzernamen keinen Kunden gibt.
+	 */
+	public Kunde findKundeByUserName(String userName) {
+		try {
+			return em.createNamedQuery(Kunde.FIND_KUNDE_BY_USERNAME, Kunde.class)
+					 .setParameter(Kunde.PARAM_KUNDE_USERNAME, userName)
+					 .getSingleResult();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+	}
+
 }
