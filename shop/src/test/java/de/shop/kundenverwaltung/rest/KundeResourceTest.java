@@ -83,7 +83,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final Long kundeId = Long.valueOf(101);
 		
 		// When
-		Response response = ClientBuilder.newClient()
+		final Response response = ClientBuilder.newClient()
 									.target("http://localhost:8080/shop/rest/kunden/{id}")
 									.resolveTemplate("id", kundeId)
 									.request()
@@ -93,7 +93,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 	
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		Kunde kunde = response.readEntity(Kunde.class);
+		final Kunde kunde = response.readEntity(Kunde.class);
 		assertThat(kunde.getId()).isEqualTo(kundeId);		
 		
 		LOGGER.finer("ENDE");
@@ -108,7 +108,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final Long kundeId = Long.valueOf(333);
 		
 		// When
-		Response response = ClientBuilder.newClient()
+		final Response response = ClientBuilder.newClient()
 									.target("http://localhost:8080/shop/rest/kunden/{id}")
 									.resolveTemplate("id", kundeId)
 									.request()
@@ -154,13 +154,13 @@ public class KundeResourceTest extends AbstractResourceTest {
 		adresse.setStrasse(strasse);
 		kunde.setAdresse(adresse);
 		
-		Response response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
+		final Response response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
                                                               .request()
                                                               .post(json(kunde));
 			
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_CREATED);
-		String location = response.getLocation().toString();
+		final String location = response.getLocation().toString();
 		response.close();
 		
 		final int startPos = location.lastIndexOf('/');

@@ -120,7 +120,7 @@ import de.shop.util.IdGroup;
 				query = "SELECT   k"
 				        + " FROM  Kunde k"
 				        + " WHERE CONCAT('', k.id) LIKE :" + Kunde.PARAM_KUNDE_ID_PREFIX
-				        + " ORDER BY k.id"),
+				        + " ORDER BY k.id")
 })
 @ScriptAssert(lang = "javascript",
 	          script = "(_this.password == null && _this.passwordWdh == null)"
@@ -238,7 +238,7 @@ public class Kunde implements Serializable, Cloneable {
 	
 	@Basic(optional = false)
 	@Temporal (TIMESTAMP)
-	@XmlElement(name="datum")
+	@XmlElement(name = "datum")
 	private Date erzeugt;	
 	
 	@Basic(optional = false)
