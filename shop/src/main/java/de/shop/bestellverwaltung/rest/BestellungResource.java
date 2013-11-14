@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -177,6 +178,7 @@ public class BestellungResource {
 	
 	@POST
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+	@Transactional
 	public Response createBestellung(@Valid Bestellung bestellung) {
 		if (bestellung == null) {
 			return null;
@@ -184,6 +186,7 @@ public class BestellungResource {
 		
 		// Username aus dem Principal ermitteln
 		final String username = principal.getName();
+		
 		
 		// IDs der (persistenten) Artikel ermitteln
 		final Collection<Posten> posten = bestellung.getVieleposten();

@@ -29,6 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -138,23 +139,27 @@ public class Bestellung implements Serializable {
 		super();
 		this.vieleposten = vieleposten;
 	}
-
+	
 	@PrePersist
 	private void prePersist() {
 		erzeugt = new Date();
 		aktualisiert = new Date();
 	}
-	
-	@PostPersist
-	private void postPersist() {
-		LOGGER.debugf("Neue Bestellung mit ID=%d", id);
-	}
-	
+
 	@PreUpdate
 	private void preUpdate() {
 		aktualisiert = new Date();
 	}
 	
+	@PostPersist
+	private void postPersist() {
+		LOGGER.debugf("Neue Bestellund mit ID=%d", id);
+	}
+	
+	@PostUpdate
+	private void postUpdate() {
+		LOGGER.debugf("Bestellung mit ID=%d aktualisiert: version=%d", id, version);
+	}
 	
 	public void setValues(Bestellung b) {
 		status = b.status;
@@ -226,6 +231,12 @@ public class Bestellung implements Serializable {
 	}
 	public void setLieferant(Lieferant lieferant) {
 		this.lieferant = lieferant;
+	}
+	public int getVersion() {
+		return version;
+	}
+	public void setVersion(int version) {
+		this.version = version;
 	}
 	public String getStatus() {
 		return status;
