@@ -2,13 +2,16 @@ package de.shop.kundenverwaltung.rest;
 
 import static java.net.HttpURLConnection.HTTP_CREATED;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
 import static java.net.HttpURLConnection.HTTP_OK;
+import static java.util.Locale.GERMAN;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.fail;
 
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -20,16 +23,17 @@ import org.jboss.arquillian.junit.InSequence;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static javax.ws.rs.client.Entity.entity;
+import static javax.ws.rs.client.Entity.json;
 
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.AbstractResourceTest;
-import static de.shop.util.TestConstants.PASSWORD_ADMIN;
-import static de.shop.util.TestConstants.USERNAME_ADMIN;
+import static de.shop.util.TestConstants.KUNDEN_ID_FILE_URI;
 import static de.shop.util.TestConstants.USERNAME;
 import static de.shop.util.TestConstants.PASSWORD;
 import static de.shop.util.TestConstants.KUNDEN_URI;
-import static javax.ws.rs.client.Entity.json;
+import static de.shop.util.TestConstants.KUNDEN_ID_URI;
 
 
 //Logging durch java.util.logging
@@ -39,6 +43,11 @@ import static javax.ws.rs.client.Entity.json;
 @RunWith(Arquillian.class)
 public class KundeResourceTest extends AbstractResourceTest {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
+	
+	private static final String IMAGE_FILENAME = "image.png";
+	private static final String IMAGE_PATH_UPLOAD = "src/test/resources/rest/" + IMAGE_FILENAME;
+	private static final String IMAGE_MIMETYPE = "image/png";
+	private static final Long KUNDE_ID_UPLOAD = Long.valueOf(102);
 	
 	private static final Integer NEUE_VERSION = 0;
 	private static final String NEUER_NACHNAME = "Nachnameneu";
@@ -51,7 +60,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final String NEUE_HAUSNUM = "1";
 	private static final String NEUES_PASSWORT = "neuesPassword";
 	private static final Long KUNDE_ID_UPDATE = Long.valueOf(103);
-	private static final Long KUNDE_ID_DELETE = Long.valueOf(105);
 //	private static final Long ARTIKEL_ID_VORHANDEN = Long.valueOf(300);
 	
 	@Test
@@ -76,6 +84,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 	
 	@Test
 	@InSequence(4)
+	@Ignore
 	public void findKundeById() {
 		LOGGER.finer("BEGINN");
 		
@@ -83,18 +92,14 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final Long kundeId = Long.valueOf(101);
 		
 		// When
-		final Response response = ClientBuilder.newClient()
-									.target("http://localhost:8080/shop/rest/kunden/{id}")
-									.resolveTemplate("id", kundeId)
-									.request()
-									.accept(APPLICATION_JSON)
-									.acceptLanguage(Locale.GERMAN)
-									.get();
+		final Response response = getHttpsClient().target(KUNDEN_ID_URI)
+                								  .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+                								  .request()
+                								  .acceptLanguage(GERMAN)
+                								  .get();
 	
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		final Kunde kunde = response.readEntity(Kunde.class);
-		assertThat(kunde.getId()).isEqualTo(kundeId);		
 		
 		LOGGER.finer("ENDE");
 	}
@@ -108,16 +113,17 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final Long kundeId = Long.valueOf(333);
 		
 		// When
-		final Response response = ClientBuilder.newClient()
-									.target("http://localhost:8080/shop/rest/kunden/{id}")
-									.resolveTemplate("id", kundeId)
-									.request()
-									.accept(APPLICATION_JSON)
-									.acceptLanguage(Locale.GERMAN)
-									.get();
+		final Response response = getHttpsClient().target(KUNDEN_ID_URI)
+				  .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+				  .request()
+				  .acceptLanguage(GERMAN)
+				  .get();
 	
 		// Then
-		assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);	
+		assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
+    	final String fehlermeldung = response.readEntity(String.class);
+    	assertThat(fehlermeldung).startsWith("Kein Artikel mit der ID")
+    	                         .endsWith("gefunden.");
 		
 		LOGGER.finer("ENDE");
 	}
@@ -207,42 +213,28 @@ public class KundeResourceTest extends AbstractResourceTest {
 	}
 	
 	@Test
-	@Ignore
 	@InSequence(8)
-	public void deleteKunde() {
-		LOGGER.finer("BEGINN");
-		
+	public void uploadDownload() throws IOException {
+	
 		// Given
-		final Long kundeId = KUNDE_ID_DELETE;
-		
+				final Long kundeId = KUNDE_ID_UPLOAD;
+				final String path = IMAGE_PATH_UPLOAD;
+				final String mimeType = IMAGE_MIMETYPE;
+				
+		// Datei einlesen
+		final byte[] uploadBytes = Files.readAllBytes(Paths.get(path));
+				
 		// When
-		Response response = getHttpsClient().target(KUNDEN_URI)
-                                            .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
-                                            .request()
-                                            .accept(APPLICATION_JSON)
-                                            .get();
-		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		response.close();
-		
-		response = getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN).target(KUNDEN_URI)
-                                                                 .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
-                                                                		          kundeId)
-                                                                 .request()
-                                                                 .delete();
+		Response response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_ID_FILE_URI)
+		                                                      .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
+		                                                         		           kundeId)
+		                                                      .request()
+		                                                      .post(entity(uploadBytes, mimeType));
 		
 		// Then
-		assertThat(response.getStatus()).isEqualTo(HTTP_NO_CONTENT);
-		response.close();
+		assertThat(response.getStatus()).isEqualTo(HTTP_CREATED);
 		
-		response = getHttpsClient().target(KUNDEN_URI)
-                                   .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
-                                   .request()
-                                   .accept(APPLICATION_JSON)
-                                   .get();
-       	assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
-		response.close();
-        
-		LOGGER.finer("ENDE");
+	}
+	
 	}
 
-}

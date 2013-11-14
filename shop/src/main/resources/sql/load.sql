@@ -17,8 +17,8 @@ INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, 
 --
 -- Die eigene Stored Procedure "insert_file_kunde" fuegt in die Tabelle file_tbl eine Zeile bzw. einen Datensatz ein,
 -- der u.a. eine Datei enthaelt 
--- CALL insert_file_kunde(101,1,0,'image.png','Privatkunde_101.png','png','I','01.01.2007 01:00:00','01.01.2007 01:00:00');
--- CALL insert_file_kunde(102,2,0,'video.mp4','Privatkunde_102.mp4','mp4','V','01.01.2007 01:00:00','01.01.2007 01:00:00');
+CALL insert_file_kunde(101,1,0,'image.png','Privatkunde_101.png','png','I','01.01.2007 01:00:00','01.01.2007 01:00:00');
+CALL insert_file_kunde(102,2,0,'video.mp4','Privatkunde_102.mp4','mp4','V','01.01.2007 01:00:00','01.01.2007 01:00:00');
 
 --
 -- Kunde Rolle
