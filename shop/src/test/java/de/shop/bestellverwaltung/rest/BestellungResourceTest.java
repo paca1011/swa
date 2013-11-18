@@ -168,24 +168,10 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		
 		// Given
 		final Long artikelId1 = ARTIKEL_ID_VORHANDEN_1;
-		final Long artikelId2 = ARTIKEL_ID_VORHANDEN_2;
 		final Long kundeId = KUNDE_ID_VORHANDEN;
 		
 		// Neues, client-seitiges Bestellungsobjekt als JSON-Datensatz
 		final Bestellung bestellung = new Bestellung();
-		
-		Posten p = new Posten();
-		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
-		p.setAnzahl((short) 1);
-		p.setVersion(0);
-		bestellung.addVieleposten(p);
-
-		p = new Posten();
-		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
-		p.setAnzahl((short) 1);
-		p.setVersion(0);
-		bestellung.addVieleposten(p);
-		
 		bestellung.setAusgeliefert(Integer.valueOf(0));
 		bestellung.setGesamtpreis(BigDecimal.valueOf(100));
 		bestellung.setStatus("Ausgeliefert");
@@ -193,6 +179,11 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		bestellung.setVersion(0);
 		bestellung.setLieferantUri(null);
 		
+		Posten p = new Posten();
+		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
+		p.setAnzahl((short) 1);
+		p.setVersion(0);
+		bestellung.addVieleposten(p);
 		
 		// When
 		Long id;

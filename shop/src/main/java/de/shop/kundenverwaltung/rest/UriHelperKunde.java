@@ -1,3 +1,4 @@
+/*
 package de.shop.kundenverwaltung.rest;
 
 import java.net.URI;
@@ -31,3 +32,4 @@ public class UriHelperKunde {
 		kunde.setBestellungenUri(bestellungenUri);
 	}
 }
+*/

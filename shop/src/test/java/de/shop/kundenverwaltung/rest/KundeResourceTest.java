@@ -84,7 +84,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 	
 	@Test
 	@InSequence(4)
-	@Ignore
 	public void findKundeById() {
 		LOGGER.finer("BEGINN");
 		
