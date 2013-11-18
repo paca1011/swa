@@ -268,6 +268,7 @@ public class Kunde implements Serializable, Cloneable {
 		vorname = k.vorname;
 		email = k.email;
 		passwort = k.passwort;
+		version = k.version;
 	}
 	
 	public File getFile() {
