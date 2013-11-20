@@ -29,7 +29,10 @@ import javax.persistence.criteria.Root;
 import org.jboss.logging.Logger;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 
+import de.shop.auth.domain.RolleType;
+import de.shop.auth.service.AuthService;
 import de.shop.bestellverwaltung.domain.Posten;
 import de.shop.bestellverwaltung.domain.Posten_;
 import de.shop.bestellverwaltung.domain.Bestellung;
@@ -74,6 +77,9 @@ public class KundeService implements Serializable {
 	
 	@Inject
 	private transient EntityManager em;
+	
+	@Inject
+	private AuthService authService;
 	
 	@Inject
 	private FileHelper fileHelper;
@@ -358,6 +364,12 @@ public class KundeService implements Serializable {
 			throw new EmailExistsException(kunde.getEmail());
 		}
 	
+		// Password verschluesseln
+		passwordVerschluesseln(kunde);
+		
+		// Rolle setzen
+		kunde.addRollen(Sets.newHashSet(RolleType.KUNDE));
+		
 		em.persist(kunde);
 		event.fire(kunde);
 		
@@ -394,6 +406,11 @@ public class KundeService implements Serializable {
 				// anderes Objekt mit gleichem Attributwert fuer email
 				throw new EmailExistsException(kunde.getEmail());
 			}
+		}
+		
+		// Password verschluesseln
+		if (geaendertPassword) {
+			passwordVerschluesseln(kunde);
 		}
 
 		kunde = em.merge(kunde);   // OptimisticLockException
@@ -522,6 +539,16 @@ public class KundeService implements Serializable {
 		catch (NoResultException e) {
 			return null;
 		}
+	}
+	
+	private void passwordVerschluesseln(Kunde kunde) {
+		LOGGER.debugf("passwordVerschluesseln BEGINN: %s", kunde);
+
+		final String unverschluesselt = kunde.getPasswort();
+		final String verschluesselt = authService.verschluesseln(unverschluesselt);
+		kunde.setPasswort(verschluesselt);
+
+		LOGGER.debugf("passwordVerschluesseln ENDE: %s", verschluesselt);
 	}
 
 }

@@ -1,7 +1,6 @@
 package de.shop.kundenverwaltung.rest;
 
 import static java.net.HttpURLConnection.HTTP_CREATED;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Locale.GERMAN;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -99,30 +98,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 	
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		
-		LOGGER.finer("ENDE");
-	}
-	
-	@Test
-	@InSequence(5)
-	public void findKundeByIdNichtVorhanden() {
-		LOGGER.finer("BEGINN");
-		
-		// Given
-		final Long kundeId = Long.valueOf(333);
-		
-		// When
-		final Response response = getHttpsClient().target(KUNDEN_ID_URI)
-				  .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
-				  .request()
-				  .acceptLanguage(GERMAN)
-				  .get();
-	
-		// Then
-		assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
-    	final String fehlermeldung = response.readEntity(String.class);
-    	assertThat(fehlermeldung).startsWith("Kein Artikel mit der ID")
-    	                         .endsWith("gefunden.");
 		
 		LOGGER.finer("ENDE");
 	}
@@ -232,7 +207,13 @@ public class KundeResourceTest extends AbstractResourceTest {
 		
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_CREATED);
+		// id extrahieren aus http://localhost:8080/shop/rest/kunden/<id>/file
+		final String location = response.getLocation().toString();
+		response.close();
 		
+		final String idStr = location.replace(KUNDEN_URI + '/', "")
+                .replace("/file", "");
+		assertThat(idStr).isEqualTo(kundeId.toString());
 	}
 	
 	}
