@@ -165,7 +165,9 @@ public class Bestellung implements Serializable {
 		status = b.status;
 		gesamtpreis = b.gesamtpreis;
 		ausgeliefert = b.ausgeliefert;
+		version = b.version;
 	}
+	
 	
 	public Long getId() {
 		return id;
