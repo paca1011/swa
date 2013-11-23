@@ -123,7 +123,7 @@ public class Bestellung implements Serializable {
 	
 	@Basic(optional = false)
 	@Temporal (TIMESTAMP)
-	@XmlElement(name="datum")
+	@XmlElement(name = "datum")
 	private Date erzeugt;	
 	
 	@Basic(optional = false)

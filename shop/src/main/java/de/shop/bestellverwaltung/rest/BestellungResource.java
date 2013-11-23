@@ -27,7 +27,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -60,9 +59,6 @@ public class BestellungResource {
 
 	@Context
 	private UriInfo uriInfo;
-	
-	@Context
-	private HttpHeaders headers;
 	
     @Inject
 	private ArtikelResource artikelResource;
@@ -162,7 +158,7 @@ public class BestellungResource {
                               .rel(ADD_LINK)
                               .build();
 
-		return new Link[] { self, add };
+		return new Link[] {self, add};
 	}
 
 	public URI getUriBestellung(Bestellung bestellung, UriInfo uriInfo) {

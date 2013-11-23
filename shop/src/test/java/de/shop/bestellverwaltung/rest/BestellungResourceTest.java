@@ -40,6 +40,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 	private static final Long BESTELLUNG_ID_VORHANDEN = Long.valueOf(400);
 	private static final Long ARTIKEL_ID_VORHANDEN_1 = Long.valueOf(300);
 	private static final Long ARTIKEL_ID_VORHANDEN_2 = Long.valueOf(301);
+	private static final BigDecimal GESAMTPREIS = BigDecimal.valueOf(100);
 
 	@Test
 	@InSequence(1)
@@ -116,10 +117,10 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		// Neues, client-seitiges Bestellungsobjekt als JSON-Datensatz
 		final Bestellung bestellung = new Bestellung();
 		
-		bestellung.setGesamtpreis(BigDecimal.valueOf(100));
+		bestellung.setGesamtpreis(GESAMTPREIS);
 		bestellung.setStatus("in_bearbeitung");
 		
-		Posten p = new Posten();
+		final Posten p = new Posten();
 		p.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
 		p.setAnzahl((short) 1);
 		p.setVersion(0);
