@@ -25,7 +25,6 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -95,7 +94,6 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 	}
 	
 	@Test
-	@Ignore
 	@InSequence(2)
 	public void updateDelete() throws InterruptedException, ExecutionException, TimeoutException {
 		LOGGER.finer("BEGINN");

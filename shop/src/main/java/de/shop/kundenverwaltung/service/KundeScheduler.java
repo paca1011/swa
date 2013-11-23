@@ -32,9 +32,10 @@ public class KundeScheduler {
 		final List<Kunde> kunden =
 				                  em.createNamedQuery(Kunde.FIND_KUNDEN_OHNE_BESTELLUNGEN, Kunde.class)
 				                    .getResultList();
-		for (Kunde k : kunden) 
+		for (Kunde k : kunden) {
 			ks.deleteKunde(k);
 			LOGGER.infof("Kunde #%d wurde geloescht (ohne Bestellungen)");
 		}
+	}
 	
 }

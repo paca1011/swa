@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.ws.rs.client.ClientBuilder;
@@ -166,7 +165,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 						.resolveTemplate("id", kundeId)
 						.request()
 						.accept(APPLICATION_JSON)
-						.acceptLanguage(Locale.GERMAN)
+						.acceptLanguage(GERMAN)
 						.get();
 		
 		Kunde kunde = response.readEntity(Kunde.class);

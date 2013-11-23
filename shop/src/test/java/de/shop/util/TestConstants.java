@@ -42,7 +42,7 @@ public final class TestConstants {
 	public static final String PASSWORD_FALSCH = "falsch";
 	
 	// Testklassen fuer Service- und Domain-Tests (nicht in Software Engineering)
-	public static final Class<?>[] TEST_CLASSES = { };
+	public static final Class<?>[] TEST_CLASSES = {};
 	
 	private TestConstants() {
 	}

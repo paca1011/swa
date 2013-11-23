@@ -5,14 +5,14 @@ import de.shop.util.AbstractShopException;
 /**
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
-public abstract class KundeServiceException extends AbstractShopException {
+public abstract class AbstractKundeServiceException extends AbstractShopException {
 	private static final long serialVersionUID = 5999208465631860486L;
 
-	public KundeServiceException(String msg) {
+	public AbstractKundeServiceException(String msg) {
 		super(msg);
 	}
 
-	public KundeServiceException(String msg, Throwable t) {
+	public AbstractKundeServiceException(String msg, Throwable t) {
 		super(msg, t);
 	}
 }
