@@ -11,6 +11,7 @@ INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, 
 INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (103, 0, 'Reinhard','Elisabeth','w','elli@web.de','RU9jrDDIMimX7wJe3/ar0j4NvnuKPVEmqJTkoWjBtZs=','03.08.2006 00:00:00','03.08.2006 00:00:00');
 INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (104, 0, 'Maier','Elisabeth','w','elli2@web.de','Xvb98yUTqnzRH3K+zPEyuSJNM/JxRx//QCdCiHoXHt8=','04.08.2006 00:00:00','04.08.2006 00:00:00');
 INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (105, 0, 'Frei','Elisabeth','w','elli3@web.de','ElPpNz54G3UAJmyqVRUOCOIQvIzYzHDYmYXjYAFV6GA=','05.08.2006 00:00:00','05.08.2006 00:00:00');
+INSERT INTO kunde (id, version, nachname, vorname, geschlecht, email, passwort, erzeugt, aktualisiert) VALUES (106, 0, 'Maulwurf','Hans','m','maulwurf@web.de','SC2Wc8/uXeOR+X/eTRyE+fjW8s8HhPz/uVi0Ay3nI2w=','05.08.2006 00:00:00','05.08.2006 00:00:00');
 
 --
 -- file_tbl
@@ -51,6 +52,7 @@ INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, e
 INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, erzeugt, aktualisiert) VALUES (205,'69117','lieferantenstadt','lieferstrasse','15',null,600,'03.08.2006 00:00:00','03.08.2006 00:00:00');
 INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, erzeugt, aktualisiert) VALUES (206,'69117','lieferantenstadt','lieferstrasse','16',null,601,'03.08.2006 00:00:00','03.08.2006 00:00:00');
 INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, erzeugt, aktualisiert) VALUES (207,'69117','lieferantenstadt','lieferstrasse','17',null,602,'03.08.2006 00:00:00','03.08.2006 00:00:00');
+INSERT INTO adresse (id, plz, stadt, strasse, hausnum, kunde_fk, lieferant_fk, erzeugt, aktualisiert) VALUES (208,'69115','Heidelberg','Belfortstrasse','16',106,null,'03.08.2006 00:00:00','03.08.2006 00:00:00');
 
 
 

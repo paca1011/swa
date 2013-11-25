@@ -1,6 +1,8 @@
 package de.shop.kundenverwaltung.rest;
 
 import static java.net.HttpURLConnection.HTTP_CREATED;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Locale.GERMAN;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -21,15 +23,17 @@ import org.jboss.arquillian.junit.InSequence;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.client.Entity.json;
-
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.util.AbstractResourceTest;
 import static de.shop.util.TestConstants.KUNDEN_ID_FILE_URI;
 import static de.shop.util.TestConstants.USERNAME;
 import static de.shop.util.TestConstants.PASSWORD;
+import static de.shop.util.TestConstants.USERNAME_ADMIN;
+import static de.shop.util.TestConstants.PASSWORD_ADMIN;
 import static de.shop.util.TestConstants.KUNDEN_URI;
 import static de.shop.util.TestConstants.KUNDEN_ID_URI;
 
@@ -46,6 +50,8 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final String IMAGE_PATH_UPLOAD = "src/test/resources/rest/" + IMAGE_FILENAME;
 	private static final String IMAGE_MIMETYPE = "image/png";
 	private static final Long KUNDE_ID_UPLOAD = Long.valueOf(102);
+	
+	private static final Long KUNDE_ID_DELETE = Long.valueOf(106);
 	
 	private static final Integer NEUE_VERSION = 0;
 	private static final String NEUER_NACHNAME = "Nachnameneu";
@@ -198,7 +204,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final byte[] uploadBytes = Files.readAllBytes(Paths.get(path));
 				
 		// When
-		Response response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_ID_FILE_URI)
+		final Response response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_ID_FILE_URI)
 		                                                      .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
 		                                                         		           kundeId)
 		                                                      .request()
@@ -213,6 +219,44 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final String idStr = location.replace(KUNDEN_URI + '/', "")
                 .replace("/file", "");
 		assertThat(idStr).isEqualTo(kundeId.toString());
+	}
+	
+	@Test
+	@InSequence(9)
+	public void deleteKunde() {
+		LOGGER.finer("BEGINN");
+		
+		// Given
+		final Long kundeId = KUNDE_ID_DELETE;
+		
+		// When
+		Response response = getHttpsClient().target(KUNDEN_ID_URI)
+                                            .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+                                            .request()
+                                            .accept(APPLICATION_JSON)
+                                            .get();
+		
+		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
+		response.close();
+		
+		response = getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN).target(KUNDEN_ID_URI)
+                                                                 .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)                                                             		         
+                                                                 .request()
+                                                                 .delete();
+		
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_NO_CONTENT);
+		response.close();
+		
+		response = getHttpsClient().target(KUNDEN_ID_URI)
+                                   .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+                                   .request()
+                                   .accept(APPLICATION_JSON)
+                                   .get();
+       	assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
+		response.close();
+        
+		LOGGER.finer("ENDE");
 	}
 	
 	}

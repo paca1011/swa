@@ -228,7 +228,7 @@ public class KundeResource {
 			for (Kunde k : kunden) {
 				setStructuralLinks(k, uriInfo);
 			}
-			entity = new GenericEntity<List<? extends Kunde>>(kunden) {};
+			entity = new GenericEntity<List<? extends Kunde>>(kunden){};
 			links = getTransitionalLinksKunden(kunden, uriInfo);
 		}
 		else if (kunde != null) {
@@ -418,8 +418,11 @@ public class KundeResource {
 	@Path("{id:[1-9][0-9]*}")
 	@DELETE
 	@Produces
-	public void deleteKunde(@PathParam("id") long kundeId) {
+	@Transactional
+	public Response deleteKunde(@PathParam("id") long kundeId) {
 		ks.deleteKundeById(kundeId);
+		return Response.noContent()
+				.build();
 	}
 
 	

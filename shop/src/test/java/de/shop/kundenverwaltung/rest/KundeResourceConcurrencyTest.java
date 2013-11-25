@@ -59,7 +59,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
     	final String neuerNachname2 = NEUER_NACHNAME_2;
 		
 		// When
-		Response response = getHttpsClient().target(KUNDEN_ID_URI)
+		final Response response = getHttpsClient().target(KUNDEN_ID_URI)
                                             .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
                                             .request()
                                             .accept(APPLICATION_JSON)
@@ -155,7 +155,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
     	final String neuerNachname = NEUER_NACHNAME;
 		
 		// When
-		Response response = getHttpsClient().target(KUNDEN_ID_URI)
+		final Response response = getHttpsClient().target(KUNDEN_ID_URI)
                                             .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
                                             .request()
                                             .accept(APPLICATION_JSON)
