@@ -33,6 +33,7 @@ public final class TestConstants {
 	
 	public static final String ARTIKEL_URI = BASE_URI + "/artikel";
 	public static final String ARTIKEL_ID_PATH_PARAM = "artikelId";
+	public static final String ARTIKEL_ID_URI = ARTIKEL_URI + "/{" + ARTIKEL_ID_PATH_PARAM + "}";
 	
 	// Username und Password
 	public static final String USERNAME = "102";

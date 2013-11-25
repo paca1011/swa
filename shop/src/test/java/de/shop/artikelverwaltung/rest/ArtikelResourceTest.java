@@ -2,6 +2,7 @@ package de.shop.artikelverwaltung.rest;
 
 import static de.shop.util.TestConstants.ARTIKEL_URI;
 import static de.shop.util.TestConstants.ARTIKEL_ID_PATH_PARAM;
+import static de.shop.util.TestConstants.ARTIKEL_ID_URI;
 import static de.shop.util.TestConstants.PASSWORD;
 import static de.shop.util.TestConstants.USERNAME;
 import static java.net.HttpURLConnection.HTTP_CREATED;
@@ -50,9 +51,36 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 	}
 	
 	
+	
 	@Test
 	@InSequence(10)
 	public void findArtikelById() {
+		LOGGER.finer("BEGINN");
+		
+		// Given
+		final Long artikelId = ARTIKEL_ID_VORHANDEN;
+		
+		// When
+		final Response response = getHttpsClient().target(ARTIKEL_ID_URI)
+                                                  .resolveTemplate(ARTIKEL_ID_PATH_PARAM, artikelId)
+                                                  .request()
+                                                  .acceptLanguage(GERMAN)
+                                                  .get();
+		
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
+		final Artikel artikel = response.readEntity(Artikel.class);
+		
+		assertThat(artikel.getId()).isEqualTo(artikelId);
+
+		LOGGER.finer("ENDE");
+	}
+	
+	
+	@Ignore
+	@Test
+	@InSequence(11)
+	public void findArtikelById1() {
 		LOGGER.finer("BEGINN");
 		
 		// Given
@@ -76,34 +104,10 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 		LOGGER.finer("ENDE");
 	}
 	
-	@Ignore
-	@Test
-	@InSequence(12)
-	public void findArtikelById2() {
-		LOGGER.finer("BEGINN");
-		
-		// Given
-		final Long artikelId = ARTIKEL_ID_VORHANDEN;
-		
-		// When
-		final Response response = getHttpsClient().target(ARTIKEL_URI)
-                                                  .resolveTemplate(ARTIKEL_ID_PATH_PARAM, artikelId)
-                                                  .request()
-                                                  .acceptLanguage(GERMAN)
-                                                  .get();
-		
-		// Then
-		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		final Artikel artikel = response.readEntity(Artikel.class);
-		
-		assertThat(artikel.getId()).isEqualTo(artikelId);
-
-		LOGGER.finer("ENDE");
-	}
 	
 	@Ignore
 	@Test
-	@InSequence(11)
+	@InSequence(12)
 	public void findArtikelByIdNichtVorhanden() {
 		LOGGER.finer("BEGINN");
 		
@@ -111,11 +115,9 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 		final Long artikelId = ARTIKEL_ID_NICHT_VORHANDEN;
 		
 		// When
-		final Response response = ClientBuilder.newClient()
-						.target("http://localhost:8080/shop/rest/artikel/{id}")
-						.resolveTemplate("id", artikelId)
+		final Response response = getHttpsClient().target(ARTIKEL_ID_URI)
+						.resolveTemplate(ARTIKEL_ID_PATH_PARAM, artikelId)
 						.request()
-						.accept(APPLICATION_JSON)
 						.acceptLanguage(GERMAN)
 						.get();
 		
@@ -176,13 +178,11 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 		final Long neuerBestand = NEUER_BESTAND;
 		
 		// When
-		Response response = ClientBuilder.newClient()
-						.target("http://localhost:8080/shop/rest/artikel/{id}")
-						.resolveTemplate("id", artikelId)
-						.request()
-						.accept(APPLICATION_JSON)
-						.acceptLanguage(GERMAN)
-						.get();
+		Response response = getHttpsClient().target(ARTIKEL_ID_URI)
+				.resolveTemplate(ARTIKEL_ID_PATH_PARAM, artikelId)
+				.request()
+				.acceptLanguage(GERMAN)
+				.get();
 		
 		Artikel artikel = response.readEntity(Artikel.class);
 		assertThat(artikel.getId()).isEqualTo(artikelId);
