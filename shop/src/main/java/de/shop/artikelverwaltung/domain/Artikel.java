@@ -1,6 +1,7 @@
 package de.shop.artikelverwaltung.domain;
 
 import static de.shop.util.Constants.MIN_ID;
+import static de.shop.util.Constants.ERSTE_VERSION;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -78,6 +80,10 @@ public class Artikel implements Serializable {
 	@Min(value = MIN_ID, message = "{artikelverwaltung.artikel.id.min}", groups = IdGroup.class)
 	private Long id;
 	
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
+	
 	@Column(length = BEZEICHNUNG_LENGTH_MAX, nullable = false)
 	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
 	@Size(min = BEZEICHNUNG_LENGTH_MIN, max = BEZEICHNUNG_LENGTH_MAX,
@@ -118,11 +124,12 @@ public class Artikel implements Serializable {
 		super();
 	}
 	
-	public Artikel(String bezeichnung, BigDecimal preisKunde, BigDecimal preisLieferant) {
+	public Artikel(String bezeichnung, BigDecimal preisKunde, BigDecimal preisLieferant, int version) {
 		super();
 		this.bezeichnung = bezeichnung;
 		this.preisKunde = preisKunde;
 		this.preisLieferant = preisLieferant;
+		this.version = version;
 	}
 
 	@PrePersist
@@ -147,6 +154,12 @@ public class Artikel implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Integer getVersion() {
+		return version;
+	}
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 	public String getBezeichnung() {
 		return bezeichnung;
