@@ -15,7 +15,6 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
-import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.ws.rs.client.ClientBuilder;
@@ -65,7 +64,7 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 						.resolveTemplate("id", artikelId)
 						.request()
 						.accept(APPLICATION_JSON)
-						.acceptLanguage(Locale.GERMAN)
+						.acceptLanguage(GERMAN)
 						.get();
 		
 		// Then
@@ -117,7 +116,7 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 						.resolveTemplate("id", artikelId)
 						.request()
 						.accept(APPLICATION_JSON)
-						.acceptLanguage(Locale.GERMAN)
+						.acceptLanguage(GERMAN)
 						.get();
 		
 		// Then
@@ -182,7 +181,7 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 						.resolveTemplate("id", artikelId)
 						.request()
 						.accept(APPLICATION_JSON)
-						.acceptLanguage(Locale.GERMAN)
+						.acceptLanguage(GERMAN)
 						.get();
 		
 		Artikel artikel = response.readEntity(Artikel.class);
