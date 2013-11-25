@@ -118,7 +118,7 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
                               .rel(SELF_LINK)
                               .build();
 
-		return new Link[] { self };
+		return new Link[] {self};
 	}
 	
 	public URI getUriArtikel(Artikel artikel, UriInfo uriInfo) {

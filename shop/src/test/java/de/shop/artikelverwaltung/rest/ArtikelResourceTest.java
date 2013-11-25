@@ -36,7 +36,7 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 	
 	private static final Long ARTIKEL_ID_VORHANDEN = Long.valueOf(300);
 	private static final Long ARTIKEL_ID_NICHT_VORHANDEN = Long.valueOf(800);
-	private static final Long ARTIKEL_ID_UPDATE= Long.valueOf(302);
+	private static final Long ARTIKEL_ID_UPDATE = Long.valueOf(302);
 	
 	private static final String NEUE_BEZEICHNUNG = "Testtisch";
 	private static final String NEUE_FARBE = "Testfarbe";
@@ -60,7 +60,7 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 		final Long artikelId = ARTIKEL_ID_VORHANDEN;
 		
 		// When
-		Response response = ClientBuilder.newClient()
+		final Response response = ClientBuilder.newClient()
 						.target("http://localhost:8080/shop/rest/artikel/{id}")
 						.resolveTemplate("id", artikelId)
 						.request()
@@ -112,7 +112,7 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 		final Long artikelId = ARTIKEL_ID_NICHT_VORHANDEN;
 		
 		// When
-		Response response = ClientBuilder.newClient()
+		final Response response = ClientBuilder.newClient()
 						.target("http://localhost:8080/shop/rest/artikel/{id}")
 						.resolveTemplate("id", artikelId)
 						.request()
@@ -149,13 +149,13 @@ public class ArtikelResourceTest extends AbstractResourceTest {
 		artikel.setBestand(bestand);
 		
 		
-		Response response = getHttpsClient(USERNAME, PASSWORD).target(ARTIKEL_URI)
+		final Response response = getHttpsClient(USERNAME, PASSWORD).target(ARTIKEL_URI)
                                                               .request()
                                                               .post(json(artikel));
 			
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_CREATED);
-		String location = response.getLocation().toString();
+		final String location = response.getLocation().toString();
 		response.close();
 		
 		final int startPos = location.lastIndexOf('/');
