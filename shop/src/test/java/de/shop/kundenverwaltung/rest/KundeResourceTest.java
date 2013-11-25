@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.jboss.arquillian.junit.Arquillian;
@@ -161,33 +160,39 @@ public class KundeResourceTest extends AbstractResourceTest {
 		
 		// Given
 		final Long kundeId = KUNDE_ID_UPDATE;
-		final String neuesPasswort = NEUES_PASSWORT;
+		final String neuerNachname = NEUER_NACHNAME;
 		
 		// When
-		Response response = ClientBuilder.newClient()
-						.target("http://localhost:8080/shop/rest/kunden/{id}")
-						.resolveTemplate("id", kundeId)
-						.request()
-						.accept(APPLICATION_JSON)
-						.acceptLanguage(GERMAN)
-						.get();
-		
+		Response response = getHttpsClient().target(KUNDEN_ID_URI)
+                                            .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+                                            .request()
+                                            .accept(APPLICATION_JSON)
+                                            .get();
 		Kunde kunde = response.readEntity(Kunde.class);
 		assertThat(kunde.getId()).isEqualTo(kundeId);
-
-		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
-		kunde.setPasswort(neuesPasswort);
-		
+		final int origVersion = kunde.getVersion();
+    	
+    	// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
+		kunde.setNachname(neuerNachname);
+    	
 		response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
-						.request()
-						.accept(APPLICATION_JSON)
-						.put(json(kunde));
+                                                     .request()
+                                                     .accept(APPLICATION_JSON)
+                                                     .put(json(kunde));
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
 		kunde = response.readEntity(Kunde.class);
+		assertThat(kunde.getVersion()).isGreaterThan(origVersion);
+		
+		// Erneutes Update funktioniert, da die Versionsnr. aktualisiert ist
+		response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
+                                                     .request()
+                                                     .put(json(kunde));
+		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
+		response.close();
 		
 		LOGGER.finer("ENDE");
-	}
+   	}
 	
 	@Test
 	@InSequence(8)
@@ -203,10 +208,10 @@ public class KundeResourceTest extends AbstractResourceTest {
 				
 		// When
 		final Response response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_ID_FILE_URI)
-		                                                      .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
-		                                                         		           kundeId)
-		                                                      .request()
-		                                                      .post(entity(uploadBytes, mimeType));
+																	.resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
+																					 kundeId)
+																	.request()
+		                                                            .post(entity(uploadBytes, mimeType));
 		
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_CREATED);
@@ -240,8 +245,8 @@ public class KundeResourceTest extends AbstractResourceTest {
 		response.close();
 		
 		response = getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN).target(KUNDEN_ID_URI)
-                                                                 .resolveTemplate
-                                                                 (KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)                                                             		         
+                                                                 .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
+                                                                		 		  kundeId)                                                             		         
                                                                  .request()
                                                                  .delete();
 		

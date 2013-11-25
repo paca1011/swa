@@ -21,7 +21,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -77,9 +76,6 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	}
 	
 	
-	@Context
-	private HttpHeaders headers;
-	
 	@Inject
 	private UriHelperArtikel uriHelperArtikel;
 	
@@ -127,7 +123,7 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	
 	
 	@POST
-	@Consumes(APPLICATION_JSON)
+	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces
 	public Response createArtikel(Artikel artikel) {
 		artikel = as.createArtikel(artikel);
@@ -138,11 +134,13 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	
 	
 	@PUT
-	@Consumes(APPLICATION_JSON)
-	@Produces
+	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+	@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	public Response updateArtikel(Artikel artikel) {	
 		as.updateArtikel(artikel);
-		return Response.noContent().build();
+		return Response.ok(artikel)
+				.links(getTransitionalLinks(artikel, uriInfo))
+				.build();
 	}
 	
 	
