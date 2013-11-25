@@ -1,7 +1,6 @@
 package de.shop.kundenverwaltung.rest;
 
 import static java.net.HttpURLConnection.HTTP_CREATED;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Locale.GERMAN;
@@ -64,7 +63,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final String NEUE_HAUSNUM = "1";
 	private static final String NEUES_PASSWORT = "neuesPassword";
 	private static final Long KUNDE_ID_UPDATE = Long.valueOf(103);
-//	private static final Long ARTIKEL_ID_VORHANDEN = Long.valueOf(300);
 	
 	@Test
 	@InSequence(1)
@@ -219,6 +217,8 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final String idStr = location.replace(KUNDEN_URI + '/', "")
                 .replace("/file", "");
 		assertThat(idStr).isEqualTo(kundeId.toString());
+		
+		LOGGER.finer("ENDE");
 	}
 	
 	@Test
@@ -240,22 +240,15 @@ public class KundeResourceTest extends AbstractResourceTest {
 		response.close();
 		
 		response = getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN).target(KUNDEN_ID_URI)
-                                                                 .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)                                                             		         
+                                                                 .resolveTemplate
+                                                                 (KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)                                                             		         
                                                                  .request()
                                                                  .delete();
 		
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_NO_CONTENT);
 		response.close();
-		
-		response = getHttpsClient().target(KUNDEN_ID_URI)
-                                   .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
-                                   .request()
-                                   .accept(APPLICATION_JSON)
-                                   .get();
-       	assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
-		response.close();
-        
+
 		LOGGER.finer("ENDE");
 	}
 	

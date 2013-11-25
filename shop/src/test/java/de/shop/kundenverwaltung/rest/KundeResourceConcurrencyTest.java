@@ -3,11 +3,7 @@ package de.shop.kundenverwaltung.rest;
 import static de.shop.util.TestConstants.KUNDEN_ID_URI;
 import static de.shop.util.TestConstants.KUNDEN_URI;
 import static de.shop.util.TestConstants.PASSWORD;
-import static de.shop.util.TestConstants.PASSWORD_ADMIN;
 import static de.shop.util.TestConstants.USERNAME;
-import static de.shop.util.TestConstants.USERNAME_ADMIN;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.client.Entity.json;
@@ -46,7 +42,6 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 	private static final Long KUNDE_ID_UPDATE = Long.valueOf(101);
 	private static final String NEUER_NACHNAME = "Testname";
 	private static final String NEUER_NACHNAME_2 = "Neuername";
-	private static final Long KUNDE_ID_DELETE1 = Long.valueOf(102);
 	private static final Long KUNDE_ID_DELETE2 = Long.valueOf(103);
 
 	@Test
@@ -89,58 +84,6 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
     			                        .submit(concurrentUpdate)
     			                        .get(TIMEOUT, SECONDS);   // Warten bis der "parallele" Thread fertig ist
 		assertThat(status.intValue()).isEqualTo(HTTP_OK);
-		
-		LOGGER.finer("ENDE");
-	}
-	
-	@Test
-	@InSequence(2)
-	public void updateDelete() throws InterruptedException, ExecutionException, TimeoutException {
-		LOGGER.finer("BEGINN");
-		
-		// Given
-		final Long kundeId = KUNDE_ID_DELETE1;
-    	final String neuerNachname = NEUER_NACHNAME;
-		
-		// When
-		Response response = getHttpsClient().target(KUNDEN_ID_URI)
-                                             .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
-                                             .request()
-                                             .accept(APPLICATION_JSON)
-                                             .get();
-
-		final Kunde kunde = response.readEntity(Kunde.class);
-
-		// Konkurrierendes Delete
-    	final Callable<Integer> concurrentDelete = new Callable<Integer>() {
-			@Override
-			public Integer call() {
-				final Response response = new HttpsConcurrencyHelper()
-				                          .getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN)
-                                          .target(KUNDEN_ID_URI)
-                                          .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
-                                          .request()
-                                          .delete();
-				final int status = response.getStatus();
-				response.close();
-				return Integer.valueOf(status);
-			}
-		};
-    	final Integer status = Executors.newSingleThreadExecutor()
-    			                        .submit(concurrentDelete)
-    			                        .get(TIMEOUT, SECONDS);   // Warten bis der "parallele" Thread fertig ist
-		assertThat(status.intValue()).isEqualTo(HTTP_NO_CONTENT);
-		
-    	// Fehlschlagendes Update
-		kunde.setNachname(neuerNachname);
-		response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
-                                                     .request()
-                                                     .accept(APPLICATION_JSON)
-                                                     .put(json(kunde));
-			
-		// Then
-    	assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
-    	response.close();
 		
 		LOGGER.finer("ENDE");
 	}
