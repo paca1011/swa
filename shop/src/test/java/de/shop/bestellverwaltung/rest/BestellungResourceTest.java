@@ -42,6 +42,9 @@ public class BestellungResourceTest extends AbstractResourceTest {
 	private static final Long ARTIKEL_ID_VORHANDEN_1 = Long.valueOf(300);
 	private static final Long ARTIKEL_ID_VORHANDEN_2 = Long.valueOf(301);
 	private static final BigDecimal GESAMTPREIS = BigDecimal.valueOf(100);
+	
+	private static final String BEGINN = "BEGINN";
+	private static final String ENDE = "ENDE";
 
 
 	@Test
@@ -53,7 +56,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 	@Test
 	@InSequence(2)
 	public void findBestellungById() {
-		LOGGER.finer("BEGINN");
+		LOGGER.finer(BEGINN);
 		
 		// Given
 		final Long bestellungId = BESTELLUNG_ID_VORHANDEN;
@@ -72,13 +75,13 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		assertThat(bestellung.getId()).isEqualTo(bestellungId);
 		assertThat(bestellung.getVieleposten()).isNotEmpty();
 
-		LOGGER.finer("ENDE");
+		LOGGER.finer(ENDE);
 	}
 
 	@Test
 	@InSequence(3)
 	public void findKundeByBestellungId() {
-		LOGGER.finer("BEGINN");
+		LOGGER.finer(BEGINN);
 		
 		// Given
 		final Long bestellungId = BESTELLUNG_ID_VORHANDEN;
@@ -104,13 +107,13 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		assertThat(response.getLinks()).isNotEmpty();
 		response.close();    // response.readEntity() wurde nicht aufgerufen
 
-		LOGGER.finer("ENDE");
+		LOGGER.finer(ENDE);
 	}
 	
 	@Test
 	@InSequence(10)
 	public void createBestellung() throws URISyntaxException {
-		LOGGER.finer("BEGINN");
+		LOGGER.finer(BEGINN);
 		
 		// Given
 		final Long artikelId1 = ARTIKEL_ID_VORHANDEN_1;
@@ -158,13 +161,13 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
 		response.close();
 		
-		LOGGER.finer("ENDE");
+		LOGGER.finer(ENDE);
 	}
 	
 	@Test
 	@InSequence(30)
 	public void updateBestellung() {
-		LOGGER.finer("BEGINN");
+		LOGGER.finer(BEGINN);
 		
 		// Given
 		final Long bestellungId = BESTELLUNG_ID_VORHANDEN;
@@ -190,6 +193,6 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
 		bestellung = response.readEntity(Bestellung.class);
 		
-		LOGGER.finer("ENDE");
+		LOGGER.finer(ENDE);
 	}
 }
