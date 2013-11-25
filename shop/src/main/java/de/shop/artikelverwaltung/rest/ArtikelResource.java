@@ -127,7 +127,7 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	
 	
 	@POST
-	@Consumes(APPLICATION_JSON)
+	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces
 	public Response createArtikel(Artikel artikel) {
 		artikel = as.createArtikel(artikel);
@@ -138,11 +138,13 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	
 	
 	@PUT
-	@Consumes(APPLICATION_JSON)
-	@Produces
+	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+	@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	public Response updateArtikel(Artikel artikel) {	
 		as.updateArtikel(artikel);
-		return Response.noContent().build();
+		return Response.ok(artikel)
+				.links(getTransitionalLinks(artikel, uriInfo))
+				.build();
 	}
 	
 	
