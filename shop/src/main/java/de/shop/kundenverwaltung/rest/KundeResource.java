@@ -228,7 +228,7 @@ public class KundeResource {
 			for (Kunde k : kunden) {
 				setStructuralLinks(k, uriInfo);
 			}
-			entity = new GenericEntity<List<? extends Kunde>>(kunden){};
+			entity = new GenericEntity<List<? extends Kunde>>(kunden) { };
 			links = getTransitionalLinksKunden(kunden, uriInfo);
 		}
 		else if (kunde != null) {

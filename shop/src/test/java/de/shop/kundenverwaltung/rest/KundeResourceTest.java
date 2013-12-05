@@ -196,6 +196,38 @@ public class KundeResourceTest extends AbstractResourceTest {
 	
 	@Test
 	@InSequence(8)
+	public void deleteKunde() {
+		LOGGER.finer("BEGINN");
+		
+		// Given
+		final Long kundeId = KUNDE_ID_DELETE;
+		
+		// When
+		Response response = getHttpsClient().target(KUNDEN_ID_URI)
+                                            .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+                                            .request()
+                                            .accept(APPLICATION_JSON)
+                                            .get();
+		
+		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
+		response.close();
+		
+		response = getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN)
+								.target(KUNDEN_ID_URI)
+                                .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
+                                kundeId)                                                             		         
+                                .request()
+                                .delete();
+		
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_NO_CONTENT);
+		response.close();
+
+		LOGGER.finer("ENDE");
+	}
+	
+	@Test
+	@InSequence(9)
 	public void uploadDownload() throws IOException {
 	
 		// Given
@@ -223,37 +255,6 @@ public class KundeResourceTest extends AbstractResourceTest {
                 .replace("/file", "");
 		assertThat(idStr).isEqualTo(kundeId.toString());
 		
-		LOGGER.finer("ENDE");
-	}
-	
-	@Test
-	@InSequence(9)
-	public void deleteKunde() {
-		LOGGER.finer("BEGINN");
-		
-		// Given
-		final Long kundeId = KUNDE_ID_DELETE;
-		
-		// When
-		Response response = getHttpsClient().target(KUNDEN_ID_URI)
-                                            .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
-                                            .request()
-                                            .accept(APPLICATION_JSON)
-                                            .get();
-		
-		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		response.close();
-		
-		response = getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN).target(KUNDEN_ID_URI)
-                                                                 .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM,
-                                                                		 		  kundeId)                                                             		         
-                                                                 .request()
-                                                                 .delete();
-		
-		// Then
-		assertThat(response.getStatus()).isEqualTo(HTTP_NO_CONTENT);
-		response.close();
-
 		LOGGER.finer("ENDE");
 	}
 	
