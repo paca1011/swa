@@ -30,7 +30,7 @@ public class ArtikelModel implements Serializable {
 	
 	private static final String JSF_LIST_ARTIKEL = "/artikelverwaltung/listArtikel";
 	private static final String FLASH_ARTIKEL = "artikel";
-//	private static final int ANZAHL_LADENHUETER = 5;	
+	private static final int ANZAHL_LADENHUETER = 5;	
 	private static final String JSF_SELECT_ARTIKEL = "/artikelverwaltung/selectArtikel";
 	private static final String SESSION_VERFUEGBARE_ARTIKEL = "verfuegbareArtikel";
 
@@ -85,10 +85,10 @@ public class ArtikelModel implements Serializable {
 	}
 	
 
-//	@Log
-//	public void loadLadenhueter() {
-//		ladenhueter = as.ladenhueter(ANZAHL_LADENHUETER);
-//	}
+	@Log
+	public void loadLadenhueter() {
+		ladenhueter = as.ladenhueter(ANZAHL_LADENHUETER);
+	}
 	
 	@Log
 	public String selectArtikel() {
