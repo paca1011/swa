@@ -6,13 +6,17 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html">
 
-	<f:view>
+	<f:view locale="#{locale}">
 		<f:metadata>
 			<ui:insert name="metadata"/>
 		</f:metadata>
 
+		
 		<h:head>
 			<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
+			<meta http-equiv="language" content="#{locale}"/>
+			<meta http-equiv="content-language" content="#{locale}"/>
+			<meta name="language" content="#{locale}"/>
 			<meta http-equiv="Content-Style-Type" content="text/css"/>
 			<base href="#{request.contextPath}"/>
 			<title>#{empty pageTitle ? 'Webshop' : pageTitle}</title>
@@ -20,7 +24,7 @@
 			<link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
 			<meta name="author" content="J&#252;rgen Zimmermann"/>
 			<meta name="copyright" content="J&#252;rgen Zimmermann"/>
-			<meta name="keywords" content="Software Engineering,Beispiele,Java EE,JBoss/WildFire,Eclipse,JBossTools,CDI,EJB,JAX-RS,JSON,JSF,EL,RichFaces,JPA,Bean Validation,JavaMail"/>
+			<meta name="keywords" content="Software Engineering,Beispiele,Java EE,JBoss,Eclipse,JBossTools,CDI,EJB,JAX-RS,JSON,JSF,EL,RichFaces,JPA,Bean Validation,JavaMail"/>
 		</h:head>
 		
 		<h:body>
@@ -29,7 +33,7 @@
 					<ui:include src="header.xml"/>
 				</ui:insert>
 			</header>
-		
+
 			<nav id="nav">
 				<ui:insert name="nav">
 					<ui:include src="nav.xml"/>
@@ -39,11 +43,11 @@
 			<article id="content">
 				<ui:insert name="content"/>
 			</article>
-			
+		
 			<aside id="aside">
 				<ui:insert name="aside"/>
 			</aside>
-		
+
 			<footer id="footer">
 				<ui:insert name="footer">
 					<ui:include src="footer.xml"/>
