@@ -7,12 +7,9 @@ import static javax.persistence.PersistenceContextType.EXTENDED;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -84,8 +81,6 @@ public class KundeModel implements Serializable {
 	
 	private static final String CLIENT_ID_CREATE_CAPTCHA_INPUT = "createKundeForm:captchaInput";
 	private static final String MSG_KEY_CREATE_PRIVATKUNDE_WRONG_CAPTCHA = "kunde.wrongCaptcha";
-	
-	private static final Class<?>[] PASSWORD_GROUP = { PasswordGroup.class };
 	
 	private static final String CLIENT_ID_UPDATE_EMAIL = "updateKundeForm:email";
 	private static final String MSG_KEY_CONCURRENT_UPDATE = "persistence.concurrentUpdate";
@@ -445,27 +440,9 @@ public class KundeModel implements Serializable {
 	 * http://community.jboss.org/thread/169487
 	 * @return Array mit PasswordGroup.class
 	 */
-	public Class<?>[] getPasswordGroup() {
-		return PASSWORD_GROUP.clone();
-	}
-	
-	/**
-	 * Hobbies bei preRenderView als Liste von Strings fuer JSF aufbereiten,
-	 * wenn ein existierender Privatkunde in updatePrivatkunde.xhtml aktualisiert wird
-	 */
-	public void hobbyTypeToString() {
-		if (!kunde.getClass().equals(Kunde.class)) {
-			return;
-		}
-		
-		final Kunde privatkunde = Kunde.class.cast(kunde);
-		
-//		hobbies = new ArrayList<>(HobbyType.values().length);
-//		final Set<HobbyType> hobbiesPrivatkunde = privatkunde.getHobbies();
-//		for (HobbyType h : hobbiesPrivatkunde) {
-//			hobbies.add(h.name());
-//		}
-	}
+//	public Class<?>[] getPasswordGroup() {
+//		return PASSWORD_GROUP.clone();
+//	}
 	
 	/**
 	 * Verwendung als ValueChangeListener bei updatePrivatkunde.xhtml und updateFirmenkunde.xhtml
