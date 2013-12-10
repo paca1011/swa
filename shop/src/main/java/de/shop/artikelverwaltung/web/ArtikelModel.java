@@ -30,13 +30,10 @@ public class ArtikelModel implements Serializable {
 	
 	private static final String JSF_LIST_ARTIKEL = "/artikelverwaltung/listArtikel";
 	private static final String FLASH_ARTIKEL = "artikel";
-	private static final int ANZAHL_LADENHUETER = 5;	
 	private static final String JSF_SELECT_ARTIKEL = "/artikelverwaltung/selectArtikel";
 	private static final String SESSION_VERFUEGBARE_ARTIKEL = "verfuegbareArtikel";
 
 	private String bezeichnung;
-	
-	private List<Artikel> ladenhueter;
 
 	@Inject
 	private ArtikelService as;
@@ -71,23 +68,12 @@ public class ArtikelModel implements Serializable {
 		this.bezeichnung = bezeichnung;
 	}
 
-
-	public List<Artikel> getLadenhueter() {
-		return ladenhueter;
-	}
-
 	@Log
 	public String findArtikelByBezeichnung() {
 		final List<Artikel> artikel = as.findArtikelByBezeichnung(bezeichnung);
 		flash.put(FLASH_ARTIKEL, artikel);
 
 		return JSF_LIST_ARTIKEL;
-	}
-	
-
-	@Log
-	public void loadLadenhueter() {
-		ladenhueter = as.ladenhueter(ANZAHL_LADENHUETER);
 	}
 	
 	@Log
