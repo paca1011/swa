@@ -4,6 +4,7 @@ import static de.shop.util.Constants.JSF_DEFAULT_ERROR;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,9 +81,23 @@ public class BestellungModel implements Serializable {
 		// Warenkorb zuruecksetzen
 		warenkorb.endConversation();
 		
+		BigDecimal gesamtpreis = new BigDecimal(0);
+		for (Posten p : neuePositionen) {
+
+			BigDecimal preis = p.getArtikel().getPreisKunde();
+			short anzahl = p.getAnzahl();
+			preis = preis.multiply(new BigDecimal(anzahl));
+			System.out.println("preis:" + preis);
+			gesamtpreis = gesamtpreis.add(preis);
+			System.out.println("gesamtpreis:" + gesamtpreis);
+		}
+		
 		// Neue Bestellung mit neuen Bestellpositionen erstellen
 		Bestellung bestellung = new Bestellung();
 		bestellung.setVieleposten(neuePositionen);
+		bestellung.setStatus("steht_noch_aus");
+		bestellung.setGesamtpreis(gesamtpreis);
+		bestellung.setAusgeliefert(0);
 		LOGGER.tracef("Neue Bestellung: %s\nBestellpositionen: %s", bestellung, bestellung.getVieleposten());
 		
 		// Bestellung mit VORHANDENEM Kunden verknuepfen:
