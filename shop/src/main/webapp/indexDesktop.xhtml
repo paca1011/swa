@@ -12,12 +12,40 @@
 
 		<ui:composition template="/WEB-INF/templates/desktop/main.xml">
 			<ui:define name="metadata">
+				<f:event type="preRenderView" listener="#{bestellungModel.loadLadenhueter}"/>
+				<!-- JSF 2.2:
+				<f:viewAction action="#{bestellungModel.loadLadenhueter}">
+				-->
 			</ui:define>
 			
 			<ui:param name="pageTitle" value="#{msg['index.title']}"/>
 		
 			<ui:define name="content">
 				<h1 id="heading">#{msg['index.welcome']}</h1>
+				
+				<r:dataTable id="ladenhueterTabelle"
+				             var="artikel"
+				             value="#{bestellungModel.ladenhueter}"
+			             rendered="#{not empty bestellungModel.ladenhueter}"> 
+				             
+				    <f:facet name="header">
+				    	#{msg['index.ladenhueter']}
+					</f:facet>
+						 
+					<r:column id="idSpalte">
+						<f:facet name="header">
+							#{msg['index.artikelId']}
+						</f:facet>
+						#{artikel.id}
+					</r:column>
+							
+					<r:column id="bezeichnungSpalte">
+						<f:facet name="header">
+							#{msg['index.artikelBezeichnung']}
+						</f:facet>
+						#{artikel.bezeichnung}
+					</r:column>
+				</r:dataTable>
 				
 				<p id="datum">
 					#{msg['index.heute']}

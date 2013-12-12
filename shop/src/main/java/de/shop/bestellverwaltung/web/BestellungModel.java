@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
+import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.auth.web.AuthModel;
 import de.shop.auth.web.KundeLoggedIn;
 import de.shop.bestellverwaltung.domain.Posten;
@@ -36,6 +37,10 @@ public class BestellungModel implements Serializable {
 
 	private static final String JSF_VIEW_BESTELLUNG = "/bestellverwaltung/viewBestellung";
 	
+	private static final int ANZAHL_LADENHUETER = 5;
+	
+	private List<Artikel> ladenhueter;
+	
 	@Inject
 	private Warenkorb warenkorb;
 	
@@ -55,7 +60,15 @@ public class BestellungModel implements Serializable {
 	@Inject
 	private Flash flash;
 	
-
+	public List<Artikel> getLadenhueter() {
+		return ladenhueter;
+	}
+	
+	@Log
+	public void loadLadenhueter() {
+		ladenhueter = bs.ladenhueter(ANZAHL_LADENHUETER);
+	}
+	
 	@Transactional
 	@Log
 	public String bestellen() {
