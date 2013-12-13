@@ -141,4 +141,9 @@ public class Warenkorb implements Serializable {
 			endConversation();
 		}
 	}
+	
+	@Log
+	public void reset() {
+		positionen.clear();
+	}
 }
