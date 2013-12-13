@@ -87,71 +87,10 @@
 							
 										<h:outputText id="vornameLabel" value="#{msgKv['viewKunde.vorname']}"/>
 										<h:outputText id="vorname" value="#{kunde.vorname}"/>
-										
-										<h:outputText id="seitLabel" value="#{msgKv['viewKunde.seit']}"/>
-										<h:outputText id="seit" value="#{kunde.seit}">
-											<f:convertDateTime type="date" dateStyle="long"/>
-										</h:outputText>
-										
-										<h:outputText id="umsatzLabel" value="#{msgKv['viewKunde.umsatz']}"/>
-										<h:outputText id="umsatz" value="#{kunde.umsatz}">
-											<f:convertNumber type="currency"
-											                 currencyCode="EUR"/>
-										</h:outputText>
 							
 										<h:outputText id="emailLabel" value="#{msgKv['viewKunde.email']}"/>
 										<h:outputText id="email" value="#{kunde.email}"/>
-						
-										<h:outputText id="firmenkundeLabel" value="#{msgKv['viewKunde.kundenart']}" rendered="#{firmenkunde}"/>
-										<h:outputText id="firmenkunde" value="#{msgKv['viewKunde.firmenkunde']}" rendered="#{firmenkunde}"/>
-							
-										<h:outputText id="privatkundeLabel" value="#{msgKv['viewKunde.kundenart']}" rendered="#{privatkunde}"/>
-										<h:outputText id="privatkunde" value="#{msgKv['viewKunde.privatkunde']}" rendered="#{privatkunde}"/>
-										
-										<!-- EL 3.0
-										<h:outputText id="kundenart" value="#{msgKv['viewKunde.kundenart']}"/>
-										<h:outputText id="firmenkunde" value="#{firmenkunde ? msgKv['viewKunde.firmenkunde' : msgKv['viewKunde.privatkunde']}"/>
-										-->
-										
-										<h:outputText id="rabattLabel" value="#{msgKv['viewKunde.rabatt']}"/>
-										<h:outputText id="rabatt" value="#{kunde.rabatt}">
-											<f:convertNumber type="percent" maxFractionDigits="2"/>
-										</h:outputText>
-										
-										<h:outputText id="familienstandLabel" value="#{msgKv['viewKunde.familienstand']}" rendered="#{privatkunde and kunde.familienstand eq 'LEDIG'}"/>
-										<h:outputText id="familienstand" value="#{msgKv['viewKunde.familienstand.ledig']}" rendered="#{privatkunde and kunde.familienstand eq 'LEDIG'}"/>
-							
-										<h:outputText id="verheiratetLabel" value="#{msgKv['viewKunde.familienstand']}" rendered="#{privatkunde and kunde.familienstand eq 'VERHEIRATET'}"/>
-										<h:outputText id="verheiratet" value="#{msgKv['viewKunde.familienstand.verheiratet']}" rendered="#{privatkunde and kunde.familienstand eq 'VERHEIRATET'}"/>
-							
-										<h:outputText id="geschiedenLabel" value="#{msgKv['viewKunde.familienstand']}" rendered="#{privatkunde and kunde.familienstand eq 'GESCHIEDEN'}"/>
-										<h:outputText id="geschieden" value="#{msgKv['viewKunde.familienstand.geschieden']}" rendered="#{privatkunde and kunde.familienstand eq 'GESCHIEDEN'}"/>
-							
-										<h:outputText id="verwitwetLabel" value="#{msgKv['viewKunde.familienstand']}" rendered="#{privatkunde and kunde.familienstand eq 'VERWITWET'}"/>
-										<h:outputText id="verwitwet" value="#{msgKv['viewKunde.familienstand.verwitwet']}" rendered="#{privatkunde and kunde.familienstand eq 'VERWITWET'}"/>
-							
-										<h:outputText id="weiblichLabel" value="#{msgKv['viewKunde.geschlecht']}" rendered="#{privatkunde and kunde.geschlecht eq 'WEIBLICH'}"/>
-										<h:outputText id="weiblich" value="#{msgKv['viewKunde.geschlecht.weiblich']}" rendered="#{privatkunde and kunde.geschlecht eq 'WEIBLICH'}"/>
-							
-										<h:outputText id="maennlichLabel" value="#{msgKv['viewKunde.geschlecht']}" rendered="#{privatkunde and kunde.geschlecht eq 'MAENNLICH'}"/>
-										<h:outputText id="maennlich" value="#{msgKv['viewKunde.geschlecht.maennlich']}" rendered="#{privatkunde and kunde.geschlecht eq 'MAENNLICH'}"/>
-						
-										<h:outputText id="newsletterLabel" value="#{msgKv['viewKunde.newsletter']}"/>
-										<h:selectBooleanCheckbox id="newsletter" value="#{kunde.newsletter}" disabled="true" readonly="true"/>
-						
-										<h:outputText id="hobbiesLabel" value="#{msgKv['viewKunde.hobbies']}" rendered="#{privatkunde}"/>
-										<h:selectManyCheckbox value="#{kunde.hobbies}"
-										                      layout="pageDirection"
-										                      disabled="true"
-										                      readonly="true"
-										                      rendered="#{privatkunde}">
-											<f:selectItem itemValue="SPORT"
-														  itemLabel="#{msgKv['viewKunde.sport']}"/>
-											<f:selectItem itemValue="LESEN" 
-														  itemLabel="#{msgKv['viewKunde.lesen']}"/>
-											<f:selectItem itemValue="REISEN" 
-														  itemLabel="#{msgKv['viewKunde.reisen']}"/>
-										</h:selectManyCheckbox>
+
 									</h:panelGrid>
 								</r:panel>
 							</r:tab>
@@ -249,7 +188,7 @@
 									</r:column>
 									
 									<r:collapsibleSubTable id="positionenSubtable"
-									                       value="#{bestellung.bestellpositionen}"
+									                       value="#{bestellung.vieleposten}"
 									                       var="pos"
 									                       rowClasses="odd-row, even-row"
 										                   styleClass="tabelleMitZebrastil"
@@ -287,26 +226,15 @@
 					
 						<p id="buttons">
 							<h:panelGroup id="buttonsGroup" rendered="#{not empty kunde}">
-								<h:commandLink id="updateButtonPrivatkunde"
-								               action="/kundenverwaltung/updatePrivatkunde"
+								<h:commandLink id="updateButtonKunde"
+								               action="/kundenverwaltung/updateKunde"
 								               alt="#{msgKv['viewKunde.update.alt']}"
-								               rendered="#{privatkunde}">
+								               rendered="#{Kunde}">
 									<h:graphicImage id="editIconPrivat"
 			    	                                name="edit.gif"
 			        	                            library="images"/>
 									<c:if test="#{not empty javax.enterprise.context.conversation.id}">
-										<f:param id="updatePrivatkundeCid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-									</c:if>
-								</h:commandLink>
-								<h:commandLink id="updateButtonFirmenkunde"
-								               action="/kundenverwaltung/updateFirmenkunde"
-								               alt="#{msgKv['viewKunde.update.alt']}"
-								               rendered="#{firmenkunde}">
-									<h:graphicImage id="editIconFirmen"
-			    	                                name="edit.gif"
-			        	                            library="images"/>
-									<c:if test="#{not empty javax.enterprise.context.conversation.id}">
-										<f:param id="updateFirmenkundeCid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+										<f:param id="updateKundeCid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
 									</c:if>
 								</h:commandLink>
 								#{' '}
