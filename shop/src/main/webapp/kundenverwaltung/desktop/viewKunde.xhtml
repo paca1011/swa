@@ -62,8 +62,6 @@
 		
 					<r:outputPanel id="gesuchterKundePanel">
 						<c:set var="kunde" value="#{kundeModel.kunde}" scope="view"/>
-						<c:set var="privatkunde" value="#{kunde.class.simpleName eq 'Privatkunde'}" scope="view"/>
-						<c:set var="firmenkunde" value="#{kunde.class.simpleName eq 'Firmenkunde'}" scope="view"/>
 						
 						<r:tabPanel id="tabPanel" switchType="client" rendered="#{not empty kunde}">
 							<r:tab id="stammdatenTab">
@@ -80,7 +78,10 @@
 								<r:panel id="stammdatenPanel">
 									<h:panelGrid id="stammdatenGrid" columns="2">
 										<h:outputText id="kundeIdLabel" value="#{msgKv['viewKunde.kundenr']}"/>
-										<h:outputText id="kundeId" value="#{kunde.id}"/>
+										<h:outputText id="kundeId" value="#{kunde.id}"/>	
+																			
+										<h:outputText id="geschlechtLabel" value="#{msgKv['viewKunde.geschlecht']}"/>
+										<h:outputText id="geschlecht" value="#{kunde.geschlecht}"/>
 								
 										<h:outputText id="nachnameLabel" value="#{msgKv['viewKunde.nachname']}"/>
 										<h:outputText id="nachname" value="#{kunde.nachname}"/>

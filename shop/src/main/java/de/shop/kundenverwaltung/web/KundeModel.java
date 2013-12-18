@@ -32,8 +32,8 @@ import org.richfaces.ui.iteration.SortOrder;
 import org.richfaces.ui.toggle.panelMenu.UIPanelMenuItem;
 
 import de.shop.auth.web.AuthModel;
-import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.domain.Kunde;
+import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.service.EmailExistsException;
 import de.shop.kundenverwaltung.service.KundeDeleteBestellungException;
 import de.shop.kundenverwaltung.service.KundeService;
@@ -64,7 +64,7 @@ public class KundeModel implements Serializable {
 	private static final String JSF_KUNDENVERWALTUNG = "/kundenverwaltung/";
 	private static final String JSF_VIEW_KUNDE = JSF_KUNDENVERWALTUNG + "viewKunde";
 	private static final String JSF_LIST_KUNDEN = JSF_KUNDENVERWALTUNG + "/kundenverwaltung/listKunden";
-	private static final String JSF_UPDATE_Kunde = JSF_KUNDENVERWALTUNG + "updateKunde";
+	private static final String JSF_UPDATE_PRIVATKUNDE = JSF_KUNDENVERWALTUNG + "updatePrivatkunde";
 	private static final String JSF_UPDATE_FIRMENKUNDE = JSF_KUNDENVERWALTUNG + "updateFirmenkunde";
 	private static final String JSF_DELETE_OK = JSF_KUNDENVERWALTUNG + "okDelete";
 	
@@ -80,7 +80,7 @@ public class KundeModel implements Serializable {
 	private static final String MSG_KEY_EMAIL_EXISTS = ".kunde.emailExists";
 	
 	private static final String CLIENT_ID_CREATE_CAPTCHA_INPUT = "createKundeForm:captchaInput";
-	private static final String MSG_KEY_CREATE_Kunde_WRONG_CAPTCHA = "kunde.wrongCaptcha";
+	private static final String MSG_KEY_CREATE_PRIVATKUNDE_WRONG_CAPTCHA = "kunde.wrongCaptcha";
 	
 	private static final String CLIENT_ID_UPDATE_EMAIL = "updateKundeForm:email";
 	private static final String MSG_KEY_CONCURRENT_UPDATE = "persistence.concurrentUpdate";
@@ -136,7 +136,6 @@ public class KundeModel implements Serializable {
 	private String vornameFilter = "";
 	
 	private boolean geaendertKunde;    // fuer ValueChangeListener
-	private Kunde neuerKunde;
 	private String captchaInput;
 
 	private transient UIPanelMenuItem menuItemEmail;   // eigentlich nicht dynamisch, nur zur Demo
@@ -228,10 +227,6 @@ public class KundeModel implements Serializable {
 	
 	public void setVornameFilter(String vornameFilter) {
 		this.vornameFilter = vornameFilter;
-	}
-
-	public Kunde getNeuerKunde() {
-		return neuerKunde;
 	}
 	
 	public String getCaptchaInput() {
@@ -370,40 +365,33 @@ public class KundeModel implements Serializable {
 	
 	@TransactionAttribute
 	@Log
-	public String createKunde() {
+	public String createPrivatkunde() {
 		if (!captcha.getValue().equals(captchaInput)) {
-			final String outcome = createKundeErrorMsg(null);
+			final String outcome = createPrivatkundeErrorMsg(null);
 			return outcome;
 		}
 
-		// Liste von Strings als Set von Enums konvertieren
-//		final Set<HobbyType> hobbiesKunde = new HashSet<>();
-//		for (String s : hobbies) {
-//			hobbiesKunde.add(HobbyType.valueOf(s));
-//		}
-//		neuerKunde.setHobbies(hobbiesKunde);
 		try {
-			neuerKunde = ks.createKunde(neuerKunde);
+			kunde = ks.createKunde(kunde);
 		}
 		catch (EmailExistsException e) {
-			return createKundeErrorMsg(e);
+			return createPrivatkundeErrorMsg(e);
 		}
 		
 		// Push-Event fuer Webbrowser
-		neuerKundeEvent.fire(String.valueOf(neuerKunde.getId()));
+		neuerKundeEvent.fire(String.valueOf(kunde.getId()));
 		
 		// Aufbereitung fuer viewKunde.xhtml
-		kundeId = neuerKunde.getId();
-		kunde = neuerKunde;
-		neuerKunde = null;  // zuruecksetzen
+		kundeId = kunde.getId();
+		kunde = null;  // zuruecksetzen
 		hobbies = null;
 		
 		return JSF_VIEW_KUNDE + JSF_REDIRECT_SUFFIX;
 	}
 
-	private String createKundeErrorMsg(AbstractShopException e) {
+	private String createPrivatkundeErrorMsg(AbstractShopException e) {
 		if (e == null) {
-			messages.error(MSG_KEY_CREATE_Kunde_WRONG_CAPTCHA, locale, CLIENT_ID_CREATE_CAPTCHA_INPUT);
+			messages.error(MSG_KEY_CREATE_PRIVATKUNDE_WRONG_CAPTCHA, locale, CLIENT_ID_CREATE_CAPTCHA_INPUT);
 		}
 		else {
 			final Class<?> exceptionClass = e.getClass();
@@ -419,33 +407,21 @@ public class KundeModel implements Serializable {
 		return null;
 	}
 
-	public void createEmptyKunde() {
+	public void createEmptyPrivatkunde() {
 		captchaInput = null;
 
-		if (neuerKunde != null) {
+		if (kunde != null) {
 			return;
 		}
 
-		neuerKunde = new Kunde();
+		kunde = new Kunde();
 		final Adresse adresse = new Adresse();
-		adresse.setKunde(neuerKunde);
-		neuerKunde.setAdresse(adresse);
-	
-//		final int anzahlHobbies = HobbyType.values().length;
-//		hobbies = new ArrayList<>(anzahlHobbies);
+		adresse.setKunde(kunde);
+		kunde.setAdresse(adresse);
 	}
 	
 	/**
-	 * https://issues.jboss.org/browse/WFLY-678
-	 * http://community.jboss.org/thread/169487
-	 * @return Array mit PasswordGroup.class
-	 */
-//	public Class<?>[] getPasswordGroup() {
-//		return PASSWORD_GROUP.clone();
-//	}
-	
-	/**
-	 * Verwendung als ValueChangeListener bei updateKunde.xhtml und updateFirmenkunde.xhtml
+	 * Verwendung als ValueChangeListener bei updatePrivatkunde.xhtml und updateFirmenkunde.xhtml
 	 * @param e Ereignis-Objekt mit der Aenderung in einem Eingabefeld, z.B. inputText
 	 */
 	public void geaendert(ValueChangeEvent e) {
@@ -474,17 +450,6 @@ public class KundeModel implements Serializable {
 		if (!geaendertKunde || kunde == null) {
 			return JSF_INDEX;
 		}
-		
-		//TODO nicht sicher ob das richtig ist
-		// Hobbies konvertieren: String -> HobbyType
-//		if (kunde.getClass().equals(Kunde.class)) {
-//			final Kunde Kunde = Kunde.class.cast(kunde);
-//			final Set<HobbyType> hobbiesKunde = new HashSet<>();
-//			for (String s : hobbies) {
-//				hobbiesKunde.add(HobbyType.valueOf(s));				
-//			}
-//			Kunde.setHobbies(hobbiesKunde);
-//		}
 		
 		LOGGER.tracef("Aktualisierter Kunde: %s", kunde);
 		try {
@@ -528,7 +493,7 @@ public class KundeModel implements Serializable {
 		kunde = ausgewaehlterKunde;
 		
 		return Kunde.class.equals(ausgewaehlterKunde.getClass())
-			   ? JSF_UPDATE_Kunde
+			   ? JSF_UPDATE_PRIVATKUNDE
 			   : JSF_UPDATE_FIRMENKUNDE;
 	}
 	
