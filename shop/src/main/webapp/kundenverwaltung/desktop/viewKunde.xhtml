@@ -184,8 +184,8 @@
 									<r:column id="togglerSpalte" colspan="3">
 										<r:collapsibleSubTableToggler id="subTableToggler"
 										                              for="positionenSubtable"
-										                              collapsedLabel="#{msgKv['viewKunde.bestellung']} #{bestellung.id} : #{bestellung.getErzeugt('yyyy-MM-dd')}"
-										                              expandedLabel="#{msgKv['viewKunde.bestellung']} #{bestellung.id} : #{bestellung.getErzeugt('yyyy-MM-dd')}"/>
+										                              collapsedLabel="#{msgKv['viewKunde.bestellung']} #{bestellung.id} : #{bestellung.getErzeugt()}"
+										                              expandedLabel="#{msgKv['viewKunde.bestellung']} #{bestellung.id} : #{bestellung.getErzeugt()}"/>
 									</r:column>
 									
 									<r:collapsibleSubTable id="positionenSubtable"
@@ -210,19 +210,7 @@
 								</r:dataTable>
 							</r:tab>
 							
-							<r:tab id="bemerkungenTab" rendered="#{not empty kunde.bemerkungen}">
-								<f:facet name="header">
-									<h:panelGroup id="bemerkungenLabel">
-										<h:graphicImage id="bemerkungenGif"
-										                name="text.gif"
-										                library="images"/>
-										#{' '}
-										#{msgKv['viewKunde.kunde.bemerkungen']}
-									</h:panelGroup>
-								</f:facet>
-								
-								<h:outputText id="bemerkungen" value="#{kunde.bemerkungen}" escape="false"/>
-							</r:tab>
+
 						</r:tabPanel>
 					
 						<p id="buttons">

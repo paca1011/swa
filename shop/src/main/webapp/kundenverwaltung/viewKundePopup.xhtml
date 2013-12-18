@@ -128,19 +128,6 @@
 				</r:collapsibleSubTable>
 			</r:dataTable>
 		</r:tab>
-		
-		<r:tab id="bemerkungenTab" rendered="#{not empty kunde.bemerkungen}">
-			<f:facet name="header">
-				<h:panelGroup id="bemerkungenLabel">
-					<h:graphicImage id="bemerkungenGif"
-					                name="text.gif"
-					                library="images"/>
-					#{' '}
-					#{msgKv['viewKundePopup.kunde.bemerkungen']}
-				</h:panelGroup>
-			</f:facet>
-					
-			<h:outputText id="bemerkungen" value="#{kunde.bemerkungen}" escape="false"/>
-		</r:tab>
+	
 	</r:tabPanel>
 </ui:composition>
