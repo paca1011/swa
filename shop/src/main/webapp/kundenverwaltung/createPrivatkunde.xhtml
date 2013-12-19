@@ -29,7 +29,7 @@
 					<r:focus id="createKundeFormFocus"/>
 					-->
 					
-					<c:set var="kunde" value="#{kundeModel.neuerKunde}" scope="view"/>
+					<c:set var="kunde" value="#{kundeModel.kunde}" scope="view"/>
 					<c:set var="adresse" value="#{kunde.adresse}" scope="view"/>
 					<!--
 						https://issues.jboss.org/browse/AS7-1348
@@ -57,29 +57,6 @@
 							<h:inputText id="vorname" value="#{kunde.vorname}"/>
 							<f:verbatim/>
 							
-							<h:outputLabel id="kategorieLabel" value="#{msgKv['createKunde.kategorie']}" for="kategorie"/>
-							<r:inputNumberSlider id="kategorie"
-							                     value="#{kunde.kategorie}"
-							                     minValue="0"
-							                     maxValue="5"
-							                     inputSize="1"
-							                     width="100"/>
-							<f:verbatim/>
-							
-							<h:outputLabel id="seitLabel"
-							               for="seit"
-							               value="#{msgKv['createKunde.seit']}"/>
-							<r:calendar id="seit"
-							            datePattern="#{msgKv['createKunde.calendar.pattern']}"
-							            value="#{kunde.seit}"
-							            timezone="CET">
-							    <!-- https://issues.jboss.org/browse/RF-10224
-								<r:validator/>
-								-->
-								<r:placeholder id="seitPlaceholder" value="#{msgKv['createKunde.seit.placeholder']}" />
-							</r:calendar>
-							<r:messages id="fehlermeldungenSeit" for="seit"/>
-							
 							
 							<h:outputText id="geschlechtLabel" value="#{msgKv['createKunde.geschlecht']}"/>
 							<h:selectOneRadio id="geschlecht" value="#{kunde.geschlecht}">
@@ -99,7 +76,7 @@
 							               for="password"
 							               value="#{msgKv['createKunde.password']}"/>
 							<h:inputSecret id="password"
-							               value="#{kunde.password}"
+							               value="#{kunde.passwort}"
 							               redisplay="true"/>
 							<f:verbatim/>
 							
@@ -107,7 +84,7 @@
 							               for="passwordWdh"
 							               value="#{msgKv['createKunde.passwordWdh']}"/>
 							<h:inputSecret id="passwordWdh"
-							               value="#{kunde.passwordWdh}"
+							               value="#{kunde.passwortWdh}"
 							               redisplay="true"/>
 							<f:verbatim/>
 			

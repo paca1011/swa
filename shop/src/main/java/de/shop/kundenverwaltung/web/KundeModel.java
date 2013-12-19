@@ -364,19 +364,19 @@ public class KundeModel implements Serializable {
 		}
 
 		try {
-			neuerKunde = ks.createKunde(neuerKunde);
+			kunde = ks.createKunde(kunde);
 		}
 		catch (EmailExistsException e) {
 			return createPrivatkundeErrorMsg(e);
 		}
 		
 		// Push-Event fuer Webbrowser
-		neuerKundeEvent.fire(String.valueOf(neuerKunde.getId()));
+		neuerKundeEvent.fire(String.valueOf(kunde.getId()));
 		
 		// Aufbereitung fuer viewKunde.xhtml
 		kundeId = neuerKunde.getId();
-		kunde = neuerKunde;
-		neuerKunde = null;  // zuruecksetzen
+//		kunde = neuerKunde;
+//		neuerKunde = null;  // zuruecksetzen
 		
 		return JSF_VIEW_KUNDE + JSF_REDIRECT_SUFFIX;
 	}
@@ -542,9 +542,5 @@ public class KundeModel implements Serializable {
 
 	public Kunde getNeuerKunde() {
 		return neuerKunde;
-	}
-
-	public void setNeuerKunde(Kunde neuerKunde) {
-		this.neuerKunde = neuerKunde;
 	}
 }

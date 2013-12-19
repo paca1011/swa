@@ -122,8 +122,8 @@ import de.shop.util.IdGroup;
 				        + " ORDER BY k.id")
 })
 @ScriptAssert(lang = "javascript",
-	          script = "(_this.password == null && _this.passwordWdh == null)"
-	                   + "|| (_this.password != null && _this.password.equals(_this.passwordWdh))",
+	          script = "(_this.passwort == null && _this.passwortWdh == null)"
+	                   + "|| (_this.passwort != null && _this.passwort.equals(_this.passwortWdh))",
 	          message = "{kundenverwaltung.kunde.password.notEqual}")
 @XmlRootElement
 @Formatted
@@ -208,6 +208,9 @@ public class Kunde implements Serializable, Cloneable {
 	
 	@Column(length = PASSWORD_LENGTH_MAX)
 	private String passwort;
+	
+	@Transient
+	private String passwortWdh;
 	
 	@OneToOne(cascade = { PERSIST, REMOVE }, mappedBy = "kunde")
 	@Valid
