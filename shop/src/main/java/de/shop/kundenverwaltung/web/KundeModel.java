@@ -125,7 +125,6 @@ public class KundeModel implements Serializable {
 	private Long kundeId;
 	
 	private Kunde kunde;
-	private List<String> hobbies;
 	
 	@Pattern(regexp = Kunde.NACHNAME_PATTERN, message = "{kunde.nachname.pattern}")
 	private String nachname;
@@ -136,6 +135,7 @@ public class KundeModel implements Serializable {
 	private String vornameFilter = "";
 	
 	private boolean geaendertKunde;    // fuer ValueChangeListener
+	private Kunde neuerKunde;
 	private String captchaInput;
 
 	private transient UIPanelMenuItem menuItemEmail;   // eigentlich nicht dynamisch, nur zur Demo
@@ -185,14 +185,6 @@ public class KundeModel implements Serializable {
 
 	public Kunde getKunde() {
 		return kunde;
-	}
-
-	public List<String> getHobbies() {
-		return hobbies;
-	}
-	
-	public void setHobbies(List<String> hobbies) {
-		this.hobbies = hobbies;
 	}
 
 	public String getNachname() {
@@ -372,19 +364,19 @@ public class KundeModel implements Serializable {
 		}
 
 		try {
-			kunde = ks.createKunde(kunde);
+			neuerKunde = ks.createKunde(neuerKunde);
 		}
 		catch (EmailExistsException e) {
 			return createPrivatkundeErrorMsg(e);
 		}
 		
 		// Push-Event fuer Webbrowser
-		neuerKundeEvent.fire(String.valueOf(kunde.getId()));
+		neuerKundeEvent.fire(String.valueOf(neuerKunde.getId()));
 		
 		// Aufbereitung fuer viewKunde.xhtml
-		kundeId = kunde.getId();
-		kunde = null;  // zuruecksetzen
-		hobbies = null;
+		kundeId = neuerKunde.getId();
+		kunde = neuerKunde;
+		neuerKunde = null;  // zuruecksetzen
 		
 		return JSF_VIEW_KUNDE + JSF_REDIRECT_SUFFIX;
 	}
@@ -546,5 +538,13 @@ public class KundeModel implements Serializable {
 		
 		fileHelper.store(file);
 		return file.getFilename();
+	}
+
+	public Kunde getNeuerKunde() {
+		return neuerKunde;
+	}
+
+	public void setNeuerKunde(Kunde neuerKunde) {
+		this.neuerKunde = neuerKunde;
 	}
 }

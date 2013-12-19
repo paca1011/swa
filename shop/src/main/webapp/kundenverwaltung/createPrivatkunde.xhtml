@@ -10,7 +10,7 @@
 	<body>
 		<ui:composition template="/WEB-INF/templates/desktop/main.xml">
 			<ui:define name="metadata">
-				<f:event type="preRenderView" listener="#{kundeModel.createEmptyKunde}"/>
+				<f:event type="preRenderView" listener="#{kundeModel.createEmptyPrivatkunde}"/>
 			</ui:define>
 			
 			<ui:param name="pageTitle" value="#{msgKv['createKunde.title']}"/>
@@ -80,56 +80,12 @@
 							</r:calendar>
 							<r:messages id="fehlermeldungenSeit" for="seit"/>
 							
-							<h:outputLabel id="umsatzLabel" for="umsatz" value="#{msgKv['createKunde.umsatz']}"/>
-							<h:inputText id="umsatz"
-							             value="#{kunde.umsatz}"
-							             converterMessage="#{msgKv['createKunde.umsatz.convert']}">
-							    <!--
-							    <f:convertNumber type="currency"
-								                 currencyCode="EUR"
-								                 maxFractionDigits="2"/>
-								-->
-								<f:ajax event="blur" render="fehlermeldungenUmsatz"/>
-								<!-- https://issues.jboss.org/browse/RF-10224
-								<r:validator/>
-								-->
-							</h:inputText>
-							<r:messages id="fehlermeldungenUmsatz" for="umsatz"/>
-				
-							<h:outputLabel id="familienstandLabel" for="familienstand" value="#{msgKv['createKunde.familienstand']}"/>
-							<r:select id="familienstand"
-							          enableManualInput="true"
-							          defaultLabel="#{msgKv['createKunde.familienstand']}"
-							          value="#{kunde.familienstand}">
-								<f:selectItem id="ledig" itemValue="LEDIG" itemLabel="#{msgKv['createKunde.familienstand.ledig']}"/>
-								<f:selectItem id="verheiratet" itemValue="VERHEIRATET" itemLabel="#{msgKv['createKunde.familienstand.verheiratet']}"/>
-								<f:selectItem id="geschieden" itemValue="GESCHIEDEN" itemLabel="#{msgKv['createKunde.familienstand.geschieden']}"/>
-								<f:selectItem id="verwitwet" itemValue="VERWITWET" itemLabel="#{msgKv['createKunde.familienstand.verwitwet']}"/>
-							</r:select>
-							<f:verbatim/>
 							
 							<h:outputText id="geschlechtLabel" value="#{msgKv['createKunde.geschlecht']}"/>
 							<h:selectOneRadio id="geschlecht" value="#{kunde.geschlecht}">
-								<f:selectItem id="weiblich" itemValue="WEIBLICH" itemLabel="#{msgKv['createKunde.geschlecht.weiblich']}"/>
-								<f:selectItem id="maennlich" itemValue="MAENNLICH" itemLabel="#{msgKv['createKunde.geschlecht.maennlich']}"/>
+								<f:selectItem id="weiblich" itemValue="w" itemLabel="#{msgKv['createKunde.geschlecht.weiblich']}"/>
+								<f:selectItem id="maennlich" itemValue="m" itemLabel="#{msgKv['createKunde.geschlecht.maennlich']}"/>
 							</h:selectOneRadio>
-							<f:verbatim/>
-							
-							<h:outputLabel id="newsletterLabel" value="#{msgKv['createKunde.newsletter']}"/>
-							<h:selectBooleanCheckbox id="newsletter" value="#{kunde.newsletter}"/>
-							<f:verbatim/>
-			
-							
-							<h:outputText id="hobbiesLabel" value="#{msgKv['createKunde.hobbies']}"/>
-							<h:selectManyCheckbox id="hobbies" value="#{kundeModel.hobbies}"
-							                      layout="pageDirection">
-								<f:selectItem id="sport" itemValue="SPORT"
-											  itemLabel="#{msgKv['createKunde.sport']}"/>
-								<f:selectItem id="lesen" itemValue="LESEN" 
-											  itemLabel="#{msgKv['createKunde.lesen']}"/>
-								<f:selectItem id="reisen" itemValue="REISEN" 
-											  itemLabel="#{msgKv['createKunde.reisen']}"/>
-							</h:selectManyCheckbox>
 							<f:verbatim/>
 											
 							<h:outputLabel id="emailLabel" for="email" value="#{msgKv['createKunde.email']}"/>
@@ -165,7 +121,7 @@
 							
 							<h:outputLabel id="ortLabel" for="ort" value="#{msgKv['createKunde.ort']}"/>
 							<h:inputText id="ort"
-							             value="#{adresse.ort}">
+							             value="#{adresse.stadt}">
 								<r:validator oninvalid="$(#{r:element('ort')}).addClass('invalid')"
 	                                         onvalid="$(#{r:element('ort')}).removeClass('invalid')"/>
 							</h:inputText>
@@ -180,7 +136,7 @@
 							<r:messages id="fehlermeldungStrasse" for="strasse"/>
 							
 							<h:outputLabel id="hausnrLabel" for="hausnr" value="#{msgKv['createKunde.hausnr']}"/>
-							<h:inputText id="hausnr" value="#{adresse.hausnr}"/>
+							<h:inputText id="hausnr" value="#{adresse.hausnum}"/>
 							<f:verbatim/>
 							
 							<r:mediaOutput id="captcha"
@@ -204,7 +160,7 @@
 						</h:panelGrid>
 			
 						<p id="buttons">
-							<h:commandButton id="createSubmit" action="#{kundeModel.createKunde}" value="#{msgKv['createKunde.submit']}"/>
+							<h:commandButton id="createSubmit" action="#{kundeModel.createPrivatkunde}" value="#{msgKv['createKunde.submit']}"/>
 							#{' '}
 							<h:commandButton id="reset" type="reset" value="#{msgKv['createKunde.reset']}"/>
 						</p>
