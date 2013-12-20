@@ -32,7 +32,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
+import javax.persistence.PostLoad;
 import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -41,6 +43,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -211,7 +214,7 @@ public class Kunde implements Serializable, Cloneable {
 	
 	@Transient
 	private String passwortWdh;
-	
+
 	@OneToOne(cascade = { PERSIST, REMOVE }, mappedBy = "kunde")
 	@Valid
 	@NotNull(message = "{kundenverwaltung.kunde.adresse.notNull}")
@@ -264,12 +267,23 @@ public class Kunde implements Serializable, Cloneable {
 		aktualisiert = new Date();
 	}
 	
+	@PostUpdate
+	protected void postUpdate() {
+		LOGGER.debugf("Kunde mit ID=%d aktualisiert: version=%d", id, version);
+	}
+	
+	@PostLoad
+	protected void postLoad() {
+		passwortWdh = passwort;
+	}
+	
 	
 	public void setValues(Kunde k) {
 		nachname = k.nachname;
 		vorname = k.vorname;
 		email = k.email;
 		passwort = k.passwort;
+		passwortWdh = k.passwortWdh;
 		version = k.version;
 	}
 	
@@ -311,6 +325,13 @@ public class Kunde implements Serializable, Cloneable {
 		this.geschlecht = geschlecht;
 	}
 
+	public String getPasswortWdh() {
+		return passwortWdh;
+	}
+
+	public void setPasswortWdh(String passwortWdh) {
+		this.passwortWdh = passwortWdh;
+	}
 	public String getPasswort() {
 		return passwort;
 	}
