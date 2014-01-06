@@ -18,10 +18,6 @@ import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.util.interceptor.Log;
 
 
-/**
- * Dialogsteuerung fuer ArtikelService
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
- */
 @Model
 public class ArtikelModel implements Serializable {
 	private static final long serialVersionUID = 1564024850446471639L;

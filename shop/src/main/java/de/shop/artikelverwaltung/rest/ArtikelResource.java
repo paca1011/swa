@@ -13,6 +13,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -125,7 +126,7 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	@POST
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces
-	public Response createArtikel(Artikel artikel) {
+	public Response createArtikel(@Valid Artikel artikel) {
 		artikel = as.createArtikel(artikel);
 		final URI artikelUri = uriHelperArtikel.getUriArtikel(artikel, uriInfo);
 		
@@ -136,7 +137,7 @@ private static final String NOT_FOUND_ID = "artikel.notFound.id";
 	@PUT
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
-	public Response updateArtikel(Artikel artikel) {	
+	public Response updateArtikel(@Valid Artikel artikel) {	
 		as.updateArtikel(artikel);
 		return Response.ok(artikel)
 				.links(getTransitionalLinks(artikel, uriInfo))
