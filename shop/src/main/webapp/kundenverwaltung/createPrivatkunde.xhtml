@@ -99,7 +99,7 @@
 							<h:outputLabel id="ortLabel" for="ort" value="#{msgKv['createKunde.ort']}"/>
 							<h:inputText id="ort"
 							             value="#{adresse.stadt}">
-								<r:validator oninvalid="$(#{r:element('ort')}).addClass('invalid')"
+							<r:validator oninvalid="$(#{r:element('ort')}).addClass('invalid')"
 	                                         onvalid="$(#{r:element('ort')}).removeClass('invalid')"/>
 							</h:inputText>
 							<r:messages id="fehlermeldungOrt" for="ort"/>
