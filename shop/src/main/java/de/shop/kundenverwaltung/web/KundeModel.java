@@ -374,8 +374,9 @@ public class KundeModel implements Serializable {
 		neuerKundeEvent.fire(String.valueOf(kunde.getId()));
 		
 		// Aufbereitung fuer viewKunde.xhtml
-		kundeId = neuerKunde.getId();
+//		kundeId = neuerKunde.getId();
 //		kunde = neuerKunde;
+		kunde = null;
 //		neuerKunde = null;  // zuruecksetzen
 		
 		return JSF_VIEW_KUNDE + JSF_REDIRECT_SUFFIX;

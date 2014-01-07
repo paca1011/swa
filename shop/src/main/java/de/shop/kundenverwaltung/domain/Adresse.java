@@ -36,7 +36,7 @@ public class Adresse implements Serializable {
 	
 	private String plz;
 	
-	@NotNull(message = "{kundenverwaltung.adresse.stadt.notNull}")
+//	@NotNull(message = "{kundenverwaltung.adresse.stadt.notNull}")
 	@Size(max = STADT_LENGTH_MAX, min = STADT_LENGTH_MIN, message = "{kundenverwaltung.adresse.stadt.length}")
 	private String stadt;
 	

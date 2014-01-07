@@ -124,10 +124,10 @@ import de.shop.util.IdGroup;
 				        + " WHERE CONCAT('', k.id) LIKE :" + Kunde.PARAM_KUNDE_ID_PREFIX
 				        + " ORDER BY k.id")
 })
-@ScriptAssert(lang = "javascript",
-	          script = "(_this.passwort == null && _this.passwortWdh == null)"
-	                   + "|| (_this.passwort != null && _this.passwort.equals(_this.passwortWdh))",
-	          message = "{kundenverwaltung.kunde.password.notEqual}")
+//@ScriptAssert(lang = "javascript",
+//	          script = "(_this.passwort == null && _this.passwortWdh == null)"
+//	                   + "|| (_this.passwort != null && _this.passwort.equals(_this.passwortWdh))",
+//	          message = "{kundenverwaltung.kunde.password.notEqual}")
 @XmlRootElement
 @Formatted
 public class Kunde implements Serializable, Cloneable {
