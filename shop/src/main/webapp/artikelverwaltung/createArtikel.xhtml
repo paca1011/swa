@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core"
+	  xmlns:r="http://richfaces.org/rich">
+	<body>
+		<ui:composition template="/WEB-INF/templates/desktop/main.xml">
+			<ui:define name="metadata">
+				<f:event type="preRenderView" listener="#{artikelModel.createEmptyArtikel}"/>
+			</ui:define>
+			
+			<ui:param name="pageTitle" value="#{msgKv['createArtikel.title']}"/>
+		
+			<ui:define name="content">
+				<h1>
+					#{msgKv['createArtikel.heading']}
+				</h1>
+		
+				<r:messages id="fehlermeldungGobal" globalOnly="true"/>
+				<r:notifyMessages id="notifyMessages" stayTime="2000" nonblocking="true"/>
+		
+				<h:form id="createArtikelForm">
+					<r:jQuery id="nachnameFocus" selector="#nachname" query="focus()"/>
+					<!-- fokussiert auf id="kategorie" statt auf id="nachname" WARUM?
+					<r:focus id="createKundeFormFocus"/>
+					-->
+					
+					<c:set var="artikel" value="#{artikelModel.artikel}" scope="view"/>
+					
+					<!--
+						https://issues.jboss.org/browse/AS7-1348
+						http://community.jboss.org/thread/169487 
+					-->
+					<r:graphValidator id="kundeValidator" value="#{kunde}">
+						<r:messages id="fehlermeldungKundeValidator" for="kundeValidator"/>
+						<r:messages id="fehlermeldungGlobal" globalOnly="true"/>
+					
+						<h:panelGrid id="createKundeTabelle" columns="3">
+				
+							<h:outputLabel id="nachnameLabel" for="nachname" value="#{msgKv['createKunde.nachname']}"/>
+							<h:inputText id="nachname" value="#{kunde.nachname}">
+								<!-- Validierung durch Ajax mit JSF -->
+								<!--
+								<f:ajax event="blur" render="fehlermeldungenUmsatz"/>
+								-->
+								<!-- Validierung durch Javascript mit RichFaces -->
+								<r:validator oninvalid="$(#{r:element('nachname')}).addClass('invalid')"
+	                                         onvalid="$(#{r:element('nachname')}).removeClass('invalid')"/>
+							</h:inputText>
+							<r:messages id="fehlermeldungenNachname" for="nachname"/>
+				
+							<h:outputLabel id="vornameLabel" for="vorname" value="#{msgKv['createKunde.vorname']}"/>
+							<h:inputText id="vorname" value="#{kunde.vorname}"/>
+							<f:verbatim/>
+							
+							
+							<h:outputText id="geschlechtLabel" value="#{msgKv['createKunde.geschlecht']}"/>
+							<h:selectOneRadio id="geschlecht" value="#{kunde.geschlecht}">
+								<f:selectItem id="weiblich" itemValue="w" itemLabel="#{msgKv['createKunde.geschlecht.weiblich']}"/>
+								<f:selectItem id="maennlich" itemValue="m" itemLabel="#{msgKv['createKunde.geschlecht.maennlich']}"/>
+							</h:selectOneRadio>
+							<f:verbatim/>
+											
+							<h:outputLabel id="emailLabel" for="email" value="#{msgKv['createKunde.email']}"/>
+							<h:inputText id="email" value="#{kunde.email}">
+								<r:validator oninvalid="$(#{r:element('email')}).addClass('invalid')"
+	                                         onvalid="$(#{r:element('email')}).removeClass('invalid')"/>
+							</h:inputText>
+							<r:messages id="fehlermeldungEmail" for="email"/>
+			
+							<h:outputLabel id="passwordLabel"
+							               for="password"
+							               value="#{msgKv['createKunde.password']}"/>
+							<h:inputSecret id="password"
+							               value="#{kunde.passwort}"
+							               redisplay="true"/>
+							<f:verbatim/>
+							
+							<h:outputLabel id="passwordWdhLabel"
+							               for="passwordWdh"
+							               value="#{msgKv['createKunde.passwordWdh']}"/>
+							<h:inputSecret id="passwordWdh"
+							               value="#{kunde.passwortWdh}"
+							               redisplay="true"/>
+							<f:verbatim/>
+			
+							<h:outputLabel id="plzLabel" for="plz" value="#{msgKv['createKunde.plz']}"/>
+							<h:inputText id="plz"
+							             value="#{adresse.plz}">
+								<r:validator oninvalid="$(#{r:element('plz')}).addClass('invalid')"
+	                                            onvalid="$(#{r:element('plz')}).removeClass('invalid')"/>
+							</h:inputText>
+							<r:messages id="fehlermeldungPlz" for="plz"/>
+							
+							<h:outputLabel id="ortLabel" for="ort" value="#{msgKv['createKunde.ort']}"/>
+							<h:inputText id="ort"
+							             value="#{adresse.stadt}">
+							<r:validator oninvalid="$(#{r:element('ort')}).addClass('invalid')"
+	                                         onvalid="$(#{r:element('ort')}).removeClass('invalid')"/>
+							</h:inputText>
+							<r:messages id="fehlermeldungOrt" for="ort"/>
+							
+							<h:outputLabel id="strasseLabel" for="strasse" value="#{msgKv['createKunde.strasse']}"/>
+							<h:inputText id="strasse"
+							             value="#{adresse.strasse}">
+								<r:validator oninvalid="$(#{r:element('strasse')}).addClass('invalid')"
+	                                         onvalid="$(#{r:element('strasse')}).removeClass('invalid')"/>
+							</h:inputText>
+							<r:messages id="fehlermeldungStrasse" for="strasse"/>
+							
+							<h:outputLabel id="hausnrLabel" for="hausnr" value="#{msgKv['createKunde.hausnr']}"/>
+							<h:inputText id="hausnr" value="#{adresse.hausnum}"/>
+							<f:verbatim/>
+							
+							<r:mediaOutput id="captcha"
+							               element="img"
+							               cacheable="false"
+							               session="false"
+							               createContent="#{captcha.paint}"
+							               mimeType="image/png"/>
+							<h:panelGroup>
+								<h:outputLabel id="captchaLabel" for="captchaInput" value="#{msgKv['createKunde.captcha.label']}"/>
+								<br/>
+								<h:inputText id="captchaInput" value="#{kundeModel.captchaInput}"/>
+							</h:panelGroup>
+							<r:message id="fehlermeldungCaptcha" for="captchaInput"/>
+							
+						</h:panelGrid>
+			
+						<p id="buttons">
+							<h:commandButton id="createSubmit" action="#{kundeModel.createPrivatkunde}" value="#{msgKv['createKunde.submit']}"/>
+							#{' '}
+							<h:commandButton id="reset" type="reset" value="#{msgKv['createKunde.reset']}"/>
+						</p>
+					</r:graphValidator>
+				</h:form>
+				
+				<p id="hinweisPflichtfelder">
+					#{msgKv['createKunde.required']}
+				</p>
+			</ui:define>
+		</ui:composition>
+	</body>
+</html>

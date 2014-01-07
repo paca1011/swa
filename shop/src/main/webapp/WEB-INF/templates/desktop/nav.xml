@@ -75,7 +75,16 @@
 					               action="#{artikelModel.selectArtikel}">
 						#{msg['nav.artikelverwaltung.selectArtikel']}
 					</h:commandLink>
-				</r:panelMenuItem>				
+				</r:panelMenuItem>	
+				<r:panelMenuItem id="artikelverwaltungCreateArtikelItem" rendered="#{r:isUserInRole('admin')}">
+					<h:link id="artikelverwaltungCreateArtikel"
+					        outcome="/artikelverwaltung/createArtikel"
+						    value="#{msg['nav.artikelverwaltung.createArtikel']}">
+						<c:if test="#{not empty javax.enterprise.context.conversation.id}">
+							<f:param id="createArtikelCid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+						</c:if>
+					</h:link>
+				</r:panelMenuItem>			
 			</r:panelMenuGroup>
 
 			<r:panelMenuGroup id="bestellverwaltung"
