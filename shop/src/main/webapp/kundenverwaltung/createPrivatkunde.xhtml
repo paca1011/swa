@@ -96,13 +96,13 @@
 							</h:inputText>
 							<r:messages id="fehlermeldungPlz" for="plz"/>
 							
-							<h:outputLabel id="ortLabel" for="ort" value="#{msgKv['createKunde.ort']}"/>
-							<h:inputText id="ort"
+							<h:outputLabel id="stadtLabel" for="stadt" value="#{msgKv['createKunde.ort']}"/>
+							<h:inputText id="stadt"
 							             value="#{adresse.stadt}">
-							<r:validator oninvalid="$(#{r:element('ort')}).addClass('invalid')"
-	                                         onvalid="$(#{r:element('ort')}).removeClass('invalid')"/>
+							<r:validator oninvalid="$(#{r:element('stadt')}).addClass('invalid')"
+	                                         onvalid="$(#{r:element('stadt')}).removeClass('invalid')"/>
 							</h:inputText>
-							<r:messages id="fehlermeldungOrt" for="ort"/>
+							<r:messages id="fehlermeldungStadt" for="stadt"/>
 							
 							<h:outputLabel id="strasseLabel" for="strasse" value="#{msgKv['createKunde.strasse']}"/>
 							<h:inputText id="strasse"
