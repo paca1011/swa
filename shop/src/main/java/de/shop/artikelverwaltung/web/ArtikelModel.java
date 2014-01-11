@@ -1,21 +1,32 @@
 package de.shop.artikelverwaltung.web;
 
+import static de.shop.util.Constants.JSF_REDIRECT_SUFFIX;
+
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.TransactionAttribute;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Model;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 import org.jboss.logging.Logger;
+import org.richfaces.push.cdi.Push;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
+import de.shop.kundenverwaltung.service.EmailExistsException;
+import de.shop.util.AbstractShopException;
 import de.shop.util.interceptor.Log;
+import de.shop.util.web.Captcha;
+import de.shop.util.web.Client;
+import de.shop.util.web.Messages;
 
 
 @Model
@@ -24,10 +35,15 @@ public class ArtikelModel implements Serializable {
 
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
+	private static final String JSF_ARTIKELVERWALTUNG = "/artikelverwaltung/";
+	private static final String JSF_VIEW_ARTIKEL = JSF_ARTIKELVERWALTUNG + "viewArtikel";
 	private static final String JSF_LIST_ARTIKEL = "/artikelverwaltung/listArtikel";
 	private static final String FLASH_ARTIKEL = "artikel";
 	private static final String JSF_SELECT_ARTIKEL = "/artikelverwaltung/selectArtikel";
 	private static final String SESSION_VERFUEGBARE_ARTIKEL = "verfuegbareArtikel";
+	
+	private static final String CLIENT_ID_CREATE_CAPTCHA_INPUT = "createArtikelForm:captchaInput";
+	private static final String MSG_KEY_CREATE_ARTIKEL_WRONG_CAPTCHA = "artikel.wrongCaptcha";
 
 	private String bezeichnung;
 
@@ -38,7 +54,25 @@ public class ArtikelModel implements Serializable {
 	private Flash flash;
 	
 	@Inject
+	@Client
+	private Locale locale;
+	
+	@Inject
+	private Messages messages;
+	
+	@Inject
+	@Push(topic = "marketing")
+	private transient Event<String> neuerArtikelEvent;
+	
+	@Inject
+	private Captcha captcha;
+	
+	@Inject
 	private transient HttpSession session;
+	
+	private Artikel artikel;
+	
+	private String captchaInput;
 
 	
 	@PostConstruct
@@ -63,6 +97,14 @@ public class ArtikelModel implements Serializable {
 	public void setBezeichnung(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
 	}
+	
+	public String getCaptchaInput() {
+		return captchaInput;
+	}
+
+	public void setCaptchaInput(String captchaInput) {
+		this.captchaInput = captchaInput;
+	}
 
 	@Log
 	public String findArtikelByBezeichnung() {
@@ -80,5 +122,53 @@ public class ArtikelModel implements Serializable {
 		}
 		
 		return JSF_SELECT_ARTIKEL;
+	}
+	
+	
+	@TransactionAttribute
+	@Log
+	public String createArtikel() {
+		if (!captcha.getValue().equals(captchaInput)) {
+			final String outcome = createArtikelErrorMsg(null);
+			return outcome;
+		}
+
+		try {
+			artikel = as.createArtikel(artikel);
+		}
+		catch (EmailExistsException e) {
+			return createArtikelErrorMsg(e);
+		}
+		
+		// Push-Event fuer Webbrowser
+		neuerArtikelEvent.fire(String.valueOf(artikel.getId()));
+		
+		// Aufbereitung fuer viewKunde.xhtml
+//		kundeId = neuerKunde.getId();
+//		kunde = neuerKunde;
+		artikel = null;
+//		neuerKunde = null;  // zuruecksetzen
+		
+		return JSF_VIEW_ARTIKEL + JSF_REDIRECT_SUFFIX;
+	}
+	
+	private String createArtikelErrorMsg(AbstractShopException e) {
+		if (e == null) {
+			messages.error(MSG_KEY_CREATE_ARTIKEL_WRONG_CAPTCHA, locale, CLIENT_ID_CREATE_CAPTCHA_INPUT);
+		}
+		
+		
+		return null;
+	}
+
+	public void createEmptyArtikel() {
+		captchaInput = null;
+
+		if (artikel != null) {
+			return;
+		}
+
+		artikel = new Artikel();
+		
 	}
 }
