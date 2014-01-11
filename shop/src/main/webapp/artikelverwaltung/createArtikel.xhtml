@@ -20,8 +20,14 @@
 					#{msgKv['createArtikel.heading']}
 				</h1>
 				
+								
+				<r:messages id="fehlermeldungGobal" globalOnly="true"/>
+				<r:notifyMessages id="notifyMessages" stayTime="2000" nonblocking="true"/>
 				
 		<h:form id="createArtikelForm">
+		
+		<c:set var="artikel" value="#{artikelModel.artikel}" scope="view"/>
+		
 		<h:panelGrid id="createArtikelTabelle" columns="3">
 		<h:outputLabel id="bezeichnungLabel" for="bezeichnung" value="#{msgKv['createArtikel.bezeichnung']}"/>
 		<h:inputText id="bezeichnung" value="#{artikel.bezeichnung}"/>
@@ -31,8 +37,12 @@
 		<h:inputText id="farbe" value="#{artikel.farbe}"/>
 		<f:verbatim/>
 		
-		<h:outputLabel id="PreisLabel" for="preis" value="#{msgKv['createArtikel.preis']}"/>
-		<h:inputText id="preis" value="#{artikel.preis}"/>
+		<h:outputLabel id="PreisLabelKunde" for="preisKunde" value="#{msgKv['createArtikel.preisKunde']}"/>
+		<h:inputText id="preisKunde" value="#{artikel.preisKunde}"/>
+		<f:verbatim/>
+		
+		<h:outputLabel id="PreisLabelLieferant" for="preisLieferant" value="#{msgKv['createArtikel.preisLieferant']}"/>
+		<h:inputText id="preisLieferant" value="#{artikel.preisLieferant}"/>
 		<f:verbatim/>
 		
 		<h:outputLabel id="BestandLabel" for="bestand" value="#{msgKv['createArtikel.bestand']}"/>

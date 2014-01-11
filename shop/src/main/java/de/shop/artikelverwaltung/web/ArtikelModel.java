@@ -1,6 +1,7 @@
 package de.shop.artikelverwaltung.web;
 
 import static de.shop.util.Constants.JSF_REDIRECT_SUFFIX;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
@@ -9,11 +10,14 @@ import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Model;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import org.jboss.logging.Logger;
@@ -29,7 +33,10 @@ import de.shop.util.web.Client;
 import de.shop.util.web.Messages;
 
 
-@Model
+@Named
+@SessionScoped
+@Stateful
+@TransactionAttribute(SUPPORTS)
 public class ArtikelModel implements Serializable {
 	private static final long serialVersionUID = 1564024850446471639L;
 
@@ -85,6 +92,14 @@ public class ArtikelModel implements Serializable {
 		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
 	}
 	
+	public Artikel getArtikel() {
+		return artikel;
+	}
+
+	public void setArtikel(Artikel artikel) {
+		this.artikel = artikel;
+	}
+
 	@Override
 	public String toString() {
 		return "ArtikelModel [bezeichnung=" + bezeichnung + "]";
@@ -149,7 +164,7 @@ public class ArtikelModel implements Serializable {
 		artikel = null;
 //		neuerKunde = null;  // zuruecksetzen
 		
-		return JSF_VIEW_ARTIKEL + JSF_REDIRECT_SUFFIX;
+		return "/index";
 	}
 	
 	private String createArtikelErrorMsg(AbstractShopException e) {
