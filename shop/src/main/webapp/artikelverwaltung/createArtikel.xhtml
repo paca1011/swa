@@ -13,70 +13,65 @@
 				<f:event type="preRenderView" listener="#{artikelModel.createEmptyArtikel}"/>
 			</ui:define>
 			
-			<ui:param name="pageTitle" value="#{msgKv['createArtikel.title']}"/>
+			<ui:param name="pageTitle" value="#{msgAv['createArtikel.title']}"/>
 		
 			<ui:define name="content">
 				<h1>
-					#{msgKv['createArtikel.heading']}
+					#{msgAv['createArtikel.heading']}
 				</h1>
 				
 								
 				<r:messages id="fehlermeldungGobal" globalOnly="true"/>
 				<r:notifyMessages id="notifyMessages" stayTime="2000" nonblocking="true"/>
 				
-		<h:form id="createArtikelForm">
+					<h:form id="createArtikelForm">
 		
-		<c:set var="artikel" value="#{artikelModel.artikel}" scope="view"/>
+					<c:set var="artikel" value="#{artikelModel.artikel}" scope="view"/>
 		
-		<h:panelGrid id="createArtikelTabelle" columns="3">
-		<h:outputLabel id="bezeichnungLabel" for="bezeichnung" value="#{msgKv['createArtikel.bezeichnung']}"/>
-		<h:inputText id="bezeichnung" value="#{artikel.bezeichnung}"/>
-		<f:verbatim/>
+					<h:panelGrid id="createArtikelTabelle" columns="3">
+					<h:outputLabel id="bezeichnungLabel" for="bezeichnung" value="#{msgAv['createArtikel.bezeichnung']}"/>
+					<h:inputText id="bezeichnung" value="#{artikel.bezeichnung}"/>
+					<f:verbatim/>
 		
-		<h:outputLabel id="farbeLabel" for="farbe" value="#{msgKv['createArtikel.farbe']}"/>
-		<h:inputText id="farbe" value="#{artikel.farbe}"/>
-		<f:verbatim/>
+					<h:outputLabel id="farbeLabel" for="farbe" value="#{msgAv['createArtikel.farbe']}"/>
+					<h:inputText id="farbe" value="#{artikel.farbe}"/>
+					<f:verbatim/>
 		
-		<h:outputLabel id="PreisLabelKunde" for="preisKunde" value="#{msgKv['createArtikel.preisKunde']}"/>
-		<h:inputText id="preisKunde" value="#{artikel.preisKunde}"/>
-		<f:verbatim/>
+					<h:outputLabel id="PreisLabelKunde" for="preisKunde" value="#{msgAv['createArtikel.preisKunde']}"/>
+					<h:inputText id="preisKunde" value="#{artikel.preisKunde}"/>
+					<f:verbatim/>
 		
-		<h:outputLabel id="PreisLabelLieferant" for="preisLieferant" value="#{msgKv['createArtikel.preisLieferant']}"/>
-		<h:inputText id="preisLieferant" value="#{artikel.preisLieferant}"/>
-		<f:verbatim/>
+					<h:outputLabel id="PreisLabelLieferant" for="preisLieferant" value="#{msgAv['createArtikel.preisLieferant']}"/>
+					<h:inputText id="preisLieferant" value="#{artikel.preisLieferant}"/>
+					<f:verbatim/>
 		
-		<h:outputLabel id="BestandLabel" for="bestand" value="#{msgKv['createArtikel.bestand']}"/>
-		<h:inputText id="bestand" value="#{artikel.bestand}"/>
-		<f:verbatim/>
+					<h:outputLabel id="BestandLabel" for="bestand" value="#{msgAv['createArtikel.bestand']}"/>
+					<h:inputText id="bestand" value="#{artikel.bestand}"/>
+					<f:verbatim/>
 		
-		<r:mediaOutput id="captcha"
-		element="img"
-		cacheable="false"
-		session="false"
-		createContent="#{captcha.paint}"
-		mimeType="image/png"/>
-		<h:panelGroup>
-		<h:outputLabel id="captchaLabel" for="captchaInput" value="#{msgKv['createArtikel.captcha.label']}"/>
-		<br/>
-		<h:inputText id="captchaInput" value="#{artikelModel.captchaInput}"/>
-		</h:panelGroup>
-		<r:message id="fehlermeldungCaptcha" for="captchaInput"/>		
+					<r:mediaOutput id="captcha"
+					element="img"
+					cacheable="false"
+					session="false"
+					createContent="#{captcha.paint}"
+					mimeType="image/png"/>
+					<h:panelGroup>
+					<h:outputLabel id="captchaLabel" for="captchaInput" value="#{msgAv['createArtikel.captcha.label']}"/>
+					<br/>
+					<h:inputText id="captchaInput" value="#{artikelModel.captchaInput}"/>
+					</h:panelGroup>
+					<r:message id="fehlermeldungCaptcha" for="captchaInput"/>		
 		
-		</h:panelGrid>
+					</h:panelGrid>
 		
-		<p id="buttons">
-		<h:commandButton id="createSubmit" action="#{artikelModel.createArtikel}" value="#{msgKv['createArtikel.submit']}"/>
-		#{' '}
-		<h:commandButton id="reset" type="reset" value="#{msgKv['createArtikel.reset']}"/>
-		</p>
+					<p id="buttons">
+					<h:commandButton id="createSubmit" action="#{artikelModel.createArtikel}" value="#{msgAv['createArtikel.submit']}"/>
+					#{' '}
+					<h:commandButton id="reset" type="reset" value="#{msgAv['createArtikel.reset']}"/>
+					</p>
 		
 		
-		</h:form>
-				
-		
-				
-				
-				
+				</h:form>			
 			</ui:define>
 		</ui:composition>
 	</body>
