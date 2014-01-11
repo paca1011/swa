@@ -41,6 +41,8 @@
 						<c:set var="artikel" value="#{flash.artikel}" scope="view"/>
 						<c:set target="#{flash}" property="artikel" value="#{artikel}"/>
 						
+						
+						
 						<r:dataTable id="artikelTabelle"
 						             value="#{artikel}"
 						             var="art"
@@ -74,6 +76,16 @@
 		        	                                library="images"/>
 		        	            </h:commandLink>
 							</r:column>
+							<r:column id="updateSpalte"
+									  rendered="#{not empty artikel}">
+						    	<h:link id="updateArtikel"
+					        outcome="/artikelverwaltung/updateArtikel"
+						    value="#{msg['nav.artikelverwaltung.update']}">
+						<c:if test="#{not empty javax.enterprise.context.conversation.id}">
+							<f:param id="updateArtikelid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+						</c:if>
+					</h:link>
+					        </r:column>
 						</r:dataTable>
 						
 						<cc:zebrastilMitDatascroller id="zebrastilMitDatascroller" for="artikelTabelle" maxPages="10" rendered="#{not empty artikel}"/>

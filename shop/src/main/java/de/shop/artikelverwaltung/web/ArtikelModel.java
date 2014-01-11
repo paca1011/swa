@@ -1,5 +1,7 @@
 package de.shop.artikelverwaltung.web;
 
+import de.shop.auth.web.AuthModel;
+import static de.shop.util.Constants.JSF_INDEX;
 import static de.shop.util.Constants.JSF_REDIRECT_SUFFIX;
 import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
@@ -16,8 +18,10 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Model;
 import javax.faces.context.Flash;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.OptimisticLockException;
 import javax.servlet.http.HttpSession;
 
 import org.jboss.logging.Logger;
@@ -25,9 +29,11 @@ import org.richfaces.push.cdi.Push;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
+import de.shop.kundenverwaltung.domain.Kunde;
 import de.shop.kundenverwaltung.service.EmailExistsException;
 import de.shop.util.AbstractShopException;
 import de.shop.util.interceptor.Log;
+import de.shop.util.persistence.ConcurrentDeletedException;
 import de.shop.util.web.Captcha;
 import de.shop.util.web.Client;
 import de.shop.util.web.Messages;
@@ -61,6 +67,9 @@ public class ArtikelModel implements Serializable {
 	private Flash flash;
 	
 	@Inject
+	private AuthModel auth;
+	
+	@Inject
 	@Client
 	private Locale locale;
 	
@@ -72,6 +81,10 @@ public class ArtikelModel implements Serializable {
 	private transient Event<String> neuerArtikelEvent;
 	
 	@Inject
+	@Push(topic = "updateArtikel")
+	private transient Event<String> updateArtikelEvent;
+	
+	@Inject
 	private Captcha captcha;
 	
 	@Inject
@@ -81,6 +94,7 @@ public class ArtikelModel implements Serializable {
 	
 	private String captchaInput;
 
+	private boolean geaendertArtikel;    // fuer ValueChangeListener
 	
 	@PostConstruct
 	private void postConstruct() {
@@ -186,4 +200,77 @@ public class ArtikelModel implements Serializable {
 		artikel = new Artikel();
 		
 	}
+	
+	public void geaendert(ValueChangeEvent e) {
+		if (geaendertArtikel) {
+			return;
+		}
+		
+		if (e.getOldValue() == null) {
+			if (e.getNewValue() != null) {
+				geaendertArtikel = true;
+			}
+			return;
+		}
+
+		if (!e.getOldValue().equals(e.getNewValue())) {
+			geaendertArtikel= true;				
+		}
+	}
+	
+	@TransactionAttribute
+	@Log
+	public String update() {
+		auth.preserveLogin();
+		
+		if (!geaendertArtikel || artikel == null) {
+			return JSF_INDEX;
+		}
+		
+		LOGGER.tracef("Aktualisierter Kunde: %s", artikel);
+		try {
+			artikel = as.updateArtikel(artikel);
+		}
+		catch (EmailExistsException | ConcurrentDeletedException | OptimisticLockException e) {
+//			final String outcome = updateErrorMsg(e, artikel.getClass());
+//			return outcome;
+		}
+
+		// Push-Event fuer Webbrowser
+		updateArtikelEvent.fire(String.valueOf(artikel.getId()));
+		return JSF_INDEX + JSF_REDIRECT_SUFFIX;
+	}
+	
+//	private String updateErrorMsg(RuntimeException e, Class<? extends Kunde> kundeClass) {
+//		final Class<? extends RuntimeException> exceptionClass = e.getClass();
+//		if (EmailExistsException.class.equals(exceptionClass)) {
+//			final EmailExistsException e2 = EmailExistsException.class.cast(e);
+//			messages.error(MSG_KEY_EMAIL_EXISTS, locale, CLIENT_ID_UPDATE_EMAIL, e2.getEmail());
+//		}
+//		else if (OptimisticLockException.class.equals(exceptionClass)) {
+//			messages.error(MSG_KEY_CONCURRENT_UPDATE, locale, null);
+//
+//		}
+//		else if (ConcurrentDeletedException.class.equals(exceptionClass)) {
+//			messages.error(MSG_KEY_CONCURRENT_DELETE, locale, null);
+//		}
+//		else {
+//			throw new RuntimeException(e);
+//		}
+//		return null;
+//	}
+	
+//	@Log
+//	public String selectForUpdate(Kunde ausgewaehlterKunde) {
+//		if (ausgewaehlterKunde == null) {
+//			return null;
+//		}
+//		
+//		kunde = ausgewaehlterKunde;
+//		
+//		return Kunde.class.equals(ausgewaehlterKunde.getClass())
+//			   ? JSF_UPDATE_PRIVATKUNDE
+//			   : JSF_UPDATE_FIRMENKUNDE;
+//	}
+//	
 }
