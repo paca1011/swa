@@ -43,7 +43,6 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -55,7 +54,6 @@ import org.hibernate.validator.constraints.Email;
 
 import de.shop.util.persistence.File;
 
-import org.hibernate.validator.constraints.ScriptAssert;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 

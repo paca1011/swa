@@ -210,7 +210,7 @@ public class ArtikelModel implements Serializable {
 		}
 
 		if (!e.getOldValue().equals(e.getNewValue())) {
-			geaendertArtikel= true;				
+			geaendertArtikel = true;				
 		}
 	}
 	
