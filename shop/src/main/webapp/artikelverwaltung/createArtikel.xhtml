@@ -30,8 +30,13 @@
 		
 					<h:panelGrid id="createArtikelTabelle" columns="3">
 					<h:outputLabel id="bezeichnungLabel" for="bezeichnung" value="#{msgAv['createArtikel.bezeichnung']}"/>
-					<h:inputText id="bezeichnung" value="#{artikel.bezeichnung}"/>
-					<f:verbatim/>
+					<h:inputText id="bezeichnung"
+						             value="#{artikel.bezeichnung}"
+						             valueChangeListener="#{artikelModel.geaendert}">
+					<r:validator oninvalid="$(#{r:element('artikel')}).addClass('invalid')"
+	                                     onvalid="$(#{r:element('artikel')}).removeClass('invalid')"/>
+					</h:inputText>
+					<r:messages id="fehlermeldungenArtikel" for="bezeichnung"/>
 		
 					<h:outputLabel id="farbeLabel" for="farbe" value="#{msgAv['createArtikel.farbe']}"/>
 					<h:inputText id="farbe" value="#{artikel.farbe}"/>

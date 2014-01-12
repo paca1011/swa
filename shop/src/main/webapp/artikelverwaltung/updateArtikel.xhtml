@@ -10,24 +10,24 @@
 	<body>
 		<ui:composition template="/WEB-INF/templates/desktop/main.xml">
 			
-			<ui:param name="pageTitle" value="#{msgKv['updateArtikel.title']}"/>
+			<ui:param name="pageTitle" value="#{msgAv['updateArtikel.title']}"/>
 		
 			<ui:define name="content">
 				<c:set var="artikel" value="#{artikelModel.artikel}" scope="view"/>
 				
 				<h1>
-					<h:outputFormat id="headingArtikel" value="#{msgKv['updateArtikel.heading']}" rendered="#{not empty artikel}">
+					<h:outputFormat id="headingArtikel" value="#{msgAv['updateArtikel.heading']}" rendered="#{not empty artikel}">
 						<f:param id="idWert" value="#{artikel.id}"/>
 					</h:outputFormat>
 				</h1>
 				
 				<h:outputText id="fehlerKeinArtikel"
-				              value="#{msgKv['updateArtikel.keinArtikel']}"
+				              value="#{msgAv['updateArtikel.keinArtikel']}"
 				              class="rf-msg-err"
 				              rendered="#{empty artikel}"/>
 	
 				<r:push id="updateEvent" address="updateArtikel"
-			            ondataavailable="if (event.rf.data == '#{artikel.id}') { $('#updateMessage').html('&lt;span class=rf-msg-err&gt;#{msgKv['updateArtikel.concurrentUpdate']}&lt;/span&gt;') }"/>
+			            ondataavailable="if (event.rf.data == '#{artikel.id}') { $('#updateMessage').html('&lt;span class=rf-msg-err&gt;#{msgAv['updateArtikel.concurrentUpdate']}&lt;/span&gt;') }"/>
 				<span id="updateMessage"></span>
 				
 				<r:notifyMessages id="notifyMessages" stayTime="2000" nonblocking="true"/>
@@ -42,7 +42,7 @@
 					<h:panelGrid id="updateArtikelTabelle"
 					             columns="3">     
 					             
-						<h:outputLabel id="bezeichnungLabel" for="bezeichnnung" value="#{msgKv['updateArtikel.bezeichnung']}"/>
+						<h:outputLabel id="bezeichnungLabel" for="bezeichnnung" value="#{msgAv['updateArtikel.bezeichnung']}"/>
 						<h:inputText id="bezeichnung"
 						             value="#{artikel.bezeichnung}"
 						             valueChangeListener="#{artikelModel.geaendert}">
@@ -51,32 +51,32 @@
 						</h:inputText>
 						<r:messages id="fehlermeldungenArtikel" for="bezeichnung"/>
 			
-						<h:outputLabel id="farbeLabel" for="farbe" value="#{msgKv['updateArtikel.farbe']}"/>
+						<h:outputLabel id="farbeLabel" for="farbe" value="#{msgAv['updateArtikel.farbe']}"/>
 						<h:inputText id="farbe" value="#{artikel.farbe}" valueChangeListener="#{artikelModel.geaendert}"/>
 						<f:verbatim/>
 						
-						<h:outputLabel id="preisKundeLabel" for="preisKunde" value="#{msgKv['updateArtikel.preisKunde']}"/>
+						<h:outputLabel id="preisKundeLabel" for="preisKunde" value="#{msgAv['updateArtikel.preisKunde']}"/>
 						<h:inputText id="preisKunde" value="#{artikel.preisKunde}" valueChangeListener="#{artikelModel.geaendert}"/>
 						<f:verbatim/>
 						
-						<h:outputLabel id="PreisLieferantLabel" for="preisLieferant" value="#{msgKv['updateArtikel.preisLieferant']}"/>
+						<h:outputLabel id="PreisLieferantLabel" for="preisLieferant" value="#{msgAv['updateArtikel.preisLieferant']}"/>
 						<h:inputText id="preisLieferant" value="#{artikel.preisLieferant}" valueChangeListener="#{artikelModel.geaendert}"/>
 						<f:verbatim/>
 						
-						<h:outputLabel id="bestantLabel" for="bestand" value="#{msgKv['updateArtikel.bestand']}"/>
+						<h:outputLabel id="bestantLabel" for="bestand" value="#{msgAv['updateArtikel.bestand']}"/>
 						<h:inputText id="bestand" value="#{artikel.bestand}" valueChangeListener="#{artikelModel.geaendert}"/>
 						<f:verbatim/>
 						
 					</h:panelGrid>
 		
 					<p id="buttons">
-						<h:commandButton id="button" action="#{artikelModel.update}" value="#{msgKv['updateArtikel.submit']}"/>
+						<h:commandButton id="button" action="#{artikelModel.update}" value="#{msgAv['updateArtikel.submit']}"/>
 						#{' '}
-						<h:commandButton type="reset" value="#{msgKv['updateArtikel.reset']}"/>
+						<h:commandButton type="reset" value="#{msgAv['updateArtikel.reset']}"/>
 					</p>
 					
 					<p id="hinweisPflichtfelder">
-						#{msgKv['updateArtikel.required']}
+						#{msgAv['updateArtikel.required']}
 					</p>
 				</h:form>
 			</ui:define>
