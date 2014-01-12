@@ -40,6 +40,7 @@
 					<c:if test="#{not empty flash.artikel or param.init ne 'true'}">
 						<c:set var="artikel" value="#{flash.artikel}" scope="view"/>
 						<c:set target="#{flash}" property="artikel" value="#{artikel}"/>
+						<c:set var="artmod" value="artikelModel.artikel" scope="view"/>
 						
 						
 						
@@ -77,14 +78,12 @@
 		        	            </h:commandLink>
 							</r:column>
 							<r:column id="updateSpalte"
-									  rendered="#{not empty artikel}">
-						    	<h:link id="updateArtikel"
-					        outcome="/artikelverwaltung/updateArtikel"
+									  rendered="#{not empty artikel and r:isUserInRole('admin')}">
+						    	<h:commandButton id="updateArtikel"
+						    	action="#{artikelModel.selectForUpdate(art)}"
 						    value="#{msg['nav.artikelverwaltung.update']}">
-						<c:if test="#{not empty javax.enterprise.context.conversation.id}">
-							<f:param id="updateArtikelid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-						</c:if>
-					</h:link>
+						
+					</h:commandButton>
 					        </r:column>
 						</r:dataTable>
 						

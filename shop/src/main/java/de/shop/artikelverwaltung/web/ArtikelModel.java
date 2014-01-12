@@ -49,6 +49,7 @@ public class ArtikelModel implements Serializable {
 	private static final String JSF_LIST_ARTIKEL = "/artikelverwaltung/listArtikel";
 	private static final String FLASH_ARTIKEL = "artikel";
 	private static final String JSF_SELECT_ARTIKEL = "/artikelverwaltung/selectArtikel";
+	private static final String JSF_UPDATE_ARTIKEL = "/artikelverwaltung/updateArtikel";
 	private static final String SESSION_VERFUEGBARE_ARTIKEL = "verfuegbareArtikel";
 	
 	private static final String CLIENT_ID_CREATE_CAPTCHA_INPUT = "createArtikelForm:captchaInput";
@@ -256,17 +257,14 @@ public class ArtikelModel implements Serializable {
 //		return null;
 //	}
 	
-//	@Log
-//	public String selectForUpdate(Kunde ausgewaehlterKunde) {
-//		if (ausgewaehlterKunde == null) {
-//			return null;
-//		}
-//		
-//		kunde = ausgewaehlterKunde;
-//		
-//		return Kunde.class.equals(ausgewaehlterKunde.getClass())
-//			   ? JSF_UPDATE_PRIVATKUNDE
-//			   : JSF_UPDATE_FIRMENKUNDE;
-//	}
+	@Log
+	public String selectForUpdate(Artikel ausgewaehlterArtikel) {
+		if (ausgewaehlterArtikel == null) {
+			return null;
+		}
+		artikel = ausgewaehlterArtikel;
+		
+		return JSF_UPDATE_ARTIKEL;
+	}
 //	
 }
